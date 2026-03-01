@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>12. Sınıf Tarih Portalı - Boğaziçi MTAL</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#C8102E">
+
+    <style>
+        /* --- CSS DEĞİŞKENLERİ (12. SINIF TEMASI: CUMHURİYET VE İSTİKLAL - KIRMIZI & GÜMÜŞ) --- */
+        :root {
+            --bg-color: #f8f9fa;
+            --container-bg: #ffffff;
+            --text-color: #2c3e50;
+            --accent-color: #C8102E; /* Bayrak Kırmızısı */
+            --secondary-accent: #7f8c8d; /* Gümüş / Koyu Gri */
+            --card-border: #e2e6eb;
+            --option-hover: #fbeef0;
+            --font-size-base: 16px; 
+        }
+
+        /* --- SADECE SEPYA (OKUMA) MODU --- */
+        body.sepia-mode {
+            --bg-color: #f4ecd8;
+            --container-bg: #fdf6e3;
+            --text-color: #5b4636; 
+            --accent-color: #a93226;
+            --secondary-accent: #873600;
+            --card-border: #e0d6b8;
+            --option-hover: #ece2c6;
+        }
+
+        /* --- KARANLIK MOD (DARK MODE) --- */
+        body.dark-mode {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --accent-color: #e74c3c; /* Karanlık mod için parlayan kırmızı */
+            --secondary-accent: #bdc3c7; /* Açık gümüş */
+            --card-border: #333333;
+            --option-hover: #2c2c2c;
+        }
+
+        /* --- GENEL STİL --- */
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color); 
+            color: var(--text-color);
+            margin: 0; padding: 20px; 
+            user-select: none; 
+            transition: background 0.3s, color 0.3s;
+        }
+        
+        /* MOBİL UYUM (SCROLL'SUZ) İÇİN PADDING DARALTILDI */
+        .container { 
+            background: var(--container-bg);
+            max-width: 900px; margin: 0 auto; padding: 20px; 
+            border-radius: 12px; 
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        /* --- BAŞLIK STİLLERİ (COMPACT) --- */
+        h1, h2, h3 { text-align: center; color: var(--accent-color); }
+        h1 { 
+            border-bottom: 2px solid var(--secondary-accent); 
+            padding-bottom: 5px; 
+            display: inline-block; 
+            margin-bottom: 15px;
+        }
+        
+        /* --- İLERLEME ÇUBUĞU --- */
+        #progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: transparent; z-index: 9999; }
+        #progress-bar { width: 0%; height: 100%; background: var(--accent-color); transition: width 0.3s; }
+
+        /* --- AYARLAR PANELİ (SAĞ ÜST) --- */
+        .settings-panel { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 10px; flex-wrap: wrap; }
+        .settings-btn { background: var(--option-hover); border: 1px solid var(--card-border); padding: 8px 15px; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: bold; color: var(--text-color); transition: 0.2s; }
+        .settings-btn:hover { transform: translateY(-2px); box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-color: var(--accent-color); }
+        .btn-duyuru { background-color: #f39c12; color: white; border: none; }
+        .btn-sozluk { background-color: var(--secondary-accent); color: white; border: none; }
+
+        /* --- YÜZEN BUTON (HATA BİLDİR/ÖĞRETMENE SOR) --- */
+        .floating-btn {
+            position: fixed; bottom: 25px; right: 25px;
+            background-color: var(--accent-color); color: white;
+            border-radius: 50%; width: 60px; height: 60px;
+            font-size: 24px; border: none; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 9998; transition: transform 0.3s, background-color 0.3s;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .floating-btn:hover { transform: scale(1.1); background-color: #a30d25; }
+
+        /* --- GİRİŞ & MENÜ (MOBİL UYUM İÇİN BOŞLUKLAR DARALTILDI) --- */
+        .form-group { margin-bottom: 10px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: var(--text-color); font-size: 14px; }
+        input, select, textarea { 
+            width: 100%; padding: 10px; border: 1px solid var(--card-border); 
+            background: var(--container-bg); color: var(--text-color);
+            border-radius: 6px; font-size: 15px; box-sizing: border-box;
+        }
+        textarea { height: 120px; resize: vertical; }
+        
+        .intro-box { background-color: var(--option-hover); border-left: 5px solid var(--accent-color); padding: 15px; margin-bottom: 25px; border-radius: 5px; font-size: 15px; line-height: 1.6; }
+        
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .menu-btn { padding: 20px; font-size: 16px; cursor: pointer; border-radius: 8px; border: 2px solid var(--accent-color); background: var(--container-bg); color: var(--accent-color); transition: 0.3s; font-weight: bold; }
+        .menu-btn:hover { background: var(--accent-color); color: white; transform: translateY(-3px); }
+        .menu-btn.klasik { border-color: var(--secondary-accent); color: var(--secondary-accent); }
+        .menu-btn.klasik:hover { background: var(--secondary-accent); color: white; }
+
+        /* --- TEST EKRANI --- */
+        .sticky-header { position: sticky; top: 0; background: var(--container-bg); padding: 10px 0; z-index: 100; border-bottom: 2px solid var(--card-border); box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .timer-box { font-size: 24px; font-weight: bold; color: var(--accent-color); text-align: center; margin-bottom: 10px; }
+        .nav-map { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 10px; }
+        .nav-dot { width: 30px; height: 30px; border-radius: 4px; background: var(--option-hover); border: 1px solid var(--card-border); display: flex; align-items: center; justify-content: center; font-size: 12px; cursor: pointer; color: var(--text-color); font-weight: bold; }
+        .nav-dot.answered { background: var(--secondary-accent); color: white; border-color: var(--secondary-accent); }
+        .nav-dot.flagged { background: #f39c12; color: white; border-color: #d35400; }
+        
+        .question-card { background: var(--container-bg); border: 1px solid var(--card-border); padding: 20px; margin-bottom: 20px; border-radius: 8px; position: relative; scroll-margin-top: 180px; }
+        .question-text { font-size: var(--font-size-base); margin-bottom: 15px; font-weight: 600; line-height: 1.6; }
+        
+        .question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .question-number { font-weight: bold; color: var(--accent-color); font-size: 18px; }
+        .flag-btn { background: transparent; border: 1px solid #f39c12; color: #f39c12; padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+        .flag-btn.active { background: #f39c12; color: white; }
+        
+        .options label { display: block; padding: 12px; margin-bottom: 8px; cursor: pointer; border-radius: 6px; border: 1px solid var(--card-border); transition: background 0.2s; font-size: var(--font-size-base); }
+        .options label:hover { background-color: var(--option-hover); border-color: var(--accent-color); }
+        .options input { width: auto; margin-right: 10px; }
+
+        /* --- BUTONLAR --- */
+        .action-btn { 
+            padding: 12px 30px; background-color: var(--accent-color); color: white; 
+            border: none; border-radius: 25px; cursor: pointer; font-size: 16px; 
+            font-weight: 600; transition: all 0.3s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            letter-spacing: 0.5px; margin-top: 10px;
+        }
+        .action-btn:hover { background-color: #a30d25; transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+        .back-btn { background-color: var(--secondary-accent); }
+        .back-btn:hover { background-color: #616e6f; }
+        .btn-center { display: block; margin: 15px auto; min-width: 220px; }
+        
+        .footer { margin-top: 30px; text-align: center; font-size: 13px; color: #95a5a6; border-top: 1px solid var(--card-border); padding-top: 15px; }
+        .hidden { display: none !important; }
+        
+        /* --- GÖRSEL SONUÇ EKRANI & DAİRESEL İLERLEME --- */
+        .progress-circle {
+            width: 150px; height: 150px; border-radius: 50%;
+            background: conic-gradient(var(--accent-color) 0%, var(--card-border) 0%);
+            display: flex; align-items: center; justify-content: center;
+            margin: 20px auto; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .progress-circle::before { content: ""; position: absolute; width: 120px; height: 120px; background-color: var(--container-bg); border-radius: 50%; }
+        .progress-circle span { position: relative; font-size: 36px; font-weight: bold; color: var(--text-color); }
+        
+        .badge-box { font-size: 22px; font-weight: bold; margin-bottom: 20px; text-align: center; padding: 10px; border-radius: 8px; background-color: var(--option-hover); }
+
+        /* --- MODALLAR --- */
+        .modal { display: none; position: fixed; z-index: 10000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(3px); }
+        .modal-content { 
+            background-color: var(--container-bg); padding: 25px; border-radius: 12px; 
+            width: 90%; max-width: 500px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            max-height: 90vh; overflow-y: auto; color: var(--text-color);
+        }
+        .modal-btn-group { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        
+        #kavramListesi::-webkit-scrollbar { width: 8px; }
+        #kavramListesi::-webkit-scrollbar-thumb { background: var(--secondary-accent); border-radius: 4px; }
+        .kavram-item { padding: 12px; border-bottom: 1px solid var(--card-border); text-align: left; font-size: 15px; }
+        .kavram-baslik { color: var(--accent-color); font-weight: bold; display: block; margin-bottom: 4px; font-size: 16px; }
+
+        /* --- DERS MATERYALLERİ (AKORDİYON) --- */
+        .accordion-btn { 
+            background-color: var(--secondary-accent); color: white; cursor: pointer; padding: 18px; width: 100%; border: none; text-align: left; outline: none; font-size: 16px; transition: 0.4s; border-radius: 8px; margin-top: 20px; font-weight: bold; display: flex; justify-content: space-between; align-items: center;
+        }
+        .accordion-btn:after { content: '\002B'; font-weight: bold; font-size: 20px; } 
+        .accordion-btn.active:after { content: "\2212"; }
+        .accordion-btn:hover { opacity: 0.9; }
+        .panel { padding: 0 18px; background-color: var(--container-bg); max-height: 0; overflow: hidden; transition: max-height 0.2s ease-out; border-left: 2px solid var(--secondary-accent); margin-bottom: 10px; }
+        .file-link { display: block; padding: 12px 10px; border-bottom: 1px solid var(--card-border); text-decoration: none; color: var(--text-color); transition: 0.2s; }
+        .file-link:hover { background: var(--option-hover); color: var(--accent-color); padding-left: 15px; }
+
+        .explanation-card { padding: 15px; margin-bottom: 10px; border-radius: 6px; border-left: 5px solid var(--card-border); background: var(--option-hover); color: var(--text-color); }
+        .explanation-card.correct { border-left-color: #27ae60; background-color: rgba(39, 174, 96, 0.1); }
+        .explanation-card.wrong { border-left-color: #e74c3c; background-color: rgba(231, 76, 60, 0.1); }
+    </style>
+</head>
+<body oncontextmenu="return false;"> 
+
+<div id="progress-container"><div id="progress-bar"></div></div>
+
+<button class="floating-btn" onclick="iletisimGoster()" title="Öğretmene Sor / Hata Bildir">💬</button>
+
+<div class="container">
+    
+    <div class="settings-panel">
+        <button class="settings-btn" onclick="fontDegistir(-1)" title="Yazıyı Küçült">A-</button>
+        <button class="settings-btn" onclick="fontDegistir(1)" title="Yazıyı Büyüt">A+</button>
+        <button class="settings-btn" onclick="toggleOkumaModu()" title="Sepya (Okuma) Modu">📜 Sepya</button>
+        <button class="settings-btn" onclick="toggleKaranlikMod()" title="Karanlık Mod">🌙 Gece</button>
+        
+        <button class="settings-btn btn-sozluk hidden" id="btnSozluk" onclick="sozlukGoster()">📖 Kavramlar</button>
+        <button class="settings-btn btn-duyuru hidden" id="btnDuyuru" onclick="duyuruGoster()">🔔 Duyuru</button>
+    </div>
+
+    <div id="girisEkrani">
+        <div style="text-align: center;">
+            <h1>12. Sınıf Tarih Portalı</h1>
+            <p style="color: var(--text-color); opacity: 0.8; margin-top:-10px; margin-bottom:15px; font-weight: bold;">T.C. İnkılap Tarihi ve Atatürkçülük</p>
+        </div>
+        
+        <p style="text-align: center; color: var(--text-color); opacity: 0.8; margin-bottom: 15px; font-size: 14px;">Giriş yapmak için bilgilerinizi giriniz.</p>
+        
+        <div class="form-group">
+            <label>Adınız Soyadınız:</label>
+            <input type="text" id="adSoyad" placeholder="Örn: Fatih Arslan">
+        </div>
+        <div class="form-group">
+            <label>Sınıfınız:</label>
+            <select id="sinif">
+                <option value="">Sınıfınızı Seçin</option>
+                <option value="12-A">12-A</option>
+                <option value="12-B">12-B</option>
+                <option value="12-C">12-C</option>
+                <option value="12-D">12-D</option>
+                <option value="12-E">12-E</option>
+                <option value="12-F">12-F</option>
+                <option value="12-G">12-G</option>
+                <option value="ÖATP-12/A">ÖATP-12/A</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Okul Numaranız:</label>
+            <input type="number" id="numara" placeholder="Örn: 21">
+        </div>
+        
+        <div class="form-group">
+            <label>Sınav Şifresi:</label>
+            <input type="password" id="sifre" placeholder="Şifreniz: Okul Numaranız + Soyadınız (Örn: 21arslan)" onkeypress="if(event.key==='Enter') girisYap()">
+        </div>
+        <button class="action-btn btn-center" onclick="girisYap()">Giriş Yap ve Başla</button>
+
+        <div class="footer" style="margin-top: 20px; border-top: none; padding-top: 0;">Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</div>
+    </div>
+
+    <div id="menuEkrani" class="hidden">
+        <h2 style="color: var(--text-color);">Hoşgeldin, <span id="kullaniciAdiSpan" style="color: var(--accent-color);"></span></h2>
+        
+        <div class="intro-box">
+            Sevgili 12. Sınıf öğrencim; bu portal <strong>Milli Mücadele ruhunu, Cumhuriyetimizin kuruluşunu ve Atatürk İlkelerini</strong> daha iyi kavraman için tasarlandı. YKS'ye hazırlık sürecinde testleri dikkatle çözmeyi ve takıldığın kelimeler olursa <strong>"Kavramlar"</strong> sözlüğünü kullanmayı unutma!
+        </div>
+
+        <div class="menu-grid">
+            <button class="menu-btn" onclick="testSec('test1')">🇹🇷 1. Ünite Testi<br><small>20. Yüzyıl Başlarında Osmanlı (20 Dk)</small></button>
+            <button class="menu-btn" onclick="testSec('test2')">🛡️ 2. Ünite Testi<br><small>Milli Mücadele Dönemi (20 Dk)</small></button>
+            <button class="menu-btn klasik" onclick="testSec('klasik')">✍️ Açık Uçlu Sınav<br><small>Harita ve Metin Analizi (40 Dk)</small></button>
+        </div>
+
+        <button class="accordion-btn">📚 Ders Materyalleri ve İndirmeler</button>
+        <div class="panel" id="materyalPaneli"></div>
+
+        <div class="footer">Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni | Boğaziçi Koleji MTAL</div>
+    </div>
+
+    <div id="testEkrani" class="hidden">
+        <div class="sticky-header">
+            <div style="display: flex; justify-content: space-between; align-items: center; padding: 0 10px;">
+                <h3 id="testBaslik" style="margin:0;">Sınav</h3>
+                <div class="timer-box" id="sayac">00:00</div>
+            </div>
+            <div class="nav-map" id="navMap"></div>
+        </div>
+        <div id="sorularAlani" style="margin-top: 20px;"></div>
+        <button class="action-btn btn-center" onclick="ozetGoster()">Sınavı Bitir ve Gönder</button>
+    </div>
+
+    <div id="sozlukModal" class="modal">
+        <div class="modal-content" style="border-top: 5px solid var(--accent-color); max-width: 600px;">
+            <h3 style="color:var(--accent-color); margin-top: 0;">📖 Tarihi Kavramlar Sözlüğü</h3>
+            <input type="text" id="sozlukArama" placeholder="Kavram ara... (Örn: Kuvay-ı Milliye, Mandater Sistem)" onkeyup="kavramAra()" style="margin-bottom: 15px; background:var(--container-bg); color:var(--text-color); border-color: var(--secondary-accent); width: 100%; padding: 10px; box-sizing: border-box; border-radius: 5px;">
+            
+            <div id="kavramListesi" style="max-height: 350px; overflow-y: auto; background: var(--option-hover); border-radius: 6px; border: 1px solid var(--card-border);"></div>
+            
+            <div class="modal-btn-group">
+                <button class="action-btn back-btn" onclick="sozlukKapat()">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="ozetModal" class="modal">
+        <div class="modal-content">
+            <h3 style="color:var(--accent-color);">Sınav Özeti</h3>
+            <div id="modalIcerik"></div>
+            <div class="modal-btn-group">
+                <button class="action-btn back-btn" onclick="document.getElementById('ozetModal').style.display='none'">Geri Dön</button>
+                <button class="action-btn" onclick="testiBitir()">Evet, Bitir</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="iletisimModal" class="modal">
+        <div class="modal-content" style="border-top: 5px solid var(--accent-color);">
+            <h3 style="color:var(--accent-color); margin-top:0;">💬 Öğretmene İlet</h3>
+            <p style="font-size:14px; color:var(--text-color); opacity:0.8;">Anlamadığın bir soruyu veya sistemde gördüğün bir hatayı buradan yazabilirsin.</p>
+            <textarea id="ogrenciMesaji" placeholder="Mesajınızı buraya yazınız..." style="width:100%; height:120px; padding:12px; margin-bottom:15px; border-radius:6px; border:1px solid var(--card-border); background:var(--container-bg); color:var(--text-color);"></textarea>
+            <div class="modal-btn-group">
+                <button class="action-btn back-btn" onclick="iletisimKapat()">İptal</button>
+                <button class="action-btn" onclick="mesajGonder()">Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="duyuruModal" class="modal">
+        <div class="modal-content" style="border-top: 5px solid #f39c12;">
+            <h3 style="color:#f39c12; margin-top:0;">📌 Haftanın Ödevi</h3>
+            <p style="font-size:16px; color:var(--text-color); line-height:1.6; text-align:left;">
+                Sevgili öğrenciler, bu haftaki ödevimiz <strong>1. Ünite Testini</strong> çözmektir. Lütfen süreniz bitmeden tamamlayınız. Başarılar dilerim!
+            </p>
+            <div class="modal-btn-group">
+                <button class="action-btn back-btn" onclick="duyuruKapat()" style="margin-top:0;">Kapat</button>
+                <button class="action-btn" style="background-color:#f39c12; margin-top:0;" onclick="odeveGit()">📝 Ödevi Çözmeye Başla</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="sonucEkrani" class="hidden container" style="margin-top: 50px; text-align: center;">
+        <h2>Sınav Tamamlandı!</h2>
+        
+        <div id="puanKutusu" style="display: none;">
+            <div class="progress-circle" id="daireIlerleme">
+                <span id="puanGostergesi">0</span>
+            </div>
+            <div class="badge-box" id="rozetAlani"></div>
+        </div>
+
+        <div id="klasikMesaj" class="hidden">
+            <h3 style="color: var(--secondary-accent);">Cevaplarınız Kaydedildi ✍️</h3>
+            <p>Öğretmeniniz değerlendirdikten sonra notunuzu açıklayacaktır.</p>
+        </div>
+        
+        <div style="background: var(--option-hover); border: 1px solid var(--card-border); padding: 10px; margin: 20px 0; border-radius: 5px; text-align: center;">
+            <span id="bitirmeSuresi" style="font-weight: bold;"></span> | 
+            <span id="ihlalSayisi" style="color:#e74c3c; font-weight:bold;"></span>
+        </div>
+
+        <div id="detayliCozumler" style="text-align: left; margin-top:30px;"></div>
+        <button class="action-btn back-btn btn-center" onclick="anaMenuyeDon()">Menüye Dön</button>
+    </div>
+
+</div>
+
+<script src="sinif12liste.js"></script>
+
+<script src="sinif12sorular.js"></script>
+
+<script>
+    // --- GÜVENLİK ---
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwDZ3mW8pTOoDlv5ZoEbY1wrilIj9ojvnZT8Ofc_QZWp3PHKBCuNiRSsg9pnO-Jezoz6A/exec";
+    
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.onkeydown = function(e) { if(e.keyCode === 123 || (e.ctrlKey && e.keyCode === 85)) return false; };
+
+    let ogrenci = {}; let aktifTest = null; let suankiSorular = []; let timerInterval; let baslangicZamani;
+    let flagged = {}; let ihlalSayisi = 0; let autoSaveData = {cevaplar:{}, flagged:{}};
+
+    // --- TEMA DEĞİŞTİRME FONKSİYONLARI ---
+    window.onload = function() {
+        const kayitliTema = localStorage.getItem('tema');
+        if(kayitliTema) document.body.classList.add(kayitliTema);
+        
+        if(localStorage.getItem('fontSize')) {
+            document.documentElement.style.setProperty('--font-size-base', localStorage.getItem('fontSize') + 'px');
+        }
+        
+        // Crash Recovery
+        const savedSession = localStorage.getItem('sinavSession12');
+        if (savedSession) {
+            if(confirm("Yarım kalmış bir sınavınız var. Devam etmek ister misiniz?")) {
+                restoreSession(JSON.parse(savedSession));
+            } else {
+                localStorage.removeItem('sinavSession12');
+            }
+        }
+        renderMateryaller();
+    };
+
+    function toggleOkumaModu() { 
+        document.body.classList.remove('dark-mode'); 
+        document.body.classList.toggle('sepia-mode');
+        localStorage.setItem('tema', document.body.classList.contains('sepia-mode') ? 'sepia-mode' : '');
+    }
+
+    function toggleKaranlikMod() {
+        document.body.classList.remove('sepia-mode');
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('tema', document.body.classList.contains('dark-mode') ? 'dark-mode' : '');
+    }
+
+    function fontDegistir(delta) {
+        let currentSize = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--font-size-base')) || 16;
+        if(currentSize + delta >= 14 && currentSize + delta <= 24) {
+            document.documentElement.style.setProperty('--font-size-base', (currentSize + delta) + 'px');
+            localStorage.setItem('fontSize', currentSize + delta);
+        }
+    }
+
+    // --- TEMEL SİSTEM FONKSİYONLARI VE ALGORİTMA ŞİFRE MANTIĞI ---
+    function girisYap() {
+        const ad = document.getElementById("adSoyad").value.trim();
+        const sinif = document.getElementById("sinif").value;
+        const numara = document.getElementById("numara").value.trim();
+        const girilenSifre = document.getElementById("sifre").value.trim();
+        
+        let girisBasarili = false;
+
+        // Katman 1: VIP (Master) Kontrolü
+        if (ad.toLocaleLowerCase('tr-TR') === "murat mutlu") {
+            if (girilenSifre === "1310") {
+                girisBasarili = true;
+                // Öğretmen girişinde sınıf veya numara boş bırakılabilir, hata vermemesi için varsayılan atıyoruz.
+                ogrenci = { ad: "Murat Mutlu (Öğretmen)", sinif: sinif || "Master", no: numara || "1310" };
+            } else {
+                alert("Master şifresi hatalı!");
+                return;
+            }
+        } else {
+            // Öğrenci için standart boşluk kontrolü
+            if (!ad || !sinif || !numara || !girilenSifre) { 
+                alert("Lütfen tüm alanları eksiksiz doldurunuz!"); 
+                return; 
+            }
+            
+            if (typeof KAYITLI_OGRENCILER === 'undefined') {
+                alert("Sistem Hatası: Güvenlik listesi (sinif12liste.js) yüklenemedi. Öğretmeninize haber veriniz.");
+                return;
+            }
+            if (typeof allTests === 'undefined') {
+                alert("Sistem Hatası: Soru havuzu (sinif12sorular.js) yüklenemedi. Öğretmeninize haber veriniz.");
+                return;
+            }
+
+            // Katman 2: Öğrenci (Beyaz Liste) Kontrolü
+            const temizAd = ad.replace(/\s+/g, ' ').toLocaleLowerCase('tr-TR');
+            const eslesen = KAYITLI_OGRENCILER.find(ogr => 
+                ogr.ad.replace(/\s+/g, ' ').toLocaleLowerCase('tr-TR') === temizAd && ogr.no === numara
+            );
+
+            if (eslesen) {
+                const adParcalari = eslesen.ad.trim().split(' ');
+                const soyad = adParcalari[adParcalari.length - 1].toLocaleLowerCase('tr-TR');
+                const beklenenSifre = eslesen.no + soyad;
+
+                if (girilenSifre === beklenenSifre) {
+                    girisBasarili = true;
+                    ogrenci = { ad, sinif, no: numara };
+                } else {
+                    alert("Şifreniz hatalı!\nLütfen şifrenizi okul numaranız ve soyadınız (küçük harflerle ve bitişik) olacak şekilde giriniz.\nÖrn: 21arslan");
+                    return;
+                }
+            } else {
+                alert("Giriş Başarısız! Adınız veya okul numaranız listede bulunamadı. Lütfen tam adınızı doğru yazdığınızdan emin olun.");
+                return;
+            }
+        }
+
+        if (girisBasarili) {
+            document.getElementById("girisEkrani").classList.add("hidden");
+            document.getElementById("menuEkrani").classList.remove("hidden");
+            document.getElementById("kullaniciAdiSpan").innerText = ogrenci.ad;
+            
+            document.getElementById("btnSozluk").classList.remove("hidden");
+            const btnDuyuru = document.getElementById("btnDuyuru");
+            if (btnDuyuru) btnDuyuru.classList.remove("hidden");
+        }
+    }
+
+    // --- DUYURU (ÖDEV) FONKSİYONLARI ---
+    function duyuruGoster() { document.getElementById('duyuruModal').style.display = 'block'; }
+    function duyuruKapat() { document.getElementById('duyuruModal').style.display = 'none'; }
+    function odeveGit() { duyuruKapat(); testSec('test1'); }
+
+    // --- TEST MOTORU ---
+    function testSec(testKodu) {
+        aktifTest = testKodu;
+        document.getElementById("menuEkrani").classList.add("hidden");
+        document.getElementById("testEkrani").classList.remove("hidden");
+        
+        ihlalSayisi = 0;
+        document.addEventListener("visibilitychange", ihlalTakip);
+
+        const isKlasik = (testKodu === 'klasik');
+        document.getElementById("testBaslik").innerText = isKlasik ? "Klasik Sınav" : "Çoktan Seçmeli Test";
+        sayacBaslat(isKlasik ? 40 * 60 : 20 * 60);
+
+        const alan = document.getElementById("sorularAlani");
+        alan.innerHTML = "";
+        flagged = {};
+        autoSaveData = { cevaplar: {}, flagged: {}, ihlal: 0, testKodu: testKodu, ogrenci: ogrenci, startTime: Date.now() };
+        
+        if (isKlasik) {
+            document.getElementById("navMap").innerHTML = "";
+            klasikSorular.forEach((item, index) => {
+                alan.innerHTML += `
+                <div class="question-card">
+                    <div class="question-text">Soru ${index+1}: ${item.soru}</div>
+                    <textarea id="klasikCevap${index}" oninput="cevapVerildi(${index}, this.value)" placeholder="Cevabınızı buraya yazınız..."></textarea>
+                </div>`;
+            });
+        } else {
+            let hamSorular = allTests[testKodu] || [];
+            suankiSorular = shuffle(JSON.parse(JSON.stringify(hamSorular))).map(s => {
+                s.shuffledOptions = shuffle([...s.secenekler]); 
+                return s;
+            });
+            renderTest(alan);
+        }
+        updateProgress();
+        saveToLocal();
+    }
+
+    function cleanText(text) { return text.replace(/^[A-E]\)\s*/, ''); }
+
+    function renderTest(alan) {
+        const map = document.getElementById("navMap");
+        map.innerHTML = "";
+        
+        suankiSorular.forEach((soru, index) => {
+            const dot = document.createElement("div");
+            dot.className = "nav-dot"; dot.innerText = index + 1; dot.id = `dot-${index}`;
+            dot.onclick = () => document.getElementById(`soru-kart-${index}`).scrollIntoView({behavior: "smooth"});
+            map.appendChild(dot);
+
+            const kart = document.createElement("div");
+            kart.className = "question-card"; kart.id = `soru-kart-${index}`;
+            
+            let html = `
+            <div class="question-header">
+                <span class="question-number">Soru ${index + 1}</span>
+                <button class="flag-btn" id="flag-${index}" onclick="bayrakKoy(${index})">🚩 Sonra Bak</button>
+            </div>
+            <div class="question-text">${soru.soru}</div>
+            <div class="options">`;
+            
+            const labels = ["A", "B", "C", "D", "E"];
+            soru.shuffledOptions.forEach((optText, i) => {
+                const cleanOpt = cleanText(optText);
+                html += `<label><input type="radio" name="soru${index}" value="${cleanOpt}" onchange="cevapVerildi(${index}, '${cleanOpt.replace(/'/g, "\\'")}')"> <b>${labels[i]})</b> ${cleanOpt}</label>`;
+            });
+            html += `</div>`;
+            kart.innerHTML = html;
+            alan.appendChild(kart);
+        });
+    }
+
+    function cevapVerildi(index, value) {
+        autoSaveData.cevaplar[index] = value;
+        if(aktifTest !== 'klasik') {
+            document.getElementById(`dot-${index}`).classList.add("answered");
+            updateProgress();
+        }
+        saveToLocal();
+    }
+
+    function bayrakKoy(index) {
+        const btn = document.getElementById(`flag-${index}`);
+        const dot = document.getElementById(`dot-${index}`);
+        if (flagged[index]) {
+            delete flagged[index]; delete autoSaveData.flagged[index];
+            btn.classList.remove("active"); dot.classList.remove("flagged"); btn.innerText = "🚩 Sonra Bak";
+        } else {
+            flagged[index] = true; autoSaveData.flagged[index] = true;
+            btn.classList.add("active"); dot.classList.add("flagged"); btn.innerText = "🚩 İşaretlendi";
+        }
+        saveToLocal();
+    }
+
+    function updateProgress() {
+        if(aktifTest === 'klasik') return;
+        const total = suankiSorular.length;
+        const answered = Object.keys(autoSaveData.cevaplar).length;
+        document.getElementById("progress-bar").style.width = ((answered / total) * 100) + "%";
+    }
+
+    function saveToLocal() {
+        autoSaveData.ihlal = ihlalSayisi;
+        localStorage.setItem('sinavSession12', JSON.stringify(autoSaveData));
+    }
+
+    function restoreSession(data) {
+        document.getElementById("girisEkrani").classList.add("hidden");
+        document.getElementById("menuEkrani").classList.remove("hidden");
+        ogrenci = data.ogrenci;
+        document.getElementById("kullaniciAdiSpan").innerText = ogrenci.ad;
+        document.getElementById("btnSozluk").classList.remove("hidden");
+        document.getElementById("btnDuyuru").classList.remove("hidden");
+    }
+
+    function ihlalTakip() {
+        if (!document.hidden) return;
+        ihlalSayisi++;
+        document.title = `⚠️ UYARI (${ihlalSayisi}) - Sekme Değiştirildi!`;
+        saveToLocal();
+    }
+
+    function sayacBaslat(sn) {
+        clearInterval(timerInterval);
+        baslangicZamani = new Date();
+        let kalan = sn;
+        timerInterval = setInterval(() => {
+            let dk = Math.floor(kalan / 60); let s = kalan % 60;
+            document.getElementById("sayac").innerText = `${dk}:${s<10?'0':''}${s}`;
+            if(--kalan < 0) { clearInterval(timerInterval); testiBitir(); }
+        }, 1000);
+    }
+
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    function ozetGoster() { 
+        const toplam = (aktifTest === 'klasik') ? klasikSorular.length : suankiSorular.length;
+        const cevaplanan = Object.keys(autoSaveData.cevaplar).length;
+        const bos = toplam - cevaplanan;
+        const isaretli = Object.keys(flagged).length;
+        let html = `
+            <div class="modal-stat">✅ Cevaplanan: <b>${cevaplanan}</b></div>
+            <div class="modal-stat" style="color:${bos>0?'#e74c3c':'#27ae60'}">⚠️ Boş Bırakılan: <b>${bos}</b></div>
+            <div class="modal-stat" style="color:#f39c12">🚩 İşaretlenen: <b>${isaretli}</b></div>
+            <p>Sınavı bitirmek istediğinize emin misiniz?</p>
+        `;
+        document.getElementById("modalIcerik").innerHTML = html;
+        document.getElementById("ozetModal").style.display = "block"; 
+    }
+
+    function testiBitir() {
+        clearInterval(timerInterval);
+        document.removeEventListener("visibilitychange", ihlalTakip);
+        document.getElementById("ozetModal").style.display = "none";
+        document.getElementById("testEkrani").classList.add("hidden");
+        document.getElementById("sonucEkrani").classList.remove("hidden");
+        localStorage.removeItem('sinavSession12');
+        
+        const bitisZamani = new Date();
+        const gecenSureSn = Math.floor((bitisZamani - baslangicZamani) / 1000);
+        const gecenSureStr = `${Math.floor(gecenSureSn / 60)} dk ${gecenSureSn % 60} sn`;
+        let raporMetni = ""; let puan = 0; let detayHtml = "";
+
+        if(aktifTest === 'klasik') {
+            document.getElementById("puanKutusu").style.display = "none";
+            document.getElementById("klasikMesaj").classList.remove("hidden");
+            
+            raporMetni = "[KLASİK] ";
+            detayHtml = "<h3 style='color:var(--text-color); border-bottom:2px solid var(--card-border); padding-bottom:10px;'>Cevap Anahtarı</h3>";
+            klasikSorular.forEach((item, index) => {
+                const cvp = autoSaveData.cevaplar[index] || "";
+                raporMetni += `S${index+1}: ${cvp.replace(/\n/g," ")} || `;
+                detayHtml += `
+                <div class="explanation-card">
+                    <div style="font-weight:bold; margin-bottom:5px;">Soru ${index+1}: ${item.soru}</div>
+                    <div style="margin-bottom:10px;"><span style="color:#e67e22; font-weight:bold;">Sizin Cevabınız:</span><br>${cvp || "Boş"}</div>
+                    <div style="background:rgba(39, 174, 96, 0.1); padding:10px; border-radius:5px;"><span style="color:#27ae60; font-weight:bold;">Beklenen Cevap:</span><br>${item.cevap}</div>
+                </div>`;
+            });
+            puan = "DEĞERLENDİRİLECEK";
+        } else {
+            let dogruSayisi = 0;
+            raporMetni = `[${aktifTest.toUpperCase()}] `;
+            
+            suankiSorular.forEach((soru, index) => {
+                const secilen = autoSaveData.cevaplar[index] || "BOŞ";
+                const dogruMetin = cleanText(soru.cevap);
+                const isCorrect = (secilen === dogruMetin);
+                
+                if (isCorrect) {
+                    dogruSayisi++;
+                    detayHtml += `<div class="explanation-card correct"><b>Soru ${index+1}: DOĞRU</b><br>Sizin Cevabınız: ${secilen}<br><i>${soru.aciklama || ""}</i></div>`;
+                } else {
+                    detayHtml += `<div class="explanation-card wrong"><b>Soru ${index+1}: YANLIŞ</b><br>Sizin Cevabınız: ${secilen}<br>Doğru Cevap: ${dogruMetin}<br><i>${soru.aciklama || ""}</i></div>`;
+                    raporMetni += `S${index+1}:Y (${secilen}) | `;
+                }
+            });
+            puan = Math.round((dogruSayisi / suankiSorular.length) * 100) || 0;
+            raporMetni += ` Doğru: ${dogruSayisi}/${suankiSorular.length}`;
+            
+            document.getElementById("klasikMesaj").classList.add("hidden");
+            document.getElementById("puanKutusu").style.display = "block";
+            
+            let daire = document.getElementById("daireIlerleme");
+            let rozet = document.getElementById("rozetAlani");
+            let puanYazi = document.getElementById("puanGostergesi");
+            daire.style.background = `conic-gradient(var(--accent-color) ${puan}%, var(--card-border) ${puan}%)`;
+            puanYazi.innerText = puan;
+
+            if(puan >= 90) { rozet.innerHTML = "🌟 Gazi Başkomutan"; rozet.style.color = "var(--accent-color)"; }
+            else if(puan >= 70) { rozet.innerHTML = "🦅 Kuvay-ı Milliye Kahramanı"; rozet.style.color = "#27ae60"; }
+            else if(puan >= 50) { rozet.innerHTML = "🐎 Vatansever Asker"; rozet.style.color = "#e67e22"; }
+            else { rozet.innerHTML = "🛡️ Genç Gönüllü"; rozet.style.color = "var(--secondary-accent)"; }
+        }
+        
+        document.getElementById("bitirmeSuresi").innerText = "Süre: " + gecenSureStr;
+        document.getElementById("detayliCozumler").innerHTML = detayHtml;
+        
+        if(ihlalSayisi > 0) {
+            document.getElementById("ihlalSayisi").innerText = `⚠️ ${ihlalSayisi} kez sekme değiştirdiniz!`;
+            raporMetni += ` [İHLAL: ${ihlalSayisi}]`;
+            alert(`Sınav sırasında ${ihlalSayisi} kez sekme değiştirdiniz! Bu durum öğretmeninize raporlanmıştır.`);
+        } else {
+            document.getElementById("ihlalSayisi").innerText = "✅ Sınav odağı korundu.";
+            document.getElementById("ihlalSayisi").style.color = "#27ae60";
+        }
+
+        const data = {
+            isim: ogrenci.ad, sinif: ogrenci.sinif, numara: ogrenci.no,
+            puan: puan, rapor: `(Süre: ${gecenSureStr}) ` + raporMetni
+        };
+        fetch(SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).catch(e => console.log(e));
+    }
+
+    function anaMenuyeDon() {
+        document.getElementById("sonucEkrani").classList.add("hidden");
+        document.getElementById("menuEkrani").classList.remove("hidden");
+        aktifTest = null; ihlalSayisi = 0; autoSaveData = {cevaplar:{}, flagged:{}};
+        document.getElementById("puanKutusu").style.display = "none";
+        document.getElementById("klasikMesaj").classList.add("hidden");
+        window.scrollTo(0, 0);
+    }
+
+    // --- SÖZLÜK FONKSİYONLARI ---
+    function sozlukGoster() {
+        document.getElementById('sozlukModal').style.display = 'block';
+        kavramAra(); 
+        document.getElementById('sozlukArama').focus();
+    }
+    function sozlukKapat() {
+        document.getElementById('sozlukModal').style.display = 'none';
+        document.getElementById('sozlukArama').value = ""; 
+    }
+    function kavramAra() {
+        const query = document.getElementById('sozlukArama').value.toLowerCase();
+        const listeDiv = document.getElementById('kavramListesi');
+        listeDiv.innerHTML = "";
+        
+        if (typeof KAVRAMLAR !== 'undefined') {
+            KAVRAMLAR.forEach(k => {
+                if(k.terim.toLowerCase().includes(query) || k.anlam.toLowerCase().includes(query)) {
+                    listeDiv.innerHTML += `
+                    <div class="kavram-item">
+                        <span class="kavram-baslik">${k.terim}</span>
+                        <span style="opacity: 0.8;">${k.anlam}</span>
+                    </div>`;
+                }
+            });
+        }
+        if(listeDiv.innerHTML === "") {
+            listeDiv.innerHTML = `<div style="padding:15px; text-align:center; color:#e74c3c;">Kavram bulunamadı.</div>`;
+        }
+    }
+
+    // --- İLETİŞİM (HATA BİLDİR) FONKSİYONLARI ---
+    function iletisimGoster() { document.getElementById('iletisimModal').style.display = 'block'; }
+    function iletisimKapat() { document.getElementById('iletisimModal').style.display = 'none'; document.getElementById('ogrenciMesaji').value = ""; }
+    function mesajGonder() {
+        const mesaj = document.getElementById('ogrenciMesaji').value;
+        if(mesaj.trim() === "") { alert("Lütfen bir mesaj yazınız."); return; }
+        if(!ogrenci || !ogrenci.ad) { alert("Mesaj gönderebilmek için önce ana ekrandan giriş yapmalısınız."); return; }
+
+        const btn = document.querySelectorAll('#iletisimModal .action-btn')[1];
+        const eskiMetin = btn ? btn.innerText : "Gönder";
+        if(btn) { btn.innerText = "Gönderiliyor..."; btn.disabled = true; }
+
+        const data = {
+            isim: ogrenci.ad, sinif: ogrenci.sinif, numara: ogrenci.no || "Belirtilmedi",
+            puan: "İLETİŞİM/MESAJ", rapor: mesaj
+        };
+        fetch(SCRIPT_URL, {
+            method: 'POST', mode: 'no-cors',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        }).then(() => {
+            alert("Mesajınız öğretmeninize başarıyla iletilmiştir. Geri bildiriminiz için teşekkürler!");
+            iletisimKapat();
+            if(btn) { btn.innerText = eskiMetin; btn.disabled = false; }
+        }).catch(e => {
+            console.log(e);
+            alert("Mesaj gönderilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
+            if(btn) { btn.innerText = eskiMetin; btn.disabled = false; }
+        });
+    }
+
+    // --- AKORDİYON MENÜ FONKSİYONLARI ---
+    function renderMateryaller() {
+        const panel = document.getElementById("materyalPaneli");
+        if (!panel) return;
+        let html = "";
+        if (typeof dersMateryalleri !== 'undefined') {
+            dersMateryalleri.forEach(mat => {
+                html += `<a href="${mat.link}" target="_blank" class="file-link">${mat.baslik}</a>`;
+            });
+        }
+        panel.innerHTML = html;
+        
+        const accBtn = document.querySelector(".accordion-btn");
+        if(accBtn) {
+            accBtn.onclick = function() {
+                this.classList.toggle("active");
+                if (panel.style.maxHeight) { panel.style.maxHeight = null; } 
+                else { panel.style.maxHeight = panel.scrollHeight + "px"; }
+            };
+        }
+    }
+    
+    // --- MODALLARI ESC VE BOŞLUĞA TIKLAYARAK KAPATMA ---
+    window.addEventListener('click', function(event) {
+        if (event.target.classList.contains('modal')) { event.target.style.display = 'none'; }
+    });
+    window.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => { if (modal.style.display === 'block') { modal.style.display = 'none'; } });
+        }
+    });
+</script>
+
+</body>
+</html>

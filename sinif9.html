@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Boğaziçi MTAL Tarih Dersi Eğitim Portalı</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         /* --- CSS DEĞİŞKENLERİ (TEMA VE FONT AYARLARI İÇİN) --- */
         :root {
@@ -164,7 +165,7 @@
             font-size: 14px; line-height: 1.6; box-shadow: 0 8px 24px rgba(0,0,0,0.04); 
             display: flex; gap: 15px; align-items: flex-start;
         }
-        .intro-icon { font-size: 24px; flex-shrink: 0; }
+        .intro-icon { font-size: 24px; flex-shrink: 0; color: #f1c40f; }
         
         .folder-grid {
             display: grid; grid-template-columns: 1fr;
@@ -258,7 +259,7 @@
             border: 2px solid var(--card-border); border-radius: 50%;
             width: 40px; height: 40px; min-width: 40px; display: flex;
             align-items: center; justify-content: center; cursor: pointer;
-            font-size: 22px; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            font-size: 20px; font-weight: 900; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
             transition: all 0.2s ease; z-index: 5; user-select: none;
         }
         .scroll-arrow:hover { background: var(--accent-color); color: white; border-color: var(--accent-color); transform: scale(1.1); }
@@ -298,7 +299,7 @@
         .test-item-row.klasik:hover { border-color: #e67e22; }
         
         .test-item-left { display: flex; align-items: center; gap: 15px; width: 100%; }
-        .test-item-icon { font-size: 28px; }
+        .test-item-icon { font-size: 28px; color: var(--text-color); }
         .test-item-info { display: flex; flex-direction: column; gap: 6px; text-align: left; }
         .test-item-title { font-weight: 700; font-size: 16px; color: var(--text-color); }
         .test-item-meta { font-size: 13px; opacity: 0.7; color: var(--text-color); line-height: 1.4; }
@@ -419,16 +420,16 @@
 <div id="progress-container"><div id="progress-bar"></div></div>
 <div id="watermark"></div>
 
-<button class="floating-btn" onclick="iletisimGoster()" title="Öğretmene Sor / Hata Bildir">💬</button>
+<button class="floating-btn" onclick="iletisimGoster()" title="Öğretmene Sor / Hata Bildir"><i class="fa-solid fa-comment-dots"></i></button>
 
 <div class="container">
     
     <div class="settings-panel">
         <button class="settings-btn" onclick="fontDegistir(-1)" title="Yazıyı Küçült">A-</button>
         <button class="settings-btn" onclick="fontDegistir(1)" title="Yazıyı Büyüt">A+</button>
-        <button class="settings-btn" id="btnTema" onclick="temaCycle()" title="Tema Değiştir">🌙</button>
-        <button class="settings-btn hidden" id="btnDuyuru" onclick="duyuruGoster()" title="Duyuru">🔔</button>
-        <button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Tarihi Kavramlar">📖 Kavramlar</button>
+        <button class="settings-btn" id="btnTema" onclick="temaCycle()" title="Tema Değiştir"><i class="fa-solid fa-moon"></i></button>
+        <button class="settings-btn hidden" id="btnDuyuru" onclick="duyuruGoster()" title="Duyuru"><i class="fa-solid fa-bell"></i></button>
+        <button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Tarihi Kavramlar"><i class="fa-solid fa-book-open"></i> Kavramlar</button>
     </div>
 
     <div id="girisEkrani">
@@ -442,11 +443,11 @@
         <div class="login-grid">
             <div class="form-group">
                 <label>Adınız Soyadınız:</label>
-                <input type="text" id="adSoyad" placeholder="Örn: Yunus Dursun">
+                <input type="text" id="adSoyad" placeholder="Örn: Yunus Dursun" onkeypress="if(event.key==='Enter') girisYap()">
             </div>
             <div class="form-group">
                 <label>Sınıfınız:</label>
-                <select id="sinif">
+                <select id="sinif" onkeypress="if(event.key==='Enter') girisYap()">
                     <option value="">Sınıfınızı Seçin</option>
                     <option value="9-A">9-A</option>
                     <option value="9-B">9-B</option>
@@ -457,7 +458,7 @@
             </div>
             <div class="form-group">
                 <label>Okul Numaranız:</label>
-                <input type="number" id="numara" placeholder="Örn: 714">
+                <input type="number" id="numara" placeholder="Örn: 714" onkeypress="if(event.key==='Enter') girisYap()">
             </div>
             <div class="form-group">
                 <label>Sınav Şifresi:</label>
@@ -475,7 +476,7 @@
         </h2>
         
         <div class="intro-box">
-            <div class="intro-icon">💡</div>
+            <div class="intro-icon"><i class="fa-solid fa-lightbulb"></i></div>
             <div>
                 Sevgili öğrenciler; sizin için hazırladığım bu testler ve ders notları derslerde işlediğimiz konularımızı anlamlı öğrenmeye dönüştürmek için hazırlanmıştır. Çoktan seçmeli testleriniz "Basit, Orta, Zor" şeklinde sizlere sunulmuş olup derslerdeki dikkat seviyenizi ve not alma alışkanlığınızı ölçerken "Açık Uçlu (Klasik)" sınavınız ise MEB Maarif Modelinin sizlerden istediği <strong>"YORUMLAMA ve ANALİZ BECERİSİ"</strong>ni ölçmek üzere hazırlanmıştır.
             </div>
@@ -484,21 +485,21 @@
         <div id="anaKlasorler">
             <div class="folder-grid">
                 <button class="folder-btn" onclick="odayaGir('u1')">
-                    <div class="icon-wrapper u1-icon">⏳</div> 
+                    <div class="icon-wrapper u1-icon"><i class="fa-solid fa-hourglass-half"></i></div> 
                     <div class="folder-texts">
                         <span class="folder-title">1. Ünite</span>
                         <span class="folder-desc">Geçmişin İnşa Sürecinde Tarih</span>
                     </div>
                 </button>
                 <button class="folder-btn" onclick="odayaGir('u2')">
-                    <div class="icon-wrapper u2-icon">🏛️</div> 
+                    <div class="icon-wrapper u2-icon"><i class="fa-solid fa-building-columns"></i></div> 
                     <div class="folder-texts">
                         <span class="folder-title">2. Ünite</span>
                         <span class="folder-desc">Eski Çağ Medeniyetleri</span>
                     </div>
                 </button>
                 <button class="folder-btn" onclick="odayaGir('u3')">
-                    <div class="icon-wrapper u3-icon">🏰</div> 
+                    <div class="icon-wrapper u3-icon"><i class="fa-solid fa-dungeon"></i></div> 
                     <div class="folder-texts">
                         <span class="folder-title">3. Ünite</span>
                         <span class="folder-desc">Orta Çağ Medeniyetleri</span>
@@ -516,9 +517,9 @@
             <h2 id="odaBasligi" class="room-title">Sınav Odası</h2>
 
             <div class="search-container">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="testArama" class="search-input" placeholder="Bu klasörde test ara... (Örn: İlk Çağ)" onkeyup="testAra()">
-                <button class="search-clear" id="aramaTemizle" onclick="aramaTemizleBtn()" title="Aramayı Temizle">✕</button>
+                <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                <input type="text" id="testArama" class="search-input" placeholder="Ünite sınavı ara (Örn: İlk Çağ)" onkeyup="testAra()">
+                <button class="search-clear" id="aramaTemizle" onclick="aramaTemizleBtn()" title="Aramayı Temizle"><i class="fa-solid fa-xmark"></i></button>
             </div>
             
             <div class="konu-slider-wrapper">
@@ -530,7 +531,7 @@
             <div id="odaTestleri" class="test-list-container"></div>
         </div>
  
-        <button class="accordion-btn" id="materyalBtn">📚 Ders Materyalleri ve İndirmeler</button>
+        <button class="accordion-btn" id="materyalBtn"><i class="fa-solid fa-book" style="margin-right:8px;"></i> Ders Materyalleri ve İndirmeler</button>
         <div class="panel" id="materyalPaneli"></div>
 
         <div class="footer">Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni | Özel Batman Boğaziçi Koleji MTAL</div>
@@ -564,7 +565,7 @@
         </div>
 
         <div id="klasikMesaj" style="text-align: center; display: none; padding: 30px 15px; background: var(--option-hover); border-radius: 16px; margin-bottom: 20px;">
-            <h3 style="color: #27ae60; font-size: 24px; margin-top: 0;">Cevaplarınız Kaydedildi ✍️</h3>
+            <h3 style="color: #27ae60; font-size: 24px; margin-top: 0;"><i class="fa-solid fa-check-double"></i> Cevaplarınız Kaydedildi</h3>
             <p style="font-size: 16px;">Öğretmeniniz değerlendirdikten sonra notunuzu açıklayacaktır.</p>
         </div>
         
@@ -583,7 +584,7 @@
 
     <div id="sozlukModal" class="modal">
         <div class="modal-content" style="border-top: 6px solid var(--accent-color); max-width: 600px;">
-            <h3 style="color:var(--accent-color); margin-top: 0; font-size: 22px;">📖 Tarihi Kavramlar</h3>
+            <h3 style="color:var(--accent-color); margin-top: 0; font-size: 22px;"><i class="fa-solid fa-book-open"></i> Tarihi Kavramlar</h3>
             <input type="text" id="sozlukArama" placeholder="Kavram ara... (Örn: Ziggurat, Firavun)" onkeyup="kavramAra()" style="margin-bottom: 20px;">
             <div id="kavramListesi" style="max-height: 40vh; overflow-y: auto; background: var(--option-hover); border-radius: 12px; border: 2px solid var(--card-border);"></div>
             <div class="modal-btn-group">
@@ -605,8 +606,8 @@
 
     <div id="iletisimModal" class="modal">
         <div class="modal-content" style="border-top: 6px solid #e74c3c;">
-            <h3 style="color:#e74c3c; margin-top:0; font-size: 22px;">💬 Öğretmene İlet</h3>
-            <p style="font-size:15px; color:var(--text-color); opacity:0.8; margin-bottom: 20px;">Anlamadığın bir soruyu veya sistemde gördüğün bir hatayı buradan yazabilirsin.</p>
+            <h3 style="color:#e74c3c; margin-top:0; font-size: 22px;"><i class="fa-solid fa-comment-dots"></i> Öğretmene İlet</h3>
+            <p style="font-size:15px; color:var(--text-color); opacity:0.8; margin-bottom: 20px;">Anlamadığın bir soruyu veya sistemde gördüğün bir hatayı buradan yazabilirsin. diğer her şey için murat@kirkyama.uk adresine mail atabilirsin.</p>
             <textarea id="ogrenciMesaji" placeholder="Mesajınızı buraya yazınız..."></textarea>
             <div class="modal-btn-group">
                 <button class="action-btn back-btn" onclick="iletisimKapat()" style="margin-top:0;">İptal</button>
@@ -617,13 +618,13 @@
     
     <div id="duyuruModal" class="modal">
         <div class="modal-content" style="border-top: 6px solid #f39c12;">
-            <h3 style="color:#f39c12; margin-top:0; font-size: 22px;">📌 Haftanın Ödevi</h3>
+            <h3 style="color:#f39c12; margin-top:0; font-size: 22px;"><i class="fa-solid fa-thumbtack"></i> Haftanın Ödevi</h3>
             <p style="font-size:16px; color:var(--text-color); line-height:1.7; text-align:left; padding: 10px 0;">
-                Sevgili öğrenciler, bu haftaki ödevimiz <strong>1. Ünite 2. Testi</strong> çözmektir. Lütfen süreniz bitmeden tamamlayınız. Başarılar dilerim!
+                Sevgili öğrenciler, bu haftaki ödevimiz <strong>2. Ünite 2. Testi</strong> çözmektir. Lütfen süreniz bitmeden tamamlayınız. Başarılar dilerim!
             </p>
             <div class="modal-btn-group">
                 <button class="action-btn back-btn" onclick="duyuruKapat()" style="margin-top:0;">Kapat</button>
-                <button class="action-btn" style="background-color:#f39c12; margin-top:0; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);" onclick="odeveGit()">📝 Ödevi Çöz</button>
+                <button class="action-btn" style="background-color:#f39c12; margin-top:0; box-shadow: 0 4px 15px rgba(243, 156, 18, 0.3);" onclick="odeveGit()"><i class="fa-solid fa-pen-nib"></i> Ödevi Çöz</button>
             </div>
         </div>
     </div>
@@ -695,7 +696,8 @@
         document.getElementById('odaBasligi').innerText = data.baslik;
 
         const konular = new Set();
-        data.testler.forEach(t => { if(!t.isKlasik && t.konu) konular.add(t.konu); });
+        // İstenilen kural: "Geçmişin İnşa Sürecinde Tarih" filtresini gizle
+        data.testler.forEach(t => { if(!t.isKlasik && t.konu && t.konu !== "Geçmişin İnşa Sürecinde Tarih") konular.add(t.konu); });
         const hasKlasik = data.testler.some(t => t.isKlasik);
 
         const chipAlani = document.getElementById('konuFiltreleri');
@@ -706,7 +708,7 @@
             chipAlani.innerHTML += "<button class='konu-chip' onclick=\"konuFiltrele('" + safeK + "', this)\">" + k + "</button>";
         });
         if (hasKlasik) {
-            chipAlani.innerHTML += "<button class='konu-chip klasik' onclick=\"konuFiltrele('Klasik Sınavlar', this)\">✍️ Klasik Sınavlar</button>";
+            chipAlani.innerHTML += "<button class='konu-chip klasik' onclick=\"konuFiltrele('Klasik Sınavlar', this)\"><i class=\"fa-solid fa-pen-nib\"></i> Klasik Sınavlar</button>";
         }
 
         oda.classList.remove('hidden');
@@ -737,7 +739,7 @@
             filtrelenmisTestler.forEach(t => {
                 const row = document.createElement('div');
                 row.className = "test-item-row " + (t.isKlasik ? "klasik" : "");
-                const icon = t.isKlasik ? '✍️' : '📝';
+                const icon = t.isKlasik ? '<i class="fa-solid fa-pen-to-square"></i>' : '<i class="fa-solid fa-file-signature"></i>';
                 
                 let rHtml = "<div class='test-item-left'><div class='test-item-icon'>" + icon + "</div><div class='test-item-info'>";
                 rHtml += "<span class='test-item-title'>" + t.baslik + "</span><span class='test-item-meta'>" + t.aciklama + "</span></div></div>";
@@ -764,8 +766,8 @@
             document.body.className = kayitliTema;
             const btnTema = document.getElementById('btnTema');
             if(btnTema) {
-                if(kayitliTema === 'dark-mode') btnTema.innerHTML = '📜';
-                else if(kayitliTema === 'sepia-mode') btnTema.innerHTML = '☀️';
+                if(kayitliTema === 'dark-mode') btnTema.innerHTML = '<i class="fa-solid fa-scroll"></i>';
+                else if(kayitliTema === 'sepia-mode') btnTema.innerHTML = '<i class="fa-solid fa-sun"></i>';
             }
         }
         
@@ -800,16 +802,16 @@
         if (!isDark && !isSepia) {
             body.classList.add('dark-mode');
             localStorage.setItem('tema', 'dark-mode');
-            btnTema.innerHTML = '📜';
+            btnTema.innerHTML = '<i class="fa-solid fa-scroll"></i>';
         } else if (isDark) {
             body.classList.remove('dark-mode');
             body.classList.add('sepia-mode');
             localStorage.setItem('tema', 'sepia-mode');
-            btnTema.innerHTML = '☀️';
+            btnTema.innerHTML = '<i class="fa-solid fa-sun"></i>';
         } else if (isSepia) {
             body.classList.remove('sepia-mode');
             localStorage.setItem('tema', '');
-            btnTema.innerHTML = '🌙';
+            btnTema.innerHTML = '<i class="fa-solid fa-moon"></i>';
         }
     }
 
@@ -908,7 +910,7 @@
 
     function duyuruGoster() { document.getElementById('duyuruModal').style.display = 'block'; }
     function duyuruKapat() { document.getElementById('duyuruModal').style.display = 'none'; }
-    function odeveGit() { duyuruKapat(); testSec('test2'); }
+    function odeveGit() { duyuruKapat(); testSec('test_u2_genel_1'); }
 
     function testSec(testKodu) {
         aktifTest = testKodu;
@@ -919,7 +921,7 @@
         let hamSorular = (window.allTests && window.allTests[testKodu]) ? window.allTests[testKodu] : [];
         
         if (!hamSorular || hamSorular.length === 0) {
-            alan.innerHTML = "<div style='padding:30px; text-align:center; border:2px dashed #e74c3c; border-radius:10px; background:#fadbd8;'><h3 style='color:#c0392b;'>⚠️ Sorular Yüklenemedi!</h3><p style='color:#333; font-weight:bold;'>Sistem '" + testKodu + "' isimli test verisini bulamadı.</p><p style='font-size:14px; color:#555;'>Lütfen JS dosyanızın içindeki tanımlamanın (Örn: window.allTests['" + testKodu + "']) menü koduyla harfi harfine aynı olduğunu kontrol edin.</p></div>";
+            alan.innerHTML = "<div style='padding:30px; text-align:center; border:2px dashed #e74c3c; border-radius:10px; background:#fadbd8;'><h3 style='color:#c0392b;'><i class=\"fa-solid fa-triangle-exclamation\"></i> Sorular Yüklenemedi!</h3><p style='color:#333; font-weight:bold;'>Sistem '" + testKodu + "' isimli test verisini bulamadı.</p><p style='font-size:14px; color:#555;'>Lütfen JS dosyanızın içindeki tanımlamanın (Örn: window.allTests['" + testKodu + "']) menü koduyla harfi harfine aynı olduğunu kontrol edin.</p></div>";
             document.getElementById("menuEkrani").classList.add("hidden");
             document.getElementById("testEkrani").classList.remove("hidden");
             document.getElementById("testBaslik").innerText = "Hata Sayfası";
@@ -975,7 +977,7 @@
             
             let qHtml = "<div class='question-header'>";
             qHtml += "<span class='question-number'>Soru " + (index + 1) + "</span>";
-            qHtml += "<button class='flag-btn' id='flag-" + index + "' onclick='bayrakKoy(" + index + ")'>🚩 Sonra Bak</button>";
+            qHtml += "<button class='flag-btn' id='flag-" + index + "' onclick='bayrakKoy(" + index + ")'><i class=\"fa-solid fa-flag\"></i> Sonra Bak</button>";
             qHtml += "</div>";
             qHtml += "<div class='question-text'>" + soru.soru + "</div>";
             qHtml += "<div class='options'>";
@@ -1018,10 +1020,10 @@
         const dot = document.getElementById("dot-" + index);
         if (flagged[index]) {
             delete flagged[index]; delete autoSaveData.flagged[index];
-            btn.classList.remove("active"); dot.classList.remove("flagged"); btn.innerText = "🚩 Sonra Bak";
+            btn.classList.remove("active"); dot.classList.remove("flagged"); btn.innerHTML = '<i class="fa-solid fa-flag"></i> Sonra Bak';
         } else {
             flagged[index] = true; autoSaveData.flagged[index] = true;
-            btn.classList.add("active"); dot.classList.add("flagged"); btn.innerText = "🚩 İşaretlendi";
+            btn.classList.add("active"); dot.classList.add("flagged"); btn.innerHTML = '<i class="fa-solid fa-flag"></i> İşaretlendi';
         }
         saveToLocal();
     }
@@ -1081,9 +1083,9 @@
         const bos = toplam - cevaplanan;
         const isaretli = Object.keys(flagged).length;
 
-        let oHtml = "<div class='modal-stat'>✅ Cevaplanan: <b>" + cevaplanan + "</b></div>";
-        oHtml += "<div class='modal-stat' style='color:" + (bos>0?'#e74c3c':'#27ae60') + "'>⚠️ Boş Bırakılan: <b>" + bos + "</b></div>";
-        oHtml += "<div class='modal-stat' style='color:#f39c12'>🚩 İşaretlenen: <b>" + isaretli + "</b></div>";
+        let oHtml = "<div class='modal-stat'><i class=\"fa-solid fa-check\"></i> Cevaplanan: <b>" + cevaplanan + "</b></div>";
+        oHtml += "<div class='modal-stat' style='color:" + (bos>0?'#e74c3c':'#27ae60') + "'><i class=\"fa-solid fa-triangle-exclamation\"></i> Boş Bırakılan: <b>" + bos + "</b></div>";
+        oHtml += "<div class='modal-stat' style='color:#f39c12'><i class=\"fa-solid fa-flag\"></i> İşaretlenen: <b>" + isaretli + "</b></div>";
         oHtml += "<p style='margin-top: 20px; font-weight: 500;'>Sınavı bitirmek istediğinize emin misiniz?</p>";
         
         document.getElementById("modalIcerik").innerHTML = oHtml;
@@ -1125,9 +1127,9 @@
                 
                 if (isCorrect) {
                     dogruSayisi++;
-                    detayHtml += "<div class='explanation-card correct'><div style='font-weight:800; font-size:16px; margin-bottom:8px; color:#27ae60;'>Soru " + (index+1) + " ✅</div><div style='margin-bottom:8px; font-weight: 500;'>" + soru.soru + "</div><div style='margin-bottom:8px;'>Sizin Cevabınız: <b>" + secilen + "</b></div><div style='opacity:0.9; font-size:14px;'><i>" + (soru.aciklama || "") + "</i></div></div>";
+                    detayHtml += "<div class='explanation-card correct'><div style='font-weight:800; font-size:16px; margin-bottom:8px; color:#27ae60;'>Soru " + (index+1) + " <i class=\"fa-solid fa-check\"></i></div><div style='margin-bottom:8px; font-weight: 500;'>" + soru.soru + "</div><div style='margin-bottom:8px;'>Sizin Cevabınız: <b>" + secilen + "</b></div><div style='opacity:0.9; font-size:14px;'><i>" + (soru.aciklama || "") + "</i></div></div>";
                 } else {
-                    detayHtml += "<div class='explanation-card wrong'><div style='font-weight:800; font-size:16px; margin-bottom:8px; color:#e74c3c;'>Soru " + (index+1) + " ❌</div><div style='margin-bottom:8px; font-weight: 500;'>" + soru.soru + "</div><div style='margin-bottom:4px; text-decoration: line-through; opacity: 0.8;'>Sizin Cevabınız: " + secilen + "</div><div style='margin-bottom:8px;'>Doğru Cevap: <b style='color:#e74c3c;'>" + dogruMetin + "</b></div><div style='opacity:0.9; font-size:14px;'><i>" + (soru.aciklama || "") + "</i></div></div>";
+                    detayHtml += "<div class='explanation-card wrong'><div style='font-weight:800; font-size:16px; margin-bottom:8px; color:#e74c3c;'>Soru " + (index+1) + " <i class=\"fa-solid fa-xmark\"></i></div><div style='margin-bottom:8px; font-weight: 500;'>" + soru.soru + "</div><div style='margin-bottom:4px; text-decoration: line-through; opacity: 0.8;'>Sizin Cevabınız: " + secilen + "</div><div style='margin-bottom:8px;'>Doğru Cevap: <b style='color:#e74c3c;'>" + dogruMetin + "</b></div><div style='opacity:0.9; font-size:14px;'><i>" + (soru.aciklama || "") + "</i></div></div>";
                     raporMetni += "S" + (index+1) + ":Y (" + secilen + ") | ";
                 }
             });
@@ -1136,9 +1138,9 @@
             raporMetni += " Doğru: " + dogruSayisi + "/" + suankiSorular.length;
             
             const msgBox = document.getElementById("ozelMotivasyonKutusu");
-            if(puan < 50) { msgBox.innerText = "Daha fazla çalışmalısın. 🛑"; msgBox.style.color = "#e74c3c"; msgBox.style.background = "rgba(231, 76, 60, 0.1)"; }
-            else if(puan < 85) { msgBox.innerText = "İyi gidiyorsun, biraz daha gayret! 👍"; msgBox.style.color = "#f39c12"; msgBox.style.background = "rgba(243, 156, 18, 0.1)"; }
-            else { msgBox.innerText = "Tebrikler! Harika bir sonuç. 🌟"; msgBox.style.color = "#27ae60"; msgBox.style.background = "rgba(39, 174, 96, 0.1)"; }
+            if(puan < 50) { msgBox.innerHTML = "Daha fazla çalışmalısın. <i class=\"fa-solid fa-stop\"></i>"; msgBox.style.color = "#e74c3c"; msgBox.style.background = "rgba(231, 76, 60, 0.1)"; }
+            else if(puan < 85) { msgBox.innerHTML = "İyi gidiyorsun, biraz daha gayret! <i class=\"fa-solid fa-thumbs-up\"></i>"; msgBox.style.color = "#f39c12"; msgBox.style.background = "rgba(243, 156, 18, 0.1)"; }
+            else { msgBox.innerHTML = "Tebrikler! Harika bir sonuç. <i class=\"fa-solid fa-star\"></i>"; msgBox.style.color = "#27ae60"; msgBox.style.background = "rgba(39, 174, 96, 0.1)"; }
             
             document.getElementById("puanKutusu").style.display = "block";
             document.getElementById("puanGostergesi").innerText = puan + " Puan";
@@ -1150,10 +1152,10 @@
         document.getElementById("detayliCozumler").innerHTML = detayHtml;
 
         if(ihlalSayisi > 0) {
-            document.getElementById("ihlalSayisi").innerText = "⚠️ " + ihlalSayisi + " kez sekme değiştirdiniz!";
+            document.getElementById("ihlalSayisi").innerHTML = "<i class=\"fa-solid fa-triangle-exclamation\"></i> " + ihlalSayisi + " kez sekme değiştirdiniz!";
             raporMetni += " [İHLAL: " + ihlalSayisi + "]";
         } else {
-            document.getElementById("ihlalSayisi").innerText = "✅ Sınav odağı korundu.";
+            document.getElementById("ihlalSayisi").innerHTML = "<i class=\"fa-solid fa-check\"></i> Sınav odağı korundu.";
             document.getElementById("ihlalSayisi").style.color = "#27ae60";
         }
 
@@ -1184,8 +1186,8 @@
         const panel = document.getElementById("materyalPaneli");
         if (!panel) return;
         const dersMateryalleri = [
-            { baslik: "📁 1. Ünite Ders Notları (PDF)", link: "#" }, { baslik: "📁 2. Ünite Ders Notları (PDF)", link: "#" },
-            { baslik: "🗺️ İlk Çağ Uygarlıkları Haritası", link: "#" }, { baslik: "🧠 Tarih Bilimi Kavram Haritası", link: "#" }
+            { baslik: "<i class=\"fa-solid fa-file-pdf\"></i> 1. Ünite Ders Notları (PDF)", link: "#" }, { baslik: "<i class=\"fa-solid fa-file-pdf\"></i> 2. Ünite Ders Notları (PDF)", link: "#" },
+            { baslik: "<i class=\"fa-solid fa-map-location-dot\"></i> İlk Çağ Uygarlıkları Haritası", link: "#" }, { baslik: "<i class=\"fa-solid fa-brain\"></i> Tarih Bilimi Kavram Haritası", link: "#" }
         ];
         let dHtml = "";
         dersMateryalleri.forEach(mat => { dHtml += "<a href='" + mat.link + "' target='_blank' class='file-link'>" + mat.baslik + "</a>"; });

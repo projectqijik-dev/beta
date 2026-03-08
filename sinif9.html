@@ -181,6 +181,7 @@
             font-size: 15px; cursor: pointer;
             box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
             display: flex; flex-direction: row; align-items: center; gap: 16px; text-align: left;
+            width: 100%;
         }
         .folder-btn:hover, .folder-btn:active {
             transform: translateY(-4px); box-shadow: 0 12px 25px rgba(0,0,0,0.06); border-color: var(--accent-color);
@@ -229,6 +230,32 @@
         .back-to-hall-btn:hover, .back-to-hall-btn:active { background-color: var(--card-border); transform: translateX(-4px); }
         
         .room-title { text-align: left; color: var(--text-color); font-size: 22px; margin-bottom: 20px; border-bottom: none;}
+
+        /* --- SEKME (TAB) TASARIMI (MODEL 2) --- */
+        .tab-container {
+            display: flex; gap: 10px; margin-bottom: 20px; background: var(--container-bg); padding: 5px; border-radius: 12px; border: 1px solid var(--card-border);
+        }
+        .tab-btn {
+            flex: 1; padding: 12px; border: none; background: transparent; color: var(--text-color); font-weight: 700; font-size: 15px; border-radius: 8px; cursor: pointer; transition: all 0.3s; opacity: 0.7; display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .tab-btn.active {
+            background: var(--accent-color); color: white; opacity: 1; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+
+        /* Materyal Grid */
+        .material-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        @media (min-width: 600px) { .material-grid { grid-template-columns: 1fr 1fr; } }
+        .mat-card {
+            display: flex; align-items: center; gap: 15px; padding: 15px; background: var(--container-bg);
+            border: 2px solid var(--card-border); border-radius: 12px; text-decoration: none; color: var(--text-color); transition: all 0.2s;
+        }
+        .mat-card:hover { border-color: var(--accent-color); transform: translateY(-3px); box-shadow: 0 6px 15px rgba(0,0,0,0.05); }
+        .mat-icon { font-size: 24px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: var(--option-hover); flex-shrink: 0;}
+        .mat-info { display: flex; flex-direction: column; gap: 4px; }
+        .mat-title { font-weight: 700; font-size: 15px; line-height: 1.3;}
+        .mat-type { font-size: 12px; opacity: 0.7; font-weight: 600;}
 
         /* --- AKILLI ARAMA MOTORU --- */
         .search-container { position: relative; margin-bottom: 20px; width: 100%; display: flex; align-items: center; }
@@ -557,23 +584,70 @@
             
             <h2 id="odaBasligi" class="room-title">Sınav Odası</h2>
 
-            <div class="search-container">
-                <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
-                <input type="text" id="testArama" class="search-input" placeholder="Ünite sınavı ara (Örn: İlk Çağ)" onkeyup="testAra()">
-                <button class="search-clear" id="aramaTemizle" onclick="aramaTemizleBtn()" title="Aramayı Temizle"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            
-            <div class="konu-slider-wrapper">
-                <button class="scroll-arrow" onclick="scrollKonu(-1)" title="Sola Kaydır">&laquo;</button>
-                <div id="konuFiltreleri" class="konu-secici"></div>
-                <button class="scroll-arrow" onclick="scrollKonu(1)" title="Sağa Kaydır">&raquo;</button>
+            <div class="tab-container">
+                <button class="tab-btn active" id="btnTabTestler" onclick="sekmeDegistir('testler')"><i class="fa-solid fa-list-check"></i> Sınavlar ve Testler</button>
+                <button class="tab-btn" id="btnTabMateryaller" onclick="sekmeDegistir('materyaller')"><i class="fa-solid fa-photo-film"></i> Ünite Materyalleri</button>
             </div>
 
-            <div id="odaTestleri" class="test-list-container"></div>
+            <div id="tabTestler" class="tab-content active">
+                <div class="search-container">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="testArama" class="search-input" placeholder="Ünite sınavı ara (Örn: İlk Çağ)" onkeyup="testAra()">
+                    <button class="search-clear" id="aramaTemizle" onclick="aramaTemizleBtn()" title="Aramayı Temizle"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                
+                <div class="konu-slider-wrapper">
+                    <button class="scroll-arrow" onclick="scrollKonu(-1)" title="Sola Kaydır">&laquo;</button>
+                    <div id="konuFiltreleri" class="konu-secici"></div>
+                    <button class="scroll-arrow" onclick="scrollKonu(1)" title="Sağa Kaydır">&raquo;</button>
+                </div>
+
+                <div id="odaTestleri" class="test-list-container"></div>
+            </div>
+
+            <div id="tabMateryaller" class="tab-content">
+                <div id="materyalKategorileri" class="folder-grid">
+                    <button class="folder-btn" onclick="kategoriSec('Video')">
+                        <div class="icon-wrapper" style="background: rgba(231, 76, 60, 0.1); color: #e74c3c;"><i class="fa-brands fa-youtube"></i></div> 
+                        <div class="folder-texts">
+                            <span class="folder-title">Video ve Belgeseller</span>
+                            <span class="folder-desc">Konu anlatımları ve belgeseller</span>
+                        </div>
+                    </button>
+                    <button class="folder-btn" onclick="kategoriSec('Podcast')">
+                        <div class="icon-wrapper" style="background: rgba(155, 89, 182, 0.1); color: #9b59b6;"><i class="fa-solid fa-podcast"></i></div> 
+                        <div class="folder-texts">
+                            <span class="folder-title">Tarih Podcastleri</span>
+                            <span class="folder-desc">Sesli tarih içerikleri</span>
+                        </div>
+                    </button>
+                    <button class="folder-btn" onclick="kategoriSec('PDF Not')">
+                        <div class="icon-wrapper" style="background: rgba(230, 126, 34, 0.1); color: #e67e22;"><i class="fa-solid fa-file-pdf"></i></div> 
+                        <div class="folder-texts">
+                            <span class="folder-title">Ders Notları (PDF)</span>
+                            <span class="folder-desc">İndirilebilir özetler ve notlar</span>
+                        </div>
+                    </button>
+                    <button class="folder-btn" onclick="kategoriSec('İnteraktif Harita')">
+                        <div class="icon-wrapper" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;"><i class="fa-solid fa-map-location-dot"></i></div> 
+                        <div class="folder-texts">
+                            <span class="folder-title">İnteraktif Haritalar</span>
+                            <span class="folder-desc">Dijital tarih haritaları</span>
+                        </div>
+                    </button>
+                </div>
+
+                <div id="materyalListesiAlani" class="hidden">
+                    <button class="back-to-hall-btn" onclick="kategorilereDon()" style="margin-bottom: 20px; background: var(--container-bg); border: 2px solid var(--card-border);">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                        Kategorilere Dön
+                    </button>
+                    <div class="material-grid" id="odaMateryalleri">
+                        </div>
+                </div>
+            </div>
+
         </div>
- 
-        <button class="accordion-btn" id="materyalBtn"><i class="fa-solid fa-book" style="margin-right:8px;"></i> Ders Materyalleri ve İndirmeler</button>
-        <div class="panel" id="materyalPaneli"></div>
 
         <div class="footer">Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni | Özel Batman Boğaziçi Koleji MTAL</div>
     </div>
@@ -779,8 +853,8 @@
 <script src="sinif9sorular/s9kavramlar.js"></script>
 
 <script>
-    const SCRIPT_URL = "AKfycbwSSZmA83naSrT4Smwgxnhpa9YIMFXfjP2ufQI8WS2q0NrvDULuBa2a-DiyQsNBSAZK7Q"; // LÜTFEN KENDİ GOOGLE SCRIPT URL'NİZİ BURAYA TEKRAR YAPIŞTIRIN
-    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbwSSZmA83naSrT4Smwgxnhpa9YIMFXfjP2ufQI8WS2q0NrvDULuBa2a-DiyQsNBSAZK7Q/exec"; // LÜTFEN KENDİ GOOGLE SCRIPT URL'NİZİ BURAYA TEKRAR YAPIŞTIRIN
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIj5rQkpizqiOqJYlUdYmefOyPMbhmquaqlHpN76dmlZ8S7pV_O-eEgRjQjkZMD14NnQ/exec"; // SONUÇ SCRIPT URL
+    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbwSSZmA83naSrT4Smwgxnhpa9YIMFXfjP2ufQI8WS2q0NrvDULuBa2a-DiyQsNBSAZK7Q/exec"; // ŞİFRE SCRİPT URL
     
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function(e) { if(e.keyCode === 123 || (e.ctrlKey && e.keyCode === 85)) return false; };
@@ -794,6 +868,7 @@
     let ihlalSayisi = 0;
     let autoSaveData = {};
     let aktifOda = null;
+    let aktifMateryaller = []; // YENİ: MATERYAL HAVUZU
 
     function enableDragScroll(slider) {
         let isDown = false; let startX; let scrollLeft;
@@ -806,6 +881,129 @@
     function scrollKonu(direction) {
         const container = document.getElementById('konuFiltreleri');
         if(container) { container.scrollLeft += direction * 200; }
+    }
+
+    // --- YENİ: SEKME DEĞİŞTİRME FONKSİYONU ---
+    function sekmeDegistir(hedef) {
+        document.getElementById('btnTabTestler').classList.remove('active');
+        document.getElementById('btnTabMateryaller').classList.remove('active');
+        document.getElementById('tabTestler').classList.remove('active');
+        document.getElementById('tabMateryaller').classList.remove('active');
+        
+        if(hedef === 'testler') {
+            document.getElementById('btnTabTestler').classList.add('active');
+            document.getElementById('tabTestler').classList.add('active');
+        } else {
+            document.getElementById('btnTabMateryaller').classList.add('active');
+            document.getElementById('tabMateryaller').classList.add('active');
+            if (typeof kategorilereDon === 'function') kategorilereDon();
+        }
+    }
+
+    // --- YENİ: DİNAMİK MATERYAL HAVUZUNU YÜKLE ---
+    function materyalleriYukle(uniteId) {
+        aktifMateryaller = [];
+        
+        // Şimdilik örnek veri (Siz buraları kendi materyal linklerinizle değiştireceksiniz)
+        if (uniteId === 'u1') {
+            aktifMateryaller = [
+                // VİDEOLAR VE BELGESELLER
+                { baslik: "Tarih Bilimine Giriş", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Zaman ve Takvim", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Tarihe Yardımcı Bilimler", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Göbeklitepe Gizemi", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                { baslik: "Tarih Yazıcılığı", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                
+                // PODCASTLER
+                { baslik: "İnsanlığın Hafızası", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "Tarih Neden Önemli?", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "Takvimlerin Serüveni", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "Geçmişten Geleceğe", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+
+                // PDF NOTLAR VE HARİTALAR
+                { baslik: "1. Ünite Full Özet", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "Kavram Haritası", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "Tarih Çalışma Kağıdı", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "Zaman Çizelgesi", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
+            ];
+        } else if (uniteId === 'u2') {
+            aktifMateryaller = [
+                // VİDEOLAR VE BELGESELLER
+                { baslik: "İnsanlığın İlk Dönemleri", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Mezopotamya Uygarlıkları", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Mısır ve Anadolu", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Sümerlerin İzinde", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                
+                // PODCASTLER
+                { baslik: "İlk İnsanlar", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "Yazının İcadı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "İlk Kanunlar", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                
+                // PDF NOTLAR VE HARİTALAR
+                { baslik: "2. Ünite Ders Notu", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "Uygarlıklar Özeti", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "İlk Çağ Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" },
+                { baslik: "Göç Yolları Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
+            ];
+        } else if (uniteId === 'u3') {
+            aktifMateryaller = [
+                // VİDEOLAR VE BELGESELLER
+                { baslik: "Orta Çağ'da Dünya", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Kavimler Göçü Etkileri", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Feodalizm ve Şövalyeler", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Karanlık Çağ Belgeseli", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                
+                // PODCASTLER
+                { baslik: "Roma'nın Çöküşü", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "Orta Çağ Avrupa'sı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                { baslik: "Ticaret Yolları", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
+                
+                // PDF NOTLAR VE HARİTALAR
+                { baslik: "3. Ünite PDF Özeti", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "Orta Çağ Kavramları", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+                { baslik: "Kavimler Göçü Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" },
+                { baslik: "İpek ve Baharat Yolu", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
+            ];
+        }
+    }
+
+    // --- YENİ: KLASÖRE (KATEGORİYE) TIKLANINCA ÇALIŞAN FONKSİYON ---
+    function kategoriSec(hedefTur) {
+        document.getElementById('materyalKategorileri').classList.add('hidden');
+        document.getElementById('materyalListesiAlani').classList.remove('hidden');
+        
+        const matAlani = document.getElementById('odaMateryalleri');
+        matAlani.innerHTML = '';
+        
+        let filtrelenmis = aktifMateryaller.filter(m => {
+            if (hedefTur === 'Video') return m.tur === 'Video Ders' || m.tur === 'Belgesel';
+            return m.tur === hedefTur;
+        });
+
+        if(filtrelenmis.length === 0) {
+            matAlani.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:20px; opacity:0.6; font-weight: bold;">Bu kategoride henüz materyal bulunmamaktadır.</div>';
+            return;
+        }
+
+        filtrelenmis.forEach(m => {
+            matAlani.innerHTML += `
+                <a href="${m.link}" target="_blank" class="mat-card">
+                    <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
+                    <div class="mat-info">
+                        <span class="mat-title">${m.baslik}</span>
+                        <span class="mat-type">${m.tur}</span>
+                    </div>
+                </a>
+            `;
+        });
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    // --- YENİ: KLASÖRLER EKRANINA GERİ DÖNÜŞ ---
+    function kategorilereDon() {
+        document.getElementById('materyalKategorileri').classList.remove('hidden');
+        document.getElementById('materyalListesiAlani').classList.add('hidden');
+        window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
     function odayaGir(uniteId) {
@@ -827,6 +1025,10 @@
         }
 
         document.getElementById('odaBasligi').innerText = data.baslik;
+
+        // Sekmeyi sıfırla ve materyalleri yükle 
+        sekmeDegistir('testler');
+        materyalleriYukle(uniteId);
 
         const konular = new Set();
         data.testler.forEach(t => { if(!t.isKlasik && t.konu && t.konu !== "Geçmişin İnşa Sürecinde Tarih") konular.add(t.konu); });
@@ -922,8 +1124,6 @@
             document.documentElement.style.setProperty('--font-size-base', localStorage.getItem('fontSize') + 'px');
         }
         
-        renderMateryaller();
-
         const kayitliOgrenci = localStorage.getItem('aktifOgrenci');
         if(kayitliOgrenci) {
             ogrenci = JSON.parse(kayitliOgrenci);
@@ -1365,25 +1565,6 @@
             localStorage.removeItem('sinavSession'); document.getElementById("testEkrani").classList.add("hidden");
             document.getElementById("menuEkrani").classList.remove("hidden");
             aktifTest = null; ihlalSayisi = 0; window.scrollTo(0,0);
-        }
-    }
-
-    function renderMateryaller() {
-        const panel = document.getElementById("materyalPaneli");
-        if (!panel) return;
-        const dersMateryalleri = [
-            { baslik: "<i class=\"fa-solid fa-file-pdf\"></i> 1. Ünite Ders Notları (PDF)", link: "#" }, { baslik: "<i class=\"fa-solid fa-file-pdf\"></i> 2. Ünite Ders Notları (PDF)", link: "#" },
-            { baslik: "<i class=\"fa-solid fa-map-location-dot\"></i> İlk Çağ Uygarlıkları Haritası", link: "#" }, { baslik: "<i class=\"fa-solid fa-brain\"></i> Tarih Bilimi Kavram Haritası", link: "#" }
-        ];
-        let dHtml = "";
-        dersMateryalleri.forEach(mat => { dHtml += "<a href='" + mat.link + "' target='_blank' class='file-link'>" + mat.baslik + "</a>"; });
-        panel.innerHTML = dHtml;
-        const accBtn = document.getElementById("materyalBtn");
-        if(accBtn) {
-            accBtn.onclick = function() {
-                this.classList.toggle("active");
-                if (panel.style.maxHeight) { panel.style.maxHeight = null; } else { panel.style.maxHeight = panel.scrollHeight + "px"; }
-            };
         }
     }
 

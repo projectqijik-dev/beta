@@ -20,7 +20,10 @@
 <div class="container">
     
     <div class="settings-panel">
-        <button class="settings-btn hidden" id="btnDuyuru" onclick="duyuruGoster()" title="Duyuru"><i class="fa-solid fa-bell"></i></button>
+<button class="settings-btn hidden" id="btnDuyuru" style="position: relative;" onclick="duyuruGoster()" title="Duyuru">
+    <i class="fa-solid fa-bell"></i>
+    <span id="duyuruRozeti" class="notification-badge hidden">!</span>
+</button>
         <button class="settings-btn" id="btnYedek" onclick="yedekleGoster()" title="Veri Yedeği"><i class="fa-solid fa-gear"></i></button>
 		<button class="settings-btn" id="sifreDegistirBtn" title="Şifre Değiştir"><i class="fa-solid fa-key"></i></button>
         <button class="settings-btn" id="btnTema" onclick="temaCycle()" title="Tema Değiştir"><i class="fa-solid fa-moon"></i></button>		
@@ -488,7 +491,9 @@
     let ihlalSayisi = 0;
     let autoSaveData = {};
     let aktifOda = null;
-    let aktifMateryaller = []; 
+    let aktifMateryaller = [];
+	// CANLI DUYURU SİSTEMİ VERSİYONU
+    const AKTIF_DUYURU_VERSIYONU = "duyuru_v1";
 
     // --- FLASHCARD JS DEĞİŞKENLERİ ---
     let fcCurrentIndex = 0;
@@ -893,7 +898,7 @@ function videoKapat() {
             document.getElementById("kullaniciAdiSpan").innerText = ogrenci.ad;
             watermarkOlustur(ogrenci.ad + " " + ogrenci.no);
             document.getElementById("btnSozluk").classList.remove("hidden");
-            if (document.getElementById("btnDuyuru")) document.getElementById("btnDuyuru").classList.remove("hidden");
+if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
         }
 
         const savedSession = localStorage.getItem('sinavSession');
@@ -952,7 +957,7 @@ function videoKapat() {
         document.getElementById("menuEkrani").classList.remove("hidden");
         document.getElementById("kullaniciAdiSpan").innerText = ogr.ad;
         document.getElementById("btnSozluk").classList.remove("hidden");
-        if (document.getElementById("btnDuyuru")) document.getElementById("btnDuyuru").classList.remove("hidden");
+if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
     }
 
     function girisYap() {
@@ -1042,7 +1047,18 @@ function videoKapat() {
         .catch(e => { alert("Mesaj gönderilemedi."); if(btn) { btn.innerText = eskiMetin; btn.disabled = false; } });
     }
 
-    function duyuruGoster() { document.getElementById('duyuruModal').style.display = 'block'; }
+function duyuruGoster() { 
+        document.getElementById('duyuruModal').style.display = 'block'; 
+        localStorage.setItem("okunanDuyuru", AKTIF_DUYURU_VERSIYONU); // Öğrenci okudu diye hafızaya kazı
+        document.getElementById('duyuruRozeti').classList.add('hidden'); // Kırmızı ışığı söndür
+    }
+
+    function duyuruRozetKontrol() {
+        const okunan = localStorage.getItem("okunanDuyuru");
+        if (okunan !== AKTIF_DUYURU_VERSIYONU) {
+            document.getElementById('duyuruRozeti').classList.remove('hidden'); // Yeni duyuru var, ışığı yak!
+        }
+    }
     function duyuruKapat() { document.getElementById('duyuruModal').style.display = 'none'; }
     function odeveGit() { duyuruKapat(); testSec('test_u2_genel_1'); }
 

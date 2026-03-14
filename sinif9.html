@@ -477,7 +477,7 @@
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIj5rQkpizqiOqJYlUdYmefOyPMbhmquaqlHpN76dmlZ8S7pV_O-eEgRjQjkZMD14NnQ/exec"; // SONUÇ SCRIPT URL
     const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbwSSZmA83naSrT4Smwgxnhpa9YIMFXfjP2ufQI8WS2q0NrvDULuBa2a-DiyQsNBSAZK7Q/exec"; // ŞİFRE SCRİPT URL
-    const ODEV_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwSSZmA83naSrT4Smwgxnhpa9YIMFXfjP2ufQI8WS2q0NrvDULuBa2a-DiyQsNBSAZK7Q/exec"; 
+    const ODEV_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcjHGzdFq96J7JD9YKJJE20DEUqQLgfdzilAci7kpUVS-lHMFM25a39zdvxeaOPhtgjw/exec"; 
     
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.onkeydown = function(e) { if(e.keyCode === 123 || (e.ctrlKey && e.keyCode === 85)) return false; };
@@ -1700,10 +1700,9 @@ function duyuruGoster() {
         });
     }
 
-    window.addEventListener('click', function(event) { 
+window.addEventListener('click', function(event) { 
         if (event.target.classList.contains('modal')) { 
             event.target.style.display = 'none'; 
-            if(event.target.id === 'videoModal') videoKapat(); 
         } 
     });
     

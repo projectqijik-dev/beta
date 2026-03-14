@@ -167,6 +167,13 @@
                             <span class="folder-desc">İndirilebilir özetler ve notlar</span>
                         </div>
                     </button>
+					<button class="folder-btn" onclick="kategoriSec('Sunu')">
+                        <div class="icon-wrapper" style="background: rgba(232, 67, 147, 0.1); color: #e84393;"><i class="fa-solid fa-chalkboard-user"></i></div> 
+                        <div class="folder-texts">
+                            <span class="folder-title">Ders Sunuları</span>
+                            <span class="folder-desc">Akıllı tahta slaytları (PDF)</span>
+                        </div>
+                    </button>
                     <button class="folder-btn" onclick="kategoriSec('İnteraktif Harita')">
                         <div class="icon-wrapper" style="background: rgba(46, 204, 113, 0.1); color: #2ecc71;"><i class="fa-solid fa-map-location-dot"></i></div> 
                         <div class="folder-texts">
@@ -646,24 +653,30 @@ function videoKapat() {
         
         if (uniteId === 'u1') {
             aktifMateryaller = [
-                { baslik: "Tarih Bilimine Giriş", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
-                { baslik: "Zaman ve Takvim", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
-                { baslik: "Tarihe Yardımcı Bilimler", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Tarih Bilimine Giriş", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                { baslik: "Zaman ve Takvim", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                { baslik: "Tarihe Yardımcı Bilimler", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
                 { baslik: "Göbeklitepe Gizemi", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Tarih Yazıcılığı", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Tarih Yazıcılığı", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
                 { baslik: "Tarih Neden Önemli?", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Kronik-Mete%20Han%20-%20Bozk%C4%B1r%C4%B1n%20Efendisi.mp3" },
                 { baslik: "Takvimlerin Serüveni", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
                 { baslik: "Geçmişten Geleceğe", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
                 { baslik: "İnsanlığın Hafızası Tarih", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/1-%20%C4%B0nsanl%C4%B1%C4%9F%C4%B1n%20Haf%C4%B1zas%C4%B1%20Tarih.pdf" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "SENIN_PDF_LINKIN_BURAYA" },
                 { baslik: "Kavram Haritası", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
                 { baslik: "Tarih Çalışma Kağıdı", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
                 { baslik: "Zaman Çizelgesi", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
             ];
         } else if (uniteId === 'u2') {
             aktifMateryaller = [
-                { baslik: "İnsanlığın İlk Dönemleri", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
-                { baslik: "Mezopotamya Uygarlıkları", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "https://youtu.be/Z4cZjZZBsjg" },
-                { baslik: "Mısır ve Anadolu", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Mezopotamya Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Z4cZjZZBsjg" },
+                { baslik: "Anadolu Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Xom434ZL6_c" },
+                { baslik: "Doğu Akdeniz, Ege, Yunan ve Makedonya Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/ri7U-d9jk-A" },
+				{ baslik: "İran ve Mısır Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Qe3jmh0CR1M" },
+				{ baslik: "Çin ve Hint Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/8ABBovKfDes" },
+				{ baslik: "İskitler ve Hunlar", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/jY5sMXqR2o8" },
+				{ baslik: "Roma Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Ke1Y8whiatA" },
+				{ baslik: "Eskiçağ Uygarlıkları (Genel Özet)", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/o8AEWSe5hio" },
                 { baslik: "Sümerlerin İzinde", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
                 { baslik: "Antik Mısırın Ünlü Firavunu II. Ramses ve Kadeş Savaşı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/kronik-2.ramses%20ve%20kade%C5%9F%20savasi.mp3" },
                 { baslik: "Yazının İcadı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
@@ -675,9 +688,9 @@ function videoKapat() {
             ];
         } else if (uniteId === 'u3') {
             aktifMateryaller = [
-                { baslik: "Orta Çağ'da Dünya", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
-                { baslik: "Kavimler Göçü Etkileri", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
-                { baslik: "Feodalizm ve Şövalyeler", tur: "Video Ders", icon: "fa-youtube", renk: "#e74c3c", link: "#" },
+                { baslik: "Orta Çağ'da Dünya", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                { baslik: "Kavimler Göçü Etkileri", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
+                { baslik: "Feodalizm ve Şövalyeler", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
                 { baslik: "Karanlık Çağ Belgeseli", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
                 { baslik: "Roma'nın Çöküşü", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
                 { baslik: "Orta Çağ Avrupa'sı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },

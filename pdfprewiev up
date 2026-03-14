@@ -171,7 +171,7 @@
                         <div class="icon-wrapper" style="background: rgba(232, 67, 147, 0.1); color: #e84393;"><i class="fa-solid fa-chalkboard-user"></i></div> 
                         <div class="folder-texts">
                             <span class="folder-title">Ders Sunuları</span>
-                            <span class="folder-desc">Akıllı tahta slaytları (PDF)</span>
+                            <span class="folder-desc">PowerPoint Sunuları (PDF)</span>
                         </div>
                     </button>
                     <button class="folder-btn" onclick="kategoriSec('İnteraktif Harita')">
@@ -459,6 +459,14 @@
     </div>
 </div>
 
+<div id="inlinePdfContainer" class="hidden" style="width: 100%; margin-top: 15px; margin-bottom: 5px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid #e67e22; background: #fff; animation: fadeIn 0.4s ease; height: 500px; display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #e67e22; color: #fff; flex-shrink: 0;">
+        <h3 id="inlinePdfBaslik" style="margin: 0; font-size: 15px; color: #fff; font-weight: 700; text-align: left;">Doküman</h3>
+        <button onclick="pdfKapat()" style="background: transparent; border: none; color: #fff; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <iframe id="pdfIframe" src="" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
+</div>
+
 <script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
 
 <script src="sinif9sorular/menu_verisi.js"></script>
@@ -648,6 +656,36 @@ function videoKapat() {
         }
     }
 
+    function oynatPdf(url, baslik, element) {
+        if(url === "#") {
+            alert("Öğretmeniniz bu dokümanı henüz yüklemedi."); return;
+        }
+
+        const inlineContainer = document.getElementById('inlinePdfContainer');
+        
+        if (inlineContainer.previousElementSibling === element && !inlineContainer.classList.contains('hidden')) {
+            pdfKapat();
+            return;
+        }
+
+        document.getElementById('inlinePdfBaslik').innerText = baslik;
+        element.parentNode.insertBefore(inlineContainer, element.nextSibling);
+        inlineContainer.classList.remove('hidden');
+
+        document.getElementById('pdfIframe').src = url;
+        
+        setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
+    }
+
+    function pdfKapat() {
+        const inlineContainer = document.getElementById('inlinePdfContainer');
+        if (inlineContainer) {
+            inlineContainer.classList.add('hidden');
+            document.getElementById('pdfIframe').src = ""; 
+            document.body.appendChild(inlineContainer); 
+        }
+    }
+
     function materyalleriYukle(uniteId) {
         aktifMateryaller = [];
         
@@ -662,7 +700,8 @@ function videoKapat() {
                 { baslik: "Takvimlerin Serüveni", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
                 { baslik: "Geçmişten Geleceğe", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
                 { baslik: "İnsanlığın Hafızası Tarih", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/1-%20%C4%B0nsanl%C4%B1%C4%9F%C4%B1n%20Haf%C4%B1zas%C4%B1%20Tarih.pdf" },
-				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "SENIN_PDF_LINKIN_BURAYA" },
+				{ baslik: "Tarih Öğrenmenin Faydaları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/1.%20%C3%9Cnite/1-Tarih%20%C3%96%C4%9Frenmenin%20Faydalar%C4%B1.pdf" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
                 { baslik: "Kavram Haritası", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
                 { baslik: "Tarih Çalışma Kağıdı", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
                 { baslik: "Zaman Çizelgesi", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
@@ -683,6 +722,12 @@ function videoKapat() {
                 { baslik: "İlk Kanunlar", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
                 { baslik: "2. Ünite Ders Notu", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
                 { baslik: "Uygarlıklar Özeti", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
+				{ baslik: "İlk Çağ Uygarlıkları Slaytı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
                 { baslik: "İlk Çağ Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" },
                 { baslik: "Göç Yolları Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
             ];
@@ -740,6 +785,16 @@ function videoKapat() {
                 // VİDEOLAR İÇİN ÖZEL TIKLAMA FONKSİYONU (AKORDİYON İÇİN 'this' EKLENDİ)
                 matAlani.innerHTML += `
                     <div class="mat-card" style="cursor:pointer;" onclick="oynatVideo('${m.link}', '${m.baslik.replace(/'/g, "\\'")}', this)">
+                        <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
+                        <div class="mat-info">
+                            <span class="mat-title">${m.baslik}</span>
+                            <span class="mat-type">${m.tur}</span>
+                        </div>
+                    </div>
+                `;
+            } else if (m.tur === 'PDF Not' || m.tur === 'Sunu') {
+                matAlani.innerHTML += `
+                    <div class="mat-card" style="cursor:pointer;" onclick="oynatPdf('${m.link}', '${m.baslik.replace(/'/g, "\\'")}', this)">
                         <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
                         <div class="mat-info">
                             <span class="mat-title">${m.baslik}</span>

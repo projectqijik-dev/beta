@@ -656,7 +656,7 @@ function videoKapat() {
         }
     }
 
-    function oynatPdf(url, baslik, element) {
+function oynatPdf(url, baslik, element) {
         if(url === "#") {
             alert("Öğretmeniniz bu dokümanı henüz yüklemedi."); return;
         }
@@ -672,7 +672,14 @@ function videoKapat() {
         element.parentNode.insertBefore(inlineContainer, element.nextSibling);
         inlineContainer.classList.remove('hidden');
 
-        document.getElementById('pdfIframe').src = url;
+        // MOBİL UYUM (GOOGLE DOCS VIEWER HİLESİ)
+        // Eğer link doğrudan bir PDF ise, mobil tarayıcıların sapıtmaması için Google üzerinden render ediyoruz.
+        let isleyiciUrl = url;
+        if (!url.includes('drive.google.com')) {
+            isleyiciUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
+        }
+
+        document.getElementById('pdfIframe').src = isleyiciUrl;
         
         setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
     }

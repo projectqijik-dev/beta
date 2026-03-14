@@ -14,7 +14,6 @@
 <body oncontextmenu="return false;"> 
 
 <div id="progress-container"><div id="progress-bar"></div></div>
-<div id="watermark"></div>
 
 <button class="floating-btn" id="iletisimBtnFloating" onclick="iletisimGoster()" title="Öğretmene Sor / Hata Bildir"><i class="fa-solid fa-comment-dots"></i></button>
 
@@ -77,13 +76,6 @@
         <h2 style="margin-top: 5px; margin-bottom: 20px; font-weight: 600; color: var(--text-color); font-size: 24px; text-align: left;">
             Hoşgeldin, <span id="kullaniciAdiSpan" style="font-weight: 800; color: var(--accent-color);"></span> 👋
         </h2>
-        
-        <div class="intro-box">
-            <div class="intro-icon"><i class="fa-solid fa-lightbulb"></i></div>
-            <div>
-                Sevgili öğrenciler; sizin için hazırladığım bu testler ve ders notları derslerde işlediğimiz konularımızı anlamlı öğrenmeye dönüştürmek için hazırlanmıştır. Çoktan seçmeli testleriniz "Basit, Orta, Zor" şeklinde sizlere sunulmuş olup derslerdeki dikkat seviyenizi ve not alma alışkanlığınızı ölçerken "Açık Uçlu (Klasik)" sınavınız ise MEB Maarif Modelinin sizlerden istediği <strong>"YORUMLAMA ve ANALİZ BECERİSİ"</strong>ni ölçmek üzere hazırlanmıştır.
-            </div>
-        </div>
 
         <div id="anaKlasorler">
             <div class="folder-grid">
@@ -584,7 +576,7 @@
         return (match && match[2].length === 11) ? match[2] : null;
     }
 
-    function oynatVideo(url, baslik, element) {
+function oynatVideo(url, baslik, element) {
         if(url === "#") {
             alert("Öğretmeniniz bu video içeriğini henüz yüklemedi."); return;
         }
@@ -604,33 +596,42 @@
         }
 
         document.getElementById('inlineVideoBaslik').innerText = baslik;
-        const iframe = document.getElementById('youtubeIframe');
         
         // Oynatıcıyı, tıklanan materyal kartının hemen altına taşı
         element.parentNode.insertBefore(inlineContainer, element.nextSibling);
-        
-        iframe.src = `https://www.youtube.com/embed/${videoId}?origin=https://plyr.io&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`;
-        
         inlineContainer.classList.remove('hidden');
 
+        // Plyr motoru ilk kez çalışıyorsa sıfırdan kur, çalışıyorsa sadece içindeki videoyu güncelle
         if (!videoPlayer) {
+            const iframe = document.getElementById('youtubeIframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?origin=https://plyr.io&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`;
+            
             videoPlayer = new Plyr('#player', {
                 youtube: { noCookie: false, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
             });
+        } else {
+            // Plyr API üzerinden kaynağı temiz ve profesyonelce değiştiriyoruz
+            videoPlayer.source = {
+                type: 'video',
+                sources: [
+                    { src: videoId, provider: 'youtube' }
+                ]
+            };
         }
         
         setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
     }
 
-    function videoKapat() {
+function videoKapat() {
         const inlineContainer = document.getElementById('inlineVideoContainer');
         if (inlineContainer) {
             inlineContainer.classList.add('hidden');
-            const iframe = document.getElementById('youtubeIframe');
-            iframe.src = ""; 
+            
+            // Fişi çekmiyoruz (src silmiyoruz), sadece Plyr'a durmasını söylüyoruz.
             if (videoPlayer) {
                 videoPlayer.stop();
             }
+            
             document.body.appendChild(inlineContainer); // Kapanınca ekranı temiz tutmak için gövdeye geri atar
         }
     }
@@ -782,7 +783,6 @@
     function odayaGir(uniteId) {
         aktifOda = uniteId;
         document.getElementById('anaKlasorler').style.display = 'none';
-        document.querySelector('.intro-box').style.display = 'none';
 
         const oda = document.getElementById('sinavOdasi');
         const data = window.MENU_VERI ? window.MENU_VERI[uniteId] : null;
@@ -862,7 +862,6 @@
         document.getElementById('sinavOdasi').classList.add('hidden');
         aktifOda = null;
         document.getElementById('anaKlasorler').style.display = 'grid';
-        document.querySelector('.intro-box').style.display = 'flex';
     }
 
     window.onload = function() {
@@ -1202,14 +1201,8 @@
         for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; }
         return array;
     }
-
-    function watermarkOlustur(text) {
-        const container = document.getElementById("watermark");
-        container.innerHTML = "";
-        for (let i = 0; i < 15; i++) {
-            const div = document.createElement("div"); div.className = "watermark-text"; div.innerText = text;
-            container.appendChild(div);
-        }
+	function watermarkOlustur(text) {
+        // Filigran iptal edildi. Giriş yapıldığında sistemin çökmemesi için bu fonksiyon kasten boş bırakıldı.
     }
 
     function ozetGoster() {

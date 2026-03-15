@@ -56,42 +56,91 @@
             <p style="color: var(--text-color); opacity: 0.8; margin: 0; font-weight: 700; font-size: 15px;">Özel Batman Boğaziçi Koleji MTAL</p>
         </div>
         
-        <p style="text-align: center; color: var(--text-color); opacity: 0.8; margin-bottom: 20px; font-size: 15px;">Giriş yapmak için bilgilerinizi giriniz.</p>
-  
-        <div class="login-grid">
-            <div class="form-group">
-                <label>Adınız Soyadınız:</label>
-                <input type="text" id="adSoyad" placeholder="Örn: Yunus Dursun" onkeypress="if(event.key==='Enter') girisYap()">
+<div class="login-tabs" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
+            <button class="tab-btn active" id="btnOgrenciTab" onclick="girisTuruDegistir('ogrenci')" style="flex: 1; max-width: 200px; margin: 0; font-size: 14px;"><i class="fa-solid fa-user-graduate"></i> Öğrenci Girişi</button>
+            <button class="tab-btn" id="btnOgretmenTab" onclick="girisTuruDegistir('ogretmen')" style="flex: 1; max-width: 200px; margin: 0; font-size: 14px;"><i class="fa-solid fa-chalkboard-user"></i> Zümre Girişi</button>
+        </div>
+
+        <div id="ogrenciGirisFormu">
+            <div class="login-grid">
+                <div class="form-group">
+                    <label>Adınız Soyadınız:</label>
+                    <input type="text" id="adSoyad" placeholder="Örn: Yunus Dursun" onkeypress="if(event.key==='Enter') girisYap()">
+                </div>
+                <div class="form-group">
+                    <label>Sınıfınız:</label>
+                    <select id="sinif" onkeypress="if(event.key==='Enter') girisYap()">
+                        <option value="">Sınıfınızı Seçin</option>
+                        <option value="9-A">9-A</option>
+                        <option value="9-B">9-B</option>
+                        <option value="9-C">9-C</option>
+                        <option value="9-D">9-D</option>
+                        <option value="9-E">9-E</option>
+                        <option value="9-F">9-F</option>
+                        <option value="9-G">9-G</option>
+                        <option value="9-H">9-H</option>
+                        <option value="9-İ">9-İ</option>
+                        <option value="9-J">9-J</option>
+                        <option value="9-K">9-K</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Okul Numaranız:</label>
+                    <input type="number" id="numara" placeholder="Örn: 714" onkeypress="if(event.key==='Enter') girisYap()">
+                </div>
+                <div class="form-group">
+                    <label>Sınav Şifresi:</label>
+                    <input type="password" id="sifre" placeholder="Şifreniz" onkeypress="if(event.key==='Enter') girisYap()">
+                </div>
             </div>
-            <div class="form-group">
-                <label>Sınıfınız:</label>
-                <select id="sinif" onkeypress="if(event.key==='Enter') girisYap()">
-                    <option value="">Sınıfınızı Seçin</option>
-                    <option value="9-A">9-A</option>
-                    <option value="9-B">9-B</option>
-                    <option value="9-C">9-C</option>
-                    <option value="9-D">9-D</option>
-                    <option value="9-E">9-E</option>
-                    <option value="9-F">9-F</option>
-                    <option value="9-G">9-G</option>
-                    <option value="9-H">9-H</option>
-                    <option value="9-İ">9-İ</option>
-                    <option value="9-J">9-J</option>
-                    <option value="9-K">9-K</option>
-                </select>
+            <button class="action-btn btn-center btn-login" onclick="girisYap()">Öğrenci Girişi Yap</button>
+        </div>
+
+        <div id="ogretmenGirisFormu" class="hidden">
+            <div class="login-grid">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                    <label>Adınız Soyadınız:</label>
+                    <input type="text" id="ogretmenAd" placeholder="Örn: Ahmet Yılmaz" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+                </div>
+                <div class="form-group">
+                    <label>Öğretmen Kodunuz:</label>
+                    <input type="password" id="vipKodu" placeholder="Öğretmenler Odası Şifresi" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+                </div>
+                <div class="form-group">
+                    <label>Hesap Şifreniz:</label>
+                    <input type="password" id="ogretmenSifre" placeholder="Kendi belirleyeceğiniz şifre" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+                </div>
             </div>
-            <div class="form-group">
-                <label>Okul Numaranız:</label>
-                <input type="number" id="numara" placeholder="Örn: 714" onkeypress="if(event.key==='Enter') girisYap()">
+            <button class="action-btn btn-center btn-login" id="btnOgretmenLogin" onclick="ogretmenGirisYap()" style="background-color: #34495e; box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3);"><i class="fa-solid fa-key"></i> Sistemi Aç</button>
+        </div>
+
+        <style>
+            .modern-footer {
+                display: flex; justify-content: space-between; align-items: center;
+                padding: 15px 20px; margin-top: 30px; border-radius: 12px;
+                background: rgba(22, 115, 166, 0.05); border: 1px solid rgba(22, 115, 166, 0.1);
+                color: var(--text-color); font-size: 13px; font-weight: 500;
+            }
+            .footer-left { display: flex; align-items: center; gap: 10px; }
+            .version-badge { background: #1673a6; color: white; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
+            .footer-right { display: flex; align-items: center; gap: 15px; opacity: 0.9; }
+            .footer-mail-btn { color: #1673a6; font-size: 18px; transition: transform 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: rgba(22, 115, 166, 0.1); border-radius: 50%; }
+            .footer-mail-btn:hover { transform: scale(1.15); background: #1673a6; color: #fff; }
+            @media (max-width: 768px) {
+                .modern-footer { flex-direction: column; text-align: center; gap: 12px; }
+                .footer-right { flex-direction: column; gap: 10px; }
+            }
+        </style>
+        <div class="modern-footer">
+            <div class="footer-left">
+                <span><strong>Boğaziçi Koleji Tarih Portalı</strong></span>
+                <span class="version-badge">v1.0</span>
             </div>
-            <div class="form-group">
-                <label>Sınav Şifresi:</label>
-                <input type="password" id="sifre" placeholder="Şifreniz" onkeypress="if(event.key==='Enter') girisYap()">
+            <div class="footer-right">
+                <span>Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</span>
+                <a href="mailto:murat@kirkyama.uk" class="footer-mail-btn" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
             </div>
         </div>
-        <button class="action-btn btn-center btn-login" onclick="girisYap()">Giriş Yap ve Başla</button>
-
-        <div class="footer">tasarım ve kodlama: murat mutlu, tarih öğretmeni</div>
     </div>
 
     <div id="menuEkrani" class="hidden">
@@ -164,7 +213,14 @@
                 <div id="odaTestleri" class="test-list-container"></div>
             </div>
 
-            <div id="tabMateryaller" class="tab-content">
+<div id="tabMateryaller" class="tab-content">
+                
+                <div class="search-container" style="margin-bottom: 20px;">
+                    <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
+                    <input type="text" id="materyalArama" class="search-input" placeholder="Materyal ara (Örn: Sümerler, Roma...)" onkeyup="materyalAra()">
+                    <button class="search-clear" id="matAramaTemizle" onclick="matAramaTemizleBtn()" title="Aramayı Temizle"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+
                 <div id="materyalKategorileri" class="folder-grid">
                     <button class="folder-btn" onclick="kategoriSec('Video')">
                         <div class="icon-wrapper" style="background: rgba(231, 76, 60, 0.1); color: #e74c3c;"><i class="fa-brands fa-youtube"></i></div> 
@@ -223,7 +279,16 @@
 
         </div>
 
-        <div class="footer">tasarım ve kodlama: murat mutlu, tarih öğretmeni | boğaziçi koleji mtal</div>
+        <div class="modern-footer">
+            <div class="footer-left">
+                <span><strong>Boğaziçi Koleji Tarih Portalı</strong></span>
+                <span class="version-badge">v1.0</span>
+            </div>
+            <div class="footer-right">
+                <span>Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</span>
+                <a href="mailto:murat@kirkyama.uk" class="footer-mail-btn" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
     </div>
 
     <div id="flashcardModal" class="flashcard-modal">
@@ -552,7 +617,7 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
 
 <script>
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIj5rQkpizqiOqJYlUdYmefOyPMbhmquaqlHpN76dmlZ8S7pV_O-eEgRjQjkZMD14NnQ/exec"; // SONUÇ SCRIPT URL
-    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbwSSZmA83naSrT4Smwgxnhpa9YIMFXfjP2ufQI8WS2q0NrvDULuBa2a-DiyQsNBSAZK7Q/exec"; // ŞİFRE SCRİPT URL
+    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbxxdn0KoOO46GkiM8IWsEM7iv2XXkZ7IcUzJgIjA-ErQl4alIYfM3UJdEUTK13qyk9wIg/exec"; // ŞİFRE SCRİPT URL
     const ODEV_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcjHGzdFq96J7JD9YKJJE20DEUqQLgfdzilAci7kpUVS-lHMFM25a39zdvxeaOPhtgjw/exec"; 
     
     document.addEventListener('contextmenu', e => e.preventDefault());
@@ -1032,10 +1097,87 @@ function oynatPodcast(link, baslik) {
         document.getElementById('currentTimeDisplay').innerText = '00:00';
     }
 
-    function kategorilereDon() {
+function kategorilereDon() {
         document.getElementById('materyalKategorileri').classList.remove('hidden');
         document.getElementById('materyalListesiAlani').classList.add('hidden');
+        const aramaInput = document.getElementById('materyalArama');
+        if(aramaInput) { aramaInput.value = ""; document.getElementById('matAramaTemizle').style.display = 'none'; }
         window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    function materyalAra() {
+        const input = document.getElementById('materyalArama');
+        const clearBtn = document.getElementById('matAramaTemizle');
+        const filter = input.value.toLocaleLowerCase('tr-TR').trim();
+        const matAlani = document.getElementById('odaMateryalleri');
+        
+        if (filter.length > 0) { 
+            clearBtn.style.display = 'flex'; 
+            document.getElementById('materyalKategorileri').classList.add('hidden');
+            document.getElementById('materyalListesiAlani').classList.remove('hidden');
+            
+            let filtrelenmis = aktifMateryaller.filter(m => m.baslik.toLocaleLowerCase('tr-TR').includes(filter));
+            matAlani.innerHTML = '';
+            
+            if(filtrelenmis.length === 0) {
+                matAlani.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:20px; opacity:0.6; font-weight: bold;">Aradığınız kritere uygun materyal bulunamadı.</div>';
+                return;
+            }
+
+            filtrelenmis.forEach(m => {
+                if (m.tur === 'Podcast') {
+                    matAlani.innerHTML += `
+                        <div class="mat-card" style="cursor:pointer;" onclick="oynatPodcast('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}')">
+                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
+                            <div class="mat-info">
+                                <span class="mat-title">${m.baslik}</span>
+                                <span class="mat-type">${m.tur}</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (m.tur === 'Video Ders' || m.tur === 'Belgesel') {
+                    matAlani.innerHTML += `
+                        <div class="mat-card" style="cursor:pointer;" onclick="oynatVideo('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
+                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
+                            <div class="mat-info">
+                                <span class="mat-title">${m.baslik}</span>
+                                <span class="mat-type">${m.tur}</span>
+                            </div>
+                        </div>
+                    `;
+                } else if (m.tur === 'PDF Not' || m.tur === 'Sunu') {
+                    matAlani.innerHTML += `
+                        <div class="mat-card" style="cursor:pointer;" onclick="oynatPdf('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
+                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
+                            <div class="mat-info">
+                                <span class="mat-title">${m.baslik}</span>
+                                <span class="mat-type">${m.tur}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    matAlani.innerHTML += `
+                        <a href="${m.link}" target="_blank" class="mat-card">
+                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
+                            <div class="mat-info">
+                                <span class="mat-title">${m.baslik}</span>
+                                <span class="mat-type">${m.tur}</span>
+                            </div>
+                        </a>
+                    `;
+                }
+            });
+        } else { 
+            clearBtn.style.display = 'none'; 
+            kategorilereDon();
+        }
+    }
+
+    function matAramaTemizleBtn() {
+        const input = document.getElementById('materyalArama');
+        input.value = "";
+        materyalAra();
+        input.focus();
     }
 
     function odayaGir(uniteId) {
@@ -1213,6 +1355,21 @@ if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru")
 if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
     }
 
+function girisTuruDegistir(tur) {
+        document.getElementById('btnOgrenciTab').classList.remove('active');
+        document.getElementById('btnOgretmenTab').classList.remove('active');
+        document.getElementById('ogrenciGirisFormu').classList.add('hidden');
+        document.getElementById('ogretmenGirisFormu').classList.add('hidden');
+        
+        if(tur === 'ogrenci') {
+            document.getElementById('btnOgrenciTab').classList.add('active');
+            document.getElementById('ogrenciGirisFormu').classList.remove('hidden');
+        } else {
+            document.getElementById('btnOgretmenTab').classList.add('active');
+            document.getElementById('ogretmenGirisFormu').classList.remove('hidden');
+        }
+    }
+
     function girisYap() {
         const ad = document.getElementById("adSoyad").value.trim();
         const sinif = document.getElementById("sinif").value;
@@ -1229,7 +1386,7 @@ if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru")
 
         if (!ad || !sinif || !numara || !girilenSifre) { alert("Lütfen tüm alanları eksiksiz doldurunuz!"); return; }
 
-        const loginBtn = document.querySelector(".btn-login");
+        const loginBtn = document.querySelector("#ogrenciGirisFormu .btn-login");
         const eskiMetin = loginBtn.innerText;
         loginBtn.innerText = "Bağlanıyor...";
         loginBtn.disabled = true;
@@ -1252,7 +1409,7 @@ if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru")
                     girisBasariliIslemleri(ogrenci);
                 }
             } else {
-                alert(data.mesaj); // "Şifreniz hatalı!" vs.
+                alert(data.mesaj); 
             }
         })
         .catch(error => {
@@ -1260,6 +1417,41 @@ if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru")
         })
         .finally(() => {
             loginBtn.innerText = eskiMetin;
+            loginBtn.disabled = false;
+        });
+    }
+
+    function ogretmenGirisYap() {
+        const ad = document.getElementById("ogretmenAd").value.trim();
+        const vipKodu = document.getElementById("vipKodu").value.trim();
+        const sifre = document.getElementById("ogretmenSifre").value.trim();
+
+        if (!ad || !vipKodu || !sifre) { alert("Lütfen Öğretmen Girişi için tüm alanları doldurunuz!"); return; }
+
+        const loginBtn = document.getElementById("btnOgretmenLogin");
+        const eskiMetin = loginBtn.innerHTML;
+        loginBtn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Sisteme Giriliyor...";
+        loginBtn.disabled = true;
+
+        fetch(SIFRE_API_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ islem: "ogretmen_kayit", adSoyad: ad, vipKodu: vipKodu, sifre: sifre })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.durum === "basarili") {
+                ogrenci = { ad: data.adSoyad + " (Zümre)", sinif: data.sinif, no: data.no };
+                girisBasariliIslemleri(ogrenci);
+            } else {
+                alert(data.mesaj); 
+            }
+        })
+        .catch(error => {
+            alert("Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.");
+        })
+        .finally(() => {
+            loginBtn.innerHTML = eskiMetin;
             loginBtn.disabled = false;
         });
     }

@@ -15,6 +15,26 @@
 
 <div id="progress-container"><div id="progress-bar"></div></div>
 
+<style>
+    #iletisimBtnFloating {
+        background: rgba(22, 115, 166, 0.3) !important; /* Yarı şeffaf buzlu mavi */
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+        opacity: 0.5; /* Normalde hayalet gibi soluk durur */
+        transform: scale(0.9); /* Biraz daha zarif ve küçük */
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
+    }
+    #iletisimBtnFloating:hover {
+        opacity: 1; /* Üzerine gelince tamamen canlanır */
+        background: rgba(22, 115, 166, 0.95) !important;
+        color: #fff !important;
+        transform: scale(1.1); /* Hafifçe büyür */
+        box-shadow: 0 8px 20px rgba(22, 115, 166, 0.3) !important;
+    }
+</style>
 <button class="floating-btn" id="iletisimBtnFloating" onclick="iletisimGoster()" title="Öğretmene Sor / Hata Bildir"><i class="fa-solid fa-comment-dots"></i></button>
 
 <div class="container">
@@ -71,7 +91,7 @@
         </div>
         <button class="action-btn btn-center btn-login" onclick="girisYap()">Giriş Yap ve Başla</button>
 
-        <div class="footer">Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</div>
+        <div class="footer">tasarım ve kodlama: murat mutlu, tarih öğretmeni</div>
     </div>
 
     <div id="menuEkrani" class="hidden">
@@ -110,7 +130,7 @@
             </button>
             
             <button class="odev-btn" onclick="odevGoster()">
-                <i class="fa-solid fa-cloud-arrow-up"></i> Ödev / Çalışma Yükle
+                <i class="fa-solid fa-cloud-arrow-up"></i> Ödev / Çalışma Gönder
             </button>
             
         </div>
@@ -203,7 +223,7 @@
 
         </div>
 
-        <div class="footer">Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni | Özel Batman Boğaziçi Koleji MTAL</div>
+        <div class="footer">tasarım ve kodlama: murat mutlu, tarih öğretmeni | boğaziçi koleji mtal</div>
     </div>
 
     <div id="flashcardModal" class="flashcard-modal">

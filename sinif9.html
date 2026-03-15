@@ -10,6 +10,33 @@
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
 
     <link rel="stylesheet" href="sinif9stil.css">
+
+    <style>
+        /* --- YENİ HAMBURGER MENÜ (DROPDOWN) STİLLERİ --- */
+        .dropdown-menu-container { position: relative; display: inline-flex; align-items: center; }
+        .glass-dropdown {
+            position: absolute; right: 0; top: 55px; width: 220px;
+            background: var(--container-bg, rgba(255, 255, 255, 0.9));
+            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--card-border);
+            border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            display: flex; flex-direction: column; gap: 5px; padding: 10px;
+            opacity: 0; visibility: hidden; transform: translateY(-10px);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2000;
+        }
+        .glass-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0); }
+        .dropdown-item {
+            background: transparent; border: none; color: var(--text-color);
+            padding: 12px 15px; text-align: left; font-size: 14px; font-weight: 600;
+            border-radius: 10px; cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 12px; text-decoration: none;
+            font-family: 'Inter', sans-serif;
+        }
+        .dropdown-item:hover { background: rgba(22, 115, 166, 0.1); color: #1673a6; transform: translateX(5px); }
+        .dropdown-item i { width: 20px; text-align: center; font-size: 16px; }
+        body.dark-mode .glass-dropdown { background: rgba(30, 41, 59, 0.95); border-color: rgba(255,255,255,0.1); }
+    </style>
 </head>
 <body oncontextmenu="return false;"> 
 
@@ -17,21 +44,21 @@
 
 <style>
     #iletisimBtnFloating {
-        background: rgba(22, 115, 166, 0.3) !important; /* Yarı şeffaf buzlu mavi */
+        background: rgba(22, 115, 166, 0.3) !important;
         backdrop-filter: blur(8px);
         -webkit-backdrop-filter: blur(8px);
         border: 1px solid rgba(255, 255, 255, 0.2) !important;
         color: rgba(255, 255, 255, 0.8) !important;
-        opacity: 0.5; /* Normalde hayalet gibi soluk durur */
-        transform: scale(0.9); /* Biraz daha zarif ve küçük */
+        opacity: 0.5;
+        transform: scale(0.9);
         transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
         box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
     }
     #iletisimBtnFloating:hover {
-        opacity: 1; /* Üzerine gelince tamamen canlanır */
+        opacity: 1;
         background: rgba(22, 115, 166, 0.95) !important;
         color: #fff !important;
-        transform: scale(1.1); /* Hafifçe büyür */
+        transform: scale(1.1);
         box-shadow: 0 8px 20px rgba(22, 115, 166, 0.3) !important;
     }
 </style>
@@ -39,15 +66,24 @@
 
 <div class="container">
     
-    <div class="settings-panel">
-<button class="settings-btn hidden" id="btnDuyuru" style="position: relative;" onclick="duyuruGoster()" title="Duyuru">
-    <i class="fa-solid fa-bell"></i>
-    <span id="duyuruRozeti" class="notification-badge hidden">!</span>
-</button>
-        <button class="settings-btn" id="btnYedek" onclick="yedekleGoster()" title="Veri Yedeği"><i class="fa-solid fa-gear"></i></button>
-		<button class="settings-btn" id="sifreDegistirBtn" title="Şifre Değiştir"><i class="fa-solid fa-key"></i></button>
+    <div class="settings-panel" style="display: flex; gap: 10px; align-items: center;">
+        <a href="index.html" class="settings-btn" title="Ana Sayfaya Dön" style="display: flex; align-items: center; justify-content: center; text-decoration: none;"><i class="fa-solid fa-house"></i></a>
         <button class="settings-btn" id="btnTema" onclick="temaCycle()" title="Tema Değiştir"><i class="fa-solid fa-moon"></i></button>		
         <button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Sözlük"><i class="fa-solid fa-book-open"></i> Sözlük</button>
+        
+        <div class="dropdown-menu-container">
+            <button class="settings-btn" id="btnHamburger" onclick="menuToggle(event)" title="Menü" style="position: relative;">
+                <i class="fa-solid fa-bars"></i>
+                <span id="duyuruRozetiGenel" class="notification-badge hidden" style="right: -2px; top: -2px;">!</span>
+            </button>
+            <div class="glass-dropdown" id="hamburgerDropdown">
+                <button class="dropdown-item hidden" id="btnDuyuru" onclick="duyuruGoster()"><i class="fa-solid fa-bell"></i> Duyurular <span id="duyuruRozeti" class="notification-badge hidden" style="position:static; transform:none; display:inline-block; margin-left:5px;">!</span></button>
+                <a href="https://sinema.kirkyama.uk" target="_blank" class="dropdown-item"><i class="fa-solid fa-film"></i> Boğaziçi Sinema</a>
+                <button class="dropdown-item" onclick="rehberGoster()"><i class="fa-solid fa-circle-question"></i> Nasıl Kullanılır?</button>
+                <button class="dropdown-item" id="btnYedek" onclick="yedekleGoster()"><i class="fa-solid fa-gear"></i> Veri Yedeği</button>
+                <button class="dropdown-item" id="sifreDegistirBtn"><i class="fa-solid fa-key"></i> Şifre Değiştir</button>
+            </div>
+        </div>
     </div>
 
     <div id="girisEkrani">
@@ -104,7 +140,7 @@
                 </div>
                 <div class="form-group">
                     <label>Öğretmen Kodunuz:</label>
-                    <input type="password" id="vipKodu" placeholder="Öğretmen Kodunuzu Giriniz" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+                    <input type="password" id="vipKodu" placeholder="Öğretmen Kodunuzu Girin" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
                 </div>
                 <div class="form-group">
                     <label>Hesap Şifreniz:</label>
@@ -115,10 +151,10 @@
         </div>
 
         <style>
-            .modern-footer {
+.modern-footer {
                 display: flex; justify-content: space-between; align-items: center;
                 padding: 15px 20px; margin-top: 30px; border-radius: 12px;
-                background: rgba(22, 115, 166, 0.05); border: 1px solid rgba(22, 115, 166, 0.1);
+                background: transparent; border: none; box-shadow: none;
                 color: var(--text-color); font-size: 13px; font-weight: 500;
             }
             .footer-left { display: flex; align-items: center; gap: 10px; }
@@ -287,6 +323,29 @@
             <div class="footer-right">
                 <span>Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</span>
                 <a href="mailto:murat@kirkyama.uk" class="footer-mail-btn" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
+            </div>
+        </div>
+    </div>
+
+    <div id="rehberModal" class="modal">
+        <div class="modal-content" style="border-top: 6px solid #3498db; max-width: 550px;">
+            <h3 style="color:#3498db; margin-top: 0; font-size: 22px;"><i class="fa-solid fa-book-open"></i> Nasıl Kullanılır?</h3>
+            <div style="text-align: left; margin-top: 20px;">
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-start;">
+                    <div style="width: 35px; height: 35px; border-radius: 50%; background: #3498db; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: bold;">1</div>
+                    <div><h4 style="margin:0 0 5px 0; color:var(--text-color);">İçerikleri Keşfet</h4><p style="margin:0; font-size:14px; opacity:0.8; color:var(--text-color);">Ünite klasörlerine girerek konu özetlerini, testleri ve interaktif materyalleri inceleyebilirsin.</p></div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-start;">
+                    <div style="width: 35px; height: 35px; border-radius: 50%; background: #e67e22; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: bold;">2</div>
+                    <div><h4 style="margin:0 0 5px 0; color:var(--text-color);">Sınav Robotu</h4><p style="margin:0; font-size:14px; opacity:0.8; color:var(--text-color);">İstediğin konulardan rastgele deneme sınavları oluşturup kendini test edebilirsin.</p></div>
+                </div>
+                <div style="display: flex; gap: 15px; margin-bottom: 15px; align-items: flex-start;">
+                    <div style="width: 35px; height: 35px; border-radius: 50%; background: #2ecc71; color: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: bold;">3</div>
+                    <div><h4 style="margin:0 0 5px 0; color:var(--text-color);">Ödev Gönder</h4><p style="margin:0; font-size:14px; opacity:0.8; color:var(--text-color);">Defterinin veya çözdüğün testlerin fotoğrafını çekip doğrudan öğretmenine gönderebilirsin.</p></div>
+                </div>
+            </div>
+            <div class="modal-btn-group" style="margin-top: 25px;">
+                <button class="action-btn back-btn" onclick="rehberKapat()" style="margin-top:0; width:100%;">Anladım, Kapat</button>
             </div>
         </div>
     </div>
@@ -465,12 +524,7 @@
     <div id="sifreModal" class="modal">
         <div class="modal-content" style="border-top: 6px solid #27ae60; max-width: 400px;">
             <h3 style="color:var(--text-color); margin-top: 0; font-size: 22px;"><i class="fa-solid fa-key" style="color:#27ae60;"></i> Şifre Değiştir</h3>
-            <p style="font-size:14px; color:var(--text-color); opacity:0.8; margin-bottom: 20px;">Öğrenci numaranız ve mevcut şifrenizle giriş yaparak yeni şifrenizi belirleyebilirsiniz.</p>
-            
-            <div style="text-align: left; margin-bottom: 15px;">
-                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: var(--text-color); font-size: 14px;">Öğrenci Numaranız:</label>
-                <input type="number" id="sifreOgrenciNo" placeholder="Örn: 105" style="width: 100%; padding: 14px; border: 2px solid var(--card-border); background: var(--option-hover); color: var(--text-color); border-radius: 12px; font-size: 15px; outline: none; font-family: 'Inter', sans-serif;">
-            </div>
+            <p style="font-size:14px; color:var(--text-color); opacity:0.8; margin-bottom: 20px;">Mevcut şifrenizle giriş yaparak yeni şifrenizi belirleyebilirsiniz.</p>
             
             <div style="text-align: left; margin-bottom: 15px;">
                 <label style="display: block; margin-bottom: 5px; font-weight: 600; color: var(--text-color); font-size: 14px;">Mevcut Şifreniz:</label>
@@ -593,8 +647,6 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
     <iframe id="pdfIframe" src="" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
 </div>
 
-<script src="https://cdn.plyr.io/3.7.8/plyr.polyfilled.js"></script>
-
 <script src="sinif9sorular/menu_verisi.js"></script>
 <script src="sinif9sorular/u1_genel.js"></script>
 <script src="sinif9sorular/u1_insa.js"></script>
@@ -616,8 +668,8 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
 <script src="sinif9sorular/bilgikartlari.js"></script>
 
 <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIj5rQkpizqiOqJYlUdYmefOyPMbhmquaqlHpN76dmlZ8S7pV_O-eEgRjQjkZMD14NnQ/exec"; // SONUÇ SCRIPT URL
-    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbxxdn0KoOO46GkiM8IWsEM7iv2XXkZ7IcUzJgIjA-ErQl4alIYfM3UJdEUTK13qyk9wIg/exec"; // ŞİFRE SCRİPT URL
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIj5rQkpizqiOqJYlUdYmefOyPMbhmquaqlHpN76dmlZ8S7pV_O-eEgRjQjkZMD14NnQ/exec"; 
+    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbzH3YQxw_6r0i7uItFStlp2nkUzmxaPhUw_v1u8hs6swV6lqY9XXRZ3Q5x64C5vpPEROQ/exec"; 
     const ODEV_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcjHGzdFq96J7JD9YKJJE20DEUqQLgfdzilAci7kpUVS-lHMFM25a39zdvxeaOPhtgjw/exec"; 
     
     document.addEventListener('contextmenu', e => e.preventDefault());
@@ -633,15 +685,28 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
     let autoSaveData = {};
     let aktifOda = null;
     let aktifMateryaller = [];
-	// CANLI DUYURU SİSTEMİ VERSİYONU
+	
     const AKTIF_DUYURU_VERSIYONU = "duyuru_v1";
 
-    // --- FLASHCARD JS DEĞİŞKENLERİ ---
     let fcCurrentIndex = 0;
     let fcAktifKartlar = [];
-
-    // --- YENİ EKLENEN: VİDEO OYNATICI DEĞİŞKENLERİ ---
     let videoPlayer = null;
+
+    /* --- YENİ HAMBURGER MENÜ VE REHBER JAVASCRIPT MOTORU --- */
+    function menuToggle(event) {
+        event.stopPropagation();
+        const dropdown = document.getElementById('hamburgerDropdown');
+        if(dropdown) dropdown.classList.toggle('active');
+    }
+
+    function rehberGoster() { 
+        document.getElementById('rehberModal').style.display = 'block'; 
+        const dropdown = document.getElementById('hamburgerDropdown');
+        if(dropdown) dropdown.classList.remove('active');
+    }
+    
+    function rehberKapat() { document.getElementById('rehberModal').style.display = 'none'; }
+    /* -------------------------------------------------------- */
 
     function enableDragScroll(slider) {
         let isDown = false; let startX; let scrollLeft;
@@ -672,7 +737,6 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
         }
     }
 
-    // --- FLASHCARD ANA KONTROL FONKSİYONLARI ---
     function baslatFlashcard(odaId) {
         if(typeof BILGI_KARTLARI === 'undefined' || !BILGI_KARTLARI[odaId] || BILGI_KARTLARI[odaId].length === 0) {
             alert("Öğretmeniniz bu üniteye henüz kavram kartı eklememiş.");
@@ -715,14 +779,13 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
         }
     });
 
-    // --- YENİ EKLENEN: YOUTUBE VİDEO KONTROL FONKSİYONLARI (AKORDİYON) ---
     function youtubeIdCikar(url) {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
         const match = url.match(regExp);
         return (match && match[2].length === 11) ? match[2] : null;
     }
 
-function oynatVideo(url, baslik, element) {
+    function oynatVideo(url, baslik, element) {
         if(url === "#") {
             alert("Öğretmeniniz bu video içeriğini henüz yüklemedi."); return;
         }
@@ -735,19 +798,15 @@ function oynatVideo(url, baslik, element) {
 
         const inlineContainer = document.getElementById('inlineVideoContainer');
         
-        // Eğer aynı karta tekrar tıklandıysa kapat (Akordiyon etkisi)
         if (inlineContainer.previousElementSibling === element && !inlineContainer.classList.contains('hidden')) {
             videoKapat();
             return;
         }
 
         document.getElementById('inlineVideoBaslik').innerText = baslik;
-        
-        // Oynatıcıyı, tıklanan materyal kartının hemen altına taşı
         element.parentNode.insertBefore(inlineContainer, element.nextSibling);
         inlineContainer.classList.remove('hidden');
 
-        // Plyr motoru ilk kez çalışıyorsa sıfırdan kur, çalışıyorsa sadece içindeki videoyu güncelle
         if (!videoPlayer) {
             const iframe = document.getElementById('youtubeIframe');
             iframe.src = `https://www.youtube.com/embed/${videoId}?origin=https://plyr.io&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`;
@@ -756,7 +815,6 @@ function oynatVideo(url, baslik, element) {
                 youtube: { noCookie: false, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
             });
         } else {
-            // Plyr API üzerinden kaynağı temiz ve profesyonelce değiştiriyoruz
             videoPlayer.source = {
                 type: 'video',
                 sources: [
@@ -768,45 +826,33 @@ function oynatVideo(url, baslik, element) {
         setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
     }
 
-function videoKapat() {
+    function videoKapat() {
         const inlineContainer = document.getElementById('inlineVideoContainer');
         if (inlineContainer) {
             inlineContainer.classList.add('hidden');
-            
-            // Fişi çekmiyoruz (src silmiyoruz), sadece Plyr'a durmasını söylüyoruz.
-            if (videoPlayer) {
-                videoPlayer.stop();
-            }
-            
-            document.body.appendChild(inlineContainer); // Kapanınca ekranı temiz tutmak için gövdeye geri atar
+            if (videoPlayer) { videoPlayer.stop(); }
+            document.body.appendChild(inlineContainer); 
         }
     }
 
-function oynatPdf(url, baslik, element) {
-        if(url === "#") {
-            alert("Öğretmeniniz bu dokümanı henüz yüklemedi."); return;
-        }
+    function oynatPdf(url, baslik, element) {
+        if(url === "#") { alert("Öğretmeniniz bu dokümanı henüz yüklemedi."); return; }
 
         const inlineContainer = document.getElementById('inlinePdfContainer');
-        
         if (inlineContainer.previousElementSibling === element && !inlineContainer.classList.contains('hidden')) {
-            pdfKapat();
-            return;
+            pdfKapat(); return;
         }
 
         document.getElementById('inlinePdfBaslik').innerText = baslik;
         element.parentNode.insertBefore(inlineContainer, element.nextSibling);
         inlineContainer.classList.remove('hidden');
 
-        // MOBİL UYUM (GOOGLE DOCS VIEWER HİLESİ)
-        // Eğer link doğrudan bir PDF ise, mobil tarayıcıların sapıtmaması için Google üzerinden render ediyoruz.
         let isleyiciUrl = url;
         if (!url.includes('drive.google.com')) {
             isleyiciUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
         }
 
         document.getElementById('pdfIframe').src = isleyiciUrl;
-        
         setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
     }
 
@@ -950,7 +996,7 @@ function oynatPdf(url, baslik, element) {
             return;
         }
 
-filtrelenmis.forEach(m => {
+        filtrelenmis.forEach(m => {
             if (m.tur === 'Podcast') {
                 matAlani.innerHTML += `
                     <div class="mat-card" style="cursor:pointer;" onclick="oynatPodcast('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}')">
@@ -962,7 +1008,6 @@ filtrelenmis.forEach(m => {
                     </div>
                 `;
             } else if (m.tur === 'Video Ders' || m.tur === 'Belgesel') {
-                // VİDEOLAR İÇİN ÖZEL TIKLAMA FONKSİYONU (AKORDİYON İÇİN 'this' EKLENDİ)
                 matAlani.innerHTML += `
                     <div class="mat-card" style="cursor:pointer;" onclick="oynatVideo('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
                         <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
@@ -997,7 +1042,7 @@ filtrelenmis.forEach(m => {
         window.scrollTo({top: 0, behavior: 'smooth'});
     }
 
-function oynatPodcast(link, baslik) {
+    function oynatPodcast(link, baslik) {
         if(link === "#") { alert("Öğretmeniniz bu podcast içeriğini henüz yüklemedi."); return; }
         
         const playerContainer = document.getElementById('audioPlayerContainer');
@@ -1038,7 +1083,6 @@ function oynatPodcast(link, baslik) {
         if (floatingBtn) floatingBtn.style.bottom = '25px';
     }
 
-    // --- YENİ EKLENEN PODCAST KONTROLLERİ ---
     function togglePlay() {
         const audio = document.getElementById('mainAudio');
         const btn = document.getElementById('playPauseBtn');
@@ -1097,7 +1141,7 @@ function oynatPodcast(link, baslik) {
         document.getElementById('currentTimeDisplay').innerText = '00:00';
     }
 
-function kategorilereDon() {
+    function kategorilereDon() {
         document.getElementById('materyalKategorileri').classList.remove('hidden');
         document.getElementById('materyalListesiAlani').classList.add('hidden');
         const aramaInput = document.getElementById('materyalArama');
@@ -1293,7 +1337,7 @@ function kategorilereDon() {
             document.getElementById("kullaniciAdiSpan").innerText = ogrenci.ad;
             watermarkOlustur(ogrenci.ad + " " + ogrenci.no);
             document.getElementById("btnSozluk").classList.remove("hidden");
-if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
+            if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
         }
 
         const savedSession = localStorage.getItem('sinavSession');
@@ -1352,10 +1396,10 @@ if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru")
         document.getElementById("menuEkrani").classList.remove("hidden");
         document.getElementById("kullaniciAdiSpan").innerText = ogr.ad;
         document.getElementById("btnSozluk").classList.remove("hidden");
-if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
+        if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
     }
 
-function girisTuruDegistir(tur) {
+    function girisTuruDegistir(tur) {
         document.getElementById('btnOgrenciTab').classList.remove('active');
         document.getElementById('btnOgretmenTab').classList.remove('active');
         document.getElementById('ogrenciGirisFormu').classList.add('hidden');
@@ -1426,7 +1470,7 @@ function girisTuruDegistir(tur) {
         const vipKodu = document.getElementById("vipKodu").value.trim();
         const sifre = document.getElementById("ogretmenSifre").value.trim();
 
-        if (!ad || !vipKodu || !sifre) { alert("Lütfen Öğretmen Girişi için tüm alanları doldurunuz!"); return; }
+        if (!ad || !sifre) { alert("Lütfen adınızı ve şifrenizi giriniz! (VIP kodu sadece ilk kayıtta zorunludur)"); return; }
 
         const loginBtn = document.getElementById("btnOgretmenLogin");
         const eskiMetin = loginBtn.innerHTML;
@@ -1492,18 +1536,25 @@ function girisTuruDegistir(tur) {
         .catch(e => { alert("Mesaj gönderilemedi."); if(btn) { btn.innerText = eskiMetin; btn.disabled = false; } });
     }
 
-function duyuruGoster() { 
+    function duyuruGoster() { 
         document.getElementById('duyuruModal').style.display = 'block'; 
-        localStorage.setItem("okunanDuyuru", AKTIF_DUYURU_VERSIYONU); // Öğrenci okudu diye hafızaya kazı
-        document.getElementById('duyuruRozeti').classList.add('hidden'); // Kırmızı ışığı söndür
+        localStorage.setItem("okunanDuyuru", AKTIF_DUYURU_VERSIYONU); 
+        document.getElementById('duyuruRozeti').classList.add('hidden'); 
+        const genelRozet = document.getElementById('duyuruRozetiGenel');
+        if(genelRozet) genelRozet.classList.add('hidden'); 
+        const dropdown = document.getElementById('hamburgerDropdown');
+        if(dropdown) dropdown.classList.remove('active');
     }
 
     function duyuruRozetKontrol() {
         const okunan = localStorage.getItem("okunanDuyuru");
         if (okunan !== AKTIF_DUYURU_VERSIYONU) {
-            document.getElementById('duyuruRozeti').classList.remove('hidden'); // Yeni duyuru var, ışığı yak!
+            document.getElementById('duyuruRozeti').classList.remove('hidden'); 
+            const genelRozet = document.getElementById('duyuruRozetiGenel');
+            if(genelRozet) genelRozet.classList.remove('hidden'); 
         }
     }
+    
     function duyuruKapat() { document.getElementById('duyuruModal').style.display = 'none'; }
     function odeveGit() { duyuruKapat(); testSec('test_u2_genel_1'); }
 
@@ -1560,7 +1611,7 @@ function duyuruGoster() {
     function renderTest(alan) {
         const map = document.getElementById("navMap");
         map.innerHTML = "";
-        enableDragScroll(map); /* EKLENEN KISIM: KAYDIRMA ÖZELLİĞİ */
+        enableDragScroll(map); 
         
         suankiSorular.forEach((soru, index) => {
             const dot = document.createElement("div");
@@ -1594,7 +1645,7 @@ function duyuruGoster() {
     function renderKlasik(alan, sourceSorular) {
         const map = document.getElementById("navMap");
         map.innerHTML = "";
-        enableDragScroll(map); /* EKLENEN KISIM: KAYDIRMA ÖZELLİĞİ */
+        enableDragScroll(map); 
 
         sourceSorular.forEach((item, index) => {
             const div = document.createElement("div");
@@ -1663,7 +1714,7 @@ function duyuruGoster() {
         return array;
     }
 	function watermarkOlustur(text) {
-        // Filigran iptal edildi. Giriş yapıldığında sistemin çökmemesi için bu fonksiyon kasten boş bırakıldı.
+        
     }
 
     function ozetGoster() {
@@ -1692,7 +1743,6 @@ function duyuruGoster() {
         document.removeEventListener("visibilitychange", ihlalTakip);
         localStorage.removeItem('sinavSession'); 
 
-        /* İLERLEME KAYDI KONTROLÜ VE EKLENMESİ */
         if (aktifTest && !aktifTest.includes('robot_sinavi')) {
             let cozulenler = JSON.parse(localStorage.getItem('cozulenTestler')) || [];
             if (!cozulenler.includes(aktifTest)) {
@@ -1811,7 +1861,6 @@ function duyuruGoster() {
         input.focus();
     }
 
-    /* --- OTOMATİK SINAV ROBOTU JAVASCRIPT FONKSİYONLARI --- */
     function robotGoster() {
         if (typeof window.MENU_VERI === 'undefined') {
             alert("Sistem Hatası: Soru kataloğu yüklenemedi."); return;
@@ -1863,7 +1912,7 @@ function duyuruGoster() {
 
             data.testler.forEach(t => {
                 if (t.isKlasik) return; 
-                if (t.konu === "Geçmişin İnşa Sürecinde Tarih") return; /* EKLENEN KISIM: İNŞA TESTLERİNİ SİLME */
+                if (t.konu === "Geçmişin İnşa Sürecinde Tarih") return; 
                 if (konu !== 'tumu' && t.konu !== konu) return;
                 testIdHavuzu.push({id: t.id, konu: t.konu});
             });
@@ -1896,8 +1945,12 @@ function duyuruGoster() {
         document.getElementById("testBaslik").innerHTML = '<i class="fa-solid fa-robot"></i> Özel Karma Sınav (' + secilenSorular.length + ' Soru)';
     }
 
-    /* --- YEDEKLEME (LOCAL STORAGE) FONKSİYONLARI --- */
-    function yedekleGoster() { document.getElementById('yedekModal').style.display = 'block'; }
+    function yedekleGoster() { 
+        document.getElementById('yedekModal').style.display = 'block'; 
+        const dropdown = document.getElementById('hamburgerDropdown');
+        if(dropdown) dropdown.classList.remove('active');
+    }
+    
     function yedekleKapat() { document.getElementById('yedekModal').style.display = 'none'; }
 
     function verileriIndir() {
@@ -1935,9 +1988,7 @@ function duyuruGoster() {
         };
         reader.readAsText(file);
     }
-    /* ----------------------------------------------------- */
 
-    /* --- ŞİFRE DEĞİŞTİRME JS --- */
     const sifreModal = document.getElementById("sifreModal");
     const sifreBtn = document.getElementById("sifreDegistirBtn");
     const sifreKaydetBtn = document.getElementById("sifreKaydetBtn");
@@ -1947,24 +1998,25 @@ function duyuruGoster() {
         sifreBtn.onclick = function() { 
             sifreModal.style.display = "block"; 
             sifreMesajDiv.innerHTML = ""; 
+            const dropdown = document.getElementById('hamburgerDropdown');
+            if(dropdown) dropdown.classList.remove('active');
         };
     }
 
     function sifreKapat() {
         sifreModal.style.display = "none";
-        document.getElementById("sifreOgrenciNo").value = "";
         document.getElementById("eskiSifre").value = "";
         document.getElementById("yeniSifre").value = "";
     }
 
     if(sifreKaydetBtn) {
         sifreKaydetBtn.onclick = function() {
-            const no = document.getElementById("sifreOgrenciNo").value.trim();
+            const no = ogrenci.no;
             const eski = document.getElementById("eskiSifre").value.trim();
             const yeni = document.getElementById("yeniSifre").value.trim();
 
-            if(!no || !eski || !yeni) {
-                sifreMesajDiv.innerHTML = "Lütfen tüm alanları doldurun.";
+            if(!eski || !yeni) {
+                sifreMesajDiv.innerHTML = "Lütfen eski ve yeni şifrenizi girin.";
                 sifreMesajDiv.style.color = "#e74c3c";
                 return;
             }
@@ -2000,7 +2052,6 @@ function duyuruGoster() {
         };
     }
     
-    // --- YENİ EKLENEN ÖDEV YÜKLEME JS (KUYRUK SİSTEMİ) ---
     let odevKuyrugu = [];
     let suAnkiYuklemeIndeksi = 0;
     let yuklemeId = "";
@@ -2139,16 +2190,22 @@ function duyuruGoster() {
                     canvas.height = height;
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL(file.type, 0.7)); // %70 Kalite ile sıkıştırma
+                    resolve(canvas.toDataURL(file.type, 0.7)); 
                 };
             };
         });
     }
 
-window.addEventListener('click', function(event) { 
+    window.addEventListener('click', function(event) { 
         if (event.target.classList.contains('modal')) { 
             event.target.style.display = 'none'; 
         } 
+        
+        /* --- YENİ EKLENEN: MENÜ DIŞINA TIKLANINCA MENÜYÜ KAPATMA MOTORU --- */
+        const dropdown = document.getElementById('hamburgerDropdown');
+        if (dropdown && dropdown.classList.contains('active') && !event.target.closest('.dropdown-menu-container')) {
+            dropdown.classList.remove('active');
+        }
     });
     
 </script>

@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-	<script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
 
     <link rel="stylesheet" href="sinif9stil.css">
 
@@ -635,8 +635,10 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
         <h3 id="inlineVideoBaslik" style="margin: 0; font-size: 15px; color: #fff; font-weight: 700; text-align: left;">Video</h3>
         <button onclick="videoKapat()" style="background: transparent; border: none; color: #fff; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
     </div>
-<div style="width: 100%; aspect-ratio: 16 / 9; background: #000; position: relative;">
-        <div id="player"></div>
+    <div style="width: 100%; aspect-ratio: 16 / 9; background: #000; position: relative;">
+        <div class="plyr__video-embed" id="player">
+            <iframe id="youtubeIframe" src="" allowfullscreen allowtransparency allow="autoplay"></iframe>
+        </div>
     </div>
 </div>
 
@@ -786,7 +788,7 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
         return (match && match[2].length === 11) ? match[2] : null;
     }
 
-function oynatVideo(url, baslik, element) {
+    function oynatVideo(url, baslik, element) {
         if(url === "#") {
             alert("Öğretmeniniz bu video içeriğini henüz yüklemedi."); return;
         }
@@ -808,20 +810,21 @@ function oynatVideo(url, baslik, element) {
         element.parentNode.insertBefore(inlineContainer, element.nextSibling);
         inlineContainer.classList.remove('hidden');
 
-        // Plyr Motorunu İlk Kez veya Yeniden Çalıştır
         if (!videoPlayer) {
+            const iframe = document.getElementById('youtubeIframe');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?origin=https://plyr.io&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`;
+            
             videoPlayer = new Plyr('#player', {
                 youtube: { noCookie: false, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
             });
+        } else {
+            videoPlayer.source = {
+                type: 'video',
+                sources: [
+                    { src: videoId, provider: 'youtube' }
+                ]
+            };
         }
-        
-        // Yeni videoyu oynatıcıya dinamik olarak yükle
-        videoPlayer.source = {
-            type: 'video',
-            sources: [
-                { src: videoId, provider: 'youtube' }
-            ]
-        };
         
         setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
     }

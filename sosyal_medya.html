@@ -609,7 +609,7 @@
         <section id="intro">
             <div class="content-box active" style="text-align: center;">
                 <h1 style="color: #fff;">İletişimin Evrimi</h1>
-                <p>İletişim, bir düşüncenin, bilginin, duygunun bir kişi veya topluluktan diğerine anlamlı bir şekilde aktarılmasıdır. İnsanlık M.Ö. 3200'de <span class="highlight">Yazının İcadı</span> ile başlayan bu yolculukta, bugün <span class="highlight">Sosyal Medya</span> çağının çok yönlü etkileşimine ulaştı.</p>
+                <p>İletişimin evrimi, insanlık tarihinin en temel dönüşümlerinden birini temsil eder. Sözlü kültürle başlayan bu süreç, bilginin nesilden nesile aktarılmasını sağlarken, <span class="highlight">Yazının icadı</span>yla birlikte bilgi artık zamana ve mekâna meydan okumaya başladı. Matbaanın gelişi ise bu bilgiyi geniş kitlelere ulaştırarak düşüncenin daha hızlı yayılmasını sağladı. Sanayi Devrimi’yle birlikte <span class="highlight">telgraf</span> ve <span class="highlight">telefon</span> gibi buluşlar, iletişimin hızını neredeyse anlık bir seviyeye taşıdı. 20. yy.'da <span class="highlight">radyo</span> ve <span class="highlight">televiyon</span>, kültürel ve siyasal olayların ortak bir deneyime dönüşmesini sağladı. Günümüzde ise <span class="highlight">internet</span> ve <span class="highlight">sosyal medya</span>, yalnızca bilgiyi değil, aynı zamanda etkileşimi <span class="highlight">çift yönlü</span> ve küresel bir boyuta evirerek iletişimin tanımını yeniden yazdı.</p>
             </div>
         </section>
 
@@ -677,6 +677,525 @@
         </div>
 
         <p style="margin-top: 30px;">Arka planda petabaytlarca veri saklayan devasa <span class="highlight">Veritabanları</span> çalışırken, algoritmalar size neyi göstereceğini belirler. Beğeni, yorum, paylaşım ve özellikle gönderiye bakma süreniz <span class="highlight">(dwell time)</span> bu motorun temel yakıtıdır.</p>
+	<!-- ================================================================
+     ALGORİTMİK MİMARİ WIDGET
+     murat@kirkyma.uk
+     ================================================================ -->
+
+<div id="algo-widget" style="margin-top: 40px;">
+
+  <!-- Platform sekme butonları -->
+  <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px;">
+    <button class="algo-tab active" data-p="tiktok">TikTok</button>
+    <button class="algo-tab" data-p="instagram">Instagram</button>
+    <button class="algo-tab" data-p="x">X (Twitter)</button>
+    <button class="algo-tab" data-p="facebook">Facebook</button>
+    <button class="algo-tab" data-p="reddit">Reddit</button>
+    <button class="algo-tab" data-p="bluesky">Bluesky</button>
+  </div>
+
+  <!-- ── TİKTOK ───────────────────────────────────────────── -->
+  <div class="algo-panel active" id="ap-tiktok">
+    <p class="algo-intro">TikTok'un "Sizin İçin" (FYP) algoritması, hesap büyüklüğünden bağımsız olarak her videoyu ayrı bir içerik birimi sayar. Her yeni video küçük bir test grubuna gösterilir; etkileşim eşiği aşılırsa kademeli olarak genişleyen kitlelere ulaşır. 10 takipçili yeni bir hesap viral olabilir; ancak tek bir olumsuz geri bildirim dalgası yayılımı anında durdurabilir.</p>
+
+    <h3 class="algo-sub">Dağıtım Hattı — Kademeli Yayılım Modeli</h3>
+    <div class="algo-flow">
+      <div class="algo-node gray">
+        <span class="anode-title">Havuz</span>
+        <span class="anode-desc">Milyonlarca içerik</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node red">
+        <span class="anode-title">Test</span>
+        <span class="anode-desc">100–500 kişi</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node red">
+        <span class="anode-title">Analiz</span>
+        <span class="anode-desc">Etkileşim ölçümü</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node red">
+        <span class="anode-title">Yayılım</span>
+        <span class="anode-desc">Viral eşiği</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gold">
+        <span class="anode-title">FYP</span>
+        <span class="anode-desc">Seçilenler</span>
+      </div>
+    </div>
+
+    <h3 class="algo-sub">Temel Sinyaller</h3>
+    <div class="algo-signals">
+      <div class="sig-row"><span class="sig-name">İzlenme tamamlama</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En kritik</span></div>
+      <div class="sig-row"><span class="sig-name">Yeniden izleme (döngü)</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En kritik</span></div>
+      <div class="sig-row"><span class="sig-name">Paylaşım</span><div class="sig-bar"><div class="sig-fill" style="width:82%;background:#c49a2a"></div></div><span class="sig-tag high">Çok yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Yorum</span><div class="sig-bar"><div class="sig-fill" style="width:74%;background:#c49a2a"></div></div><span class="sig-tag high">Yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Beğeni</span><div class="sig-bar"><div class="sig-fill" style="width:55%;background:#a07818"></div></div><span class="sig-tag med">Orta</span></div>
+      <div class="sig-row"><span class="sig-name">Takip eylemi</span><div class="sig-bar"><div class="sig-fill" style="width:50%;background:#a07818"></div></div><span class="sig-tag med">Orta</span></div>
+      <div class="sig-row"><span class="sig-name">"İlginç değil" butonu</span><div class="sig-bar"><div class="sig-fill" style="width:95%;background:#9575b0"></div></div><span class="sig-tag neg">Ağır ceza</span></div>
+      <div class="sig-row"><span class="sig-name">Ses / trend kullanımı</span><div class="sig-bar"><div class="sig-fill" style="width:40%;background:#6a8f6a"></div></div><span class="sig-tag info">İçerik eşleşmesi</span></div>
+    </div>
+
+    <div class="algo-unique">
+      <span class="algo-unique-label">Benzersiz Özellik: Kartopu Sistemi</span>
+      Her video hesap geçmişinden bağımsız değerlendirilir. Yeni bir hesap da iyi etkileşim alırsa milyonlara ulaşabilir. Ancak sistem olumsuz geri bildirime karşı son derece hassastır: "şikayet et" veya "gizle" aksiyonları yayılımı anında frenler. Bu asimetri, içerik kalitesini hesap otoritesinden daha belirleyici kılar.
+    </div>
+  </div>
+
+  <!-- ── İNSTAGRAM ─────────────────────────────────────────── -->
+  <div class="algo-panel" id="ap-instagram">
+    <p class="algo-intro">Instagram, Feed, Reels, Keşfet ve Hikayeler için birbirinden farklı algoritmalar kullanır. 2022 sonrası Reels'in platformun merkezine taşınmasıyla birlikte kaydetme eylemi ve izlenme tamamlama oranı dominant sinyaller haline geldi. Beğeni bu ölçekte çok geride kalır.</p>
+
+    <h3 class="algo-sub">Dağıtım Hattı — Çok Yüzeyli Sıralama</h3>
+    <div class="algo-flow">
+      <div class="algo-node gray">
+        <span class="anode-title">Havuz</span>
+        <span class="anode-desc">Medya adayları</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node purple">
+        <span class="anode-title">İlgi Tahmini</span>
+        <span class="anode-desc">Geçmiş davranış</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node purple">
+        <span class="anode-title">İlişki Skoru</span>
+        <span class="anode-desc">Etkileşim geçmişi</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gold">
+        <span class="anode-title">Yüzey Akışı</span>
+        <span class="anode-desc">Feed / Reels / Keşfet</span>
+      </div>
+    </div>
+
+    <h3 class="algo-sub">Temel Sinyaller</h3>
+    <div class="algo-signals">
+      <div class="sig-row"><span class="sig-name">Kaydetme</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En güçlü</span></div>
+      <div class="sig-row"><span class="sig-name">İzlenme tamamlama (Reels)</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En güçlü</span></div>
+      <div class="sig-row"><span class="sig-name">DM üzerinden paylaşım</span><div class="sig-bar"><div class="sig-fill" style="width:82%;background:#c49a2a"></div></div><span class="sig-tag high">Çok yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Yorum</span><div class="sig-bar"><div class="sig-fill" style="width:72%;background:#c49a2a"></div></div><span class="sig-tag high">Yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Beğeni</span><div class="sig-bar"><div class="sig-fill" style="width:50%;background:#a07818"></div></div><span class="sig-tag med">Orta</span></div>
+      <div class="sig-row"><span class="sig-name">Hesap etkileşim geçmişi</span><div class="sig-bar"><div class="sig-fill" style="width:62%;background:#c49a2a"></div></div><span class="sig-tag high">İlişki sinyali</span></div>
+      <div class="sig-row"><span class="sig-name">Ses / müzik eşleşmesi</span><div class="sig-bar"><div class="sig-fill" style="width:45%;background:#a07818"></div></div><span class="sig-tag med">Reels'te etkili</span></div>
+      <div class="sig-row"><span class="sig-name">Güncellik</span><div class="sig-bar"><div class="sig-fill" style="width:35%;background:#6a7a6a"></div></div><span class="sig-tag info">Düşük–orta</span></div>
+    </div>
+
+    <div class="algo-unique">
+      <span class="algo-unique-label">Benzersiz Özellik: Yüzey Bazlı Algoritmalar</span>
+      Feed, Reels, Keşfet ve Hikayeler tamamen farklı algoritmalar kullanır. Feed'de yakın çevrenizle ilişki sinyali öndeyken, Reels'te tamamlama oranı ve ses eşleşmesi belirleyicidir. Keşfet sekmesi ise hiç etkileşim kurmadığınız hesapların içeriklerini keşfettirmeye optimize edilmiştir — bu yüzden viral yayılım çoğunlukla Keşfet üzerinden gerçekleşir.
+    </div>
+  </div>
+
+  <!-- ── X (TWİTTER) ───────────────────────────────────────── -->
+  <div class="algo-panel" id="ap-x">
+    <p class="algo-intro">X, 2023'te algoritmasını açık kaynak olarak yayımladı — büyük sosyal medya platformları arasında eşi görülmemiş bir şeffaflık adımı. "Sana Özel" akışı, yalnızca takip edilenleri değil; ağınızın etkileşim kurduğu içerikleri de getirir. Sistem, "Elan" adlı çok değişkenli puanlama motoruna dayanır.</p>
+
+    <h3 class="algo-sub">Dağıtım Hattı — "Sana Özel" Akışı</h3>
+    <div class="algo-flow">
+      <div class="algo-node gray">
+        <span class="anode-title">Aday Havuz</span>
+        <span class="anode-desc">Ağ içeriği</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gray">
+        <span class="anode-title">Ağ Analizi</span>
+        <span class="anode-desc">Takipçi sinyalleri</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gray">
+        <span class="anode-title">Puanlama</span>
+        <span class="anode-desc">Elan motoru</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gold">
+        <span class="anode-title">Sana Özel</span>
+        <span class="anode-desc">Kişisel akış</span>
+      </div>
+    </div>
+
+    <h3 class="algo-sub">Temel Sinyaller</h3>
+    <div class="algo-signals">
+      <div class="sig-row"><span class="sig-name">Ağ etkileşim etkisi</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En kritik</span></div>
+      <div class="sig-row"><span class="sig-name">Yanıtlar (reply)</span><div class="sig-bar"><div class="sig-fill" style="width:90%;background:#d4af37"></div></div><span class="sig-tag critical">Çok yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Retweet</span><div class="sig-bar"><div class="sig-fill" style="width:75%;background:#c49a2a"></div></div><span class="sig-tag high">Yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Beğeni</span><div class="sig-bar"><div class="sig-fill" style="width:60%;background:#c49a2a"></div></div><span class="sig-tag high">Orta–yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Yer işareti</span><div class="sig-bar"><div class="sig-fill" style="width:55%;background:#a07818"></div></div><span class="sig-tag med">Orta</span></div>
+      <div class="sig-row"><span class="sig-name">Hesap güvenilirliği</span><div class="sig-bar"><div class="sig-fill" style="width:72%;background:#c49a2a"></div></div><span class="sig-tag high">Kalite filtresi</span></div>
+      <div class="sig-row"><span class="sig-name">X Premium abonelik</span><div class="sig-bar"><div class="sig-fill" style="width:40%;background:#6a7a8a"></div></div><span class="sig-tag info">Görünürlük artışı</span></div>
+      <div class="sig-row"><span class="sig-name">Spam / manipülasyon</span><div class="sig-bar"><div class="sig-fill" style="width:95%;background:#9575b0"></div></div><span class="sig-tag neg">Ağır ceza</span></div>
+    </div>
+
+    <div class="algo-unique">
+      <span class="algo-unique-label">Benzersiz Özellik: Açık Kaynak Elan Motoru</span>
+      X, 2023'te puanlama sisteminin kaynak kodunu GitHub'da yayımladı. Sistem, takipçilerinizin bir tweete verdiği tepkiyi "sosyal etki genişletici" olarak kullanır: ağınızda yankı uyandıran içerikler size de ulaşır. Premium abonelik ise doğrudan görünürlük çarpanı olarak algoritmaya yerleştirilmiştir.
+    </div>
+  </div>
+
+  <!-- ── FACEBOOK ───────────────────────────────────────────── -->
+  <div class="algo-panel" id="ap-facebook">
+    <p class="algo-intro">Facebook 2018'de "Anlamlı Sosyal Etkileşimler" reformuyla algoritmasını köklü biçimde yeniden tasarladı. Bugün yapay zeka destekli sistem, beğeni gibi pasif eylemleri değil; yorum, paylaşım ve uzun süreli tartışmayı — yani gerçek sosyal değeri — ödüllendirir. Organik sayfa erişimi bu reform sonrası dramatik şekilde düştü.</p>
+
+    <h3 class="algo-sub">Dağıtım Hattı — Anlamlı Sosyal Etkileşim Modeli</h3>
+    <div class="algo-flow">
+      <div class="algo-node gray">
+        <span class="anode-title">İçerik Stoku</span>
+        <span class="anode-desc">Paylaşılan içerik</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node blue">
+        <span class="anode-title">Kim Paylaştı</span>
+        <span class="anode-desc">Arkadaş vs. sayfa</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node blue">
+        <span class="anode-title">Değer Tahmini</span>
+        <span class="anode-desc">Etkileşim tahmini</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gold">
+        <span class="anode-title">Haber Akışı</span>
+        <span class="anode-desc">Kişisel öncelik</span>
+      </div>
+    </div>
+
+    <h3 class="algo-sub">Temel Sinyaller</h3>
+    <div class="algo-signals">
+      <div class="sig-row"><span class="sig-name">Paylaşım (share)</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En kritik</span></div>
+      <div class="sig-row"><span class="sig-name">Arkadaş / aile paylaşımı</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">Kaynak kalitesi</span></div>
+      <div class="sig-row"><span class="sig-name">Yorum ve tartışma</span><div class="sig-bar"><div class="sig-fill" style="width:90%;background:#d4af37"></div></div><span class="sig-tag critical">Çok yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Tepkiler (öfke dahil)</span><div class="sig-bar"><div class="sig-fill" style="width:72%;background:#c49a2a"></div></div><span class="sig-tag high">Yüksek</span></div>
+      <div class="sig-row"><span class="sig-name">Video tamamlama</span><div class="sig-bar"><div class="sig-fill" style="width:58%;background:#a07818"></div></div><span class="sig-tag med">Orta</span></div>
+      <div class="sig-row"><span class="sig-name">Sayfa / grup içeriği</span><div class="sig-bar"><div class="sig-fill" style="width:28%;background:#6a7a6a"></div></div><span class="sig-tag info">Organik düşüş trendi</span></div>
+      <div class="sig-row"><span class="sig-name">Sensasyonel başlık</span><div class="sig-bar"><div class="sig-fill" style="width:95%;background:#9575b0"></div></div><span class="sig-tag neg">Clickbait cezası</span></div>
+      <div class="sig-row"><span class="sig-name">Bağlantı tıklamaları</span><div class="sig-bar"><div class="sig-fill" style="width:38%;background:#6a7a6a"></div></div><span class="sig-tag info">Düşük etki</span></div>
+    </div>
+
+    <div class="algo-unique">
+      <span class="algo-unique-label">Benzersiz Özellik: Clickbait Cezalandırma Sistemi</span>
+      "Bu videoyu izlemeden gidin!" tarzı başlıklar ve içeriği karşılamayan merak uyandırıcı ifadeler, Facebook'un özel ML modelleriyle tespit edilir ve aktif olarak bastırılır. Sağlık dezenformasyonu, seçim manipülasyonu girişimleri ve aşı karşıtı içerikler de sistematik ceza mekanizmalarına tabidir.
+    </div>
+  </div>
+
+  <!-- ── REDDIT ─────────────────────────────────────────────── -->
+  <div class="algo-panel" id="ap-reddit">
+    <p class="algo-intro">Reddit, tek bir algoritma yerine kullanıcının seçebildiği birden fazla sıralama modu sunar: Hot, Top, Rising, New, Controversial ve Best. Hot algoritması matematiksel olarak şeffaftır; formülü açık kaynaklıdır. Sistem, zaman ile oy kalitesini logaritmik bir denge içinde birleştirir.</p>
+
+    <h3 class="algo-sub">Dağıtım Hattı — Hot Modu</h3>
+    <div class="algo-flow">
+      <div class="algo-node gray">
+        <span class="anode-title">Gönderi</span>
+        <span class="anode-desc">Yeni içerik</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node orange">
+        <span class="anode-title">Oy Skoru</span>
+        <span class="anode-desc">Wilson güveni</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node orange">
+        <span class="anode-title">Zaman Azalması</span>
+        <span class="anode-desc">Logaritmik düşüş</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gold">
+        <span class="anode-title">Sıralama</span>
+        <span class="anode-desc">Hot / Top / Rising</span>
+      </div>
+    </div>
+
+    <div class="algo-formula">
+      <span class="algo-formula-label">Hot Skor Formülü (Açık Kaynak)</span>
+      score = log₁₀(max(|upvotes − downvotes|, 1)) + (unix_zaman − 1134028003) / 45000
+    </div>
+
+    <h3 class="algo-sub">Temel Sinyaller</h3>
+    <div class="algo-signals">
+      <div class="sig-row"><span class="sig-name">Upvote / downvote oranı</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">Wilson güven skoru</span></div>
+      <div class="sig-row"><span class="sig-name">Gönderinin yaşı</span><div class="sig-bar"><div class="sig-fill" style="width:85%;background:#c49a2a"></div></div><span class="sig-tag high">Logaritmik zaman</span></div>
+      <div class="sig-row"><span class="sig-name">Toplam oy hacmi</span><div class="sig-bar"><div class="sig-fill" style="width:70%;background:#c49a2a"></div></div><span class="sig-tag high">İstatistiksel güven</span></div>
+      <div class="sig-row"><span class="sig-name">Yorum sayısı</span><div class="sig-bar"><div class="sig-fill" style="width:50%;background:#a07818"></div></div><span class="sig-tag med">Best modunda etkili</span></div>
+      <div class="sig-row"><span class="sig-name">Subreddit kuralları</span><div class="sig-bar"><div class="sig-fill" style="width:80%;background:#c49a2a"></div></div><span class="sig-tag high">Moderatör filtresi</span></div>
+      <div class="sig-row"><span class="sig-name">Raporlama oranı</span><div class="sig-bar"><div class="sig-fill" style="width:90%;background:#9575b0"></div></div><span class="sig-tag neg">Negatif sinyal</span></div>
+      <div class="sig-row"><span class="sig-name">Controversial skoru</span><div class="sig-bar"><div class="sig-fill" style="width:60%;background:#a07818"></div></div><span class="sig-tag med">Ayrı sıralama modu</span></div>
+      <div class="sig-row"><span class="sig-name">Ödül (Gold, Platin)</span><div class="sig-bar"><div class="sig-fill" style="width:30%;background:#6a7a6a"></div></div><span class="sig-tag info">Düşük doğrudan etki</span></div>
+    </div>
+
+    <div class="algo-unique">
+      <span class="algo-unique-label">Benzersiz Özellik: Wilson Güven Aralığı</span>
+      Reddit, basit oy oranı yerine istatistiksel güven aralığını hesaplar. 10 upvote / 0 downvote ile 1000 upvote / 100 downvote farklı muamele görür: az oylanan içeriklerde %100 upvote oranına rağmen belirsizlik yüksektir. Wilson skoru bu belirsizliği hesaba katarak gerçek kaliteyi ölçer. Formül tamamen açık kaynaklıdır.
+    </div>
+  </div>
+
+  <!-- ── BLUESKY ─────────────────────────────────────────────── -->
+  <div class="algo-panel" id="ap-bluesky">
+    <p class="algo-intro">Bluesky, AT (Authenticated Transfer) Protokolü üzerine kurulu merkezi olmayan bir sosyal ağdır. Diğer platformlardan en temel farkı: kullanıcı hangi algoritmayı kullanacağını seçer — ya da topluluk tarafından yazılmış özel bir algoritma indirir. Platform algoritmayı dayatmaz, reklamla finanse edilmez.</p>
+
+    <h3 class="algo-sub">AT Protocol Mimarisi — Merkezsiz Akış</h3>
+    <div class="algo-flow">
+      <div class="algo-node gray">
+        <span class="anode-title">Firehose</span>
+        <span class="anode-desc">AT Protocol akışı</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node green">
+        <span class="anode-title">Veri Sunucusu</span>
+        <span class="anode-desc">Kişisel depo (PDS)</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node green">
+        <span class="anode-title">Feed Generator</span>
+        <span class="anode-desc">Seçilen algoritma</span>
+      </div>
+      <div class="algo-arrow">→</div>
+      <div class="algo-node gold">
+        <span class="anode-title">Kişisel Akış</span>
+        <span class="anode-desc">Kullanıcı kontrolü</span>
+      </div>
+    </div>
+
+    <h3 class="algo-sub">Temel Sinyaller (Varsayılan Discover Feed)</h3>
+    <div class="algo-signals">
+      <div class="sig-row"><span class="sig-name">Kullanıcı tercihi</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">En güçlü kontrol</span></div>
+      <div class="sig-row"><span class="sig-name">Güvenilen ağ beğenileri</span><div class="sig-bar"><div class="sig-fill" style="width:80%;background:#c49a2a"></div></div><span class="sig-tag high">Sosyal güven sinyali</span></div>
+      <div class="sig-row"><span class="sig-name">Zaman (kronoloji)</span><div class="sig-bar"><div class="sig-fill" style="width:75%;background:#c49a2a"></div></div><span class="sig-tag high">Varsayılanda güçlü</span></div>
+      <div class="sig-row"><span class="sig-name">Konu ve etiket eşleşmesi</span><div class="sig-bar"><div class="sig-fill" style="width:60%;background:#a07818"></div></div><span class="sig-tag med">Orta etki</span></div>
+      <div class="sig-row"><span class="sig-name">Repostlar</span><div class="sig-bar"><div class="sig-fill" style="width:52%;background:#a07818"></div></div><span class="sig-tag med">Orta etki</span></div>
+      <div class="sig-row"><span class="sig-name">Etkileşim oranı</span><div class="sig-bar"><div class="sig-fill" style="width:48%;background:#6a8f6a"></div></div><span class="sig-tag info">Feed'e göre değişir</span></div>
+      <div class="sig-row"><span class="sig-name">Reklam / tanıtım</span><div class="sig-bar"><div class="sig-fill" style="width:0%;background:#555"></div></div><span class="sig-tag info">Şu an mevcut değil</span></div>
+      <div class="sig-row"><span class="sig-name">Açık kaynak şeffaflık</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">Temel tasarım prensibi</span></div>
+    </div>
+
+    <div class="algo-unique">
+      <span class="algo-unique-label">Benzersiz Özellik: Algoritmik Seçim Özgürlüğü</span>
+      Bluesky'da "Discover", "Chronological" veya "Popular with Friends" gibi hazır feed'ler arasında geçiş yapabilirsiniz. Bunların ötesinde, topluluk tarafından yazılmış yüzlerce özel algoritma kullanılabilir. AT Protocol, verilerinizin size ait olduğunu garanti eder: hesabınızı kaybetmeden başka bir sunucuya taşıyabilirsiniz.
+    </div>
+  </div>
+
+</div><!-- / #algo-widget -->
+
+<style>
+/* ── GENEL WIDGET STİLLERİ ─────────────────────────────────────── */
+#algo-widget {
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Sekmeler */
+.algo-tab {
+  background: transparent;
+  border: 1px solid rgba(212,175,55,0.3);
+  color: #a0a0a0;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: 'Cinzel', serif;
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+}
+.algo-tab:hover {
+  border-color: rgba(212,175,55,0.7);
+  color: #d4af37;
+}
+.algo-tab.active {
+  background: rgba(212,175,55,0.12);
+  border-color: #d4af37;
+  color: #d4af37;
+}
+
+/* Paneller */
+.algo-panel { display: none; }
+.algo-panel.active { display: block; }
+
+/* Giriş metni */
+.algo-intro {
+  font-family: 'Lora', serif;
+  font-size: 1rem;
+  color: #c0c0c0;
+  line-height: 1.8;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: rgba(212,175,55,0.04);
+  border-left: 3px solid rgba(212,175,55,0.4);
+  border-radius: 0 10px 10px 0;
+}
+
+/* Alt başlık */
+.algo-sub {
+  font-family: 'Cinzel', serif !important;
+  font-size: 1rem !important;
+  color: #d4af37 !important;
+  margin: 24px 0 12px !important;
+  letter-spacing: 0.5px;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+/* Akış diyagramı */
+.algo-flow {
+  display: flex;
+  align-items: stretch;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.algo-node {
+  flex: 1;
+  min-width: 90px;
+  border: 1px solid;
+  border-radius: 10px;
+  padding: 12px 10px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.algo-node.gray  { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.12); }
+.algo-node.gold  { background: rgba(212,175,55,0.14);  border-color: rgba(212,175,55,0.6);  }
+.algo-node.red   { background: rgba(210,84,48,0.1);    border-color: rgba(210,84,48,0.4);   }
+.algo-node.purple{ background: rgba(127,119,221,0.1);  border-color: rgba(127,119,221,0.4); }
+.algo-node.blue  { background: rgba(56,138,221,0.1);   border-color: rgba(56,138,221,0.35); }
+.algo-node.orange{ background: rgba(186,117,23,0.12);  border-color: rgba(186,117,23,0.4);  }
+.algo-node.green { background: rgba(29,158,117,0.1);   border-color: rgba(29,158,117,0.35); }
+
+.anode-title {
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #f0f0f0;
+  letter-spacing: 0.3px;
+}
+.anode-desc {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.65rem;
+  color: #888;
+  line-height: 1.3;
+}
+.algo-node.gold .anode-title  { color: #d4af37; }
+.algo-node.gold .anode-desc   { color: #b89a30; }
+
+.algo-arrow {
+  display: flex;
+  align-items: center;
+  color: rgba(212,175,55,0.5);
+  font-size: 1rem;
+  flex-shrink: 0;
+  padding: 0 2px;
+}
+
+/* Sinyal çubukları */
+.algo-signals {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 8px;
+}
+.sig-row {
+  display: grid;
+  grid-template-columns: 1fr 120px auto;
+  align-items: center;
+  gap: 10px;
+}
+.sig-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  color: #c0c0c0;
+}
+.sig-bar {
+  height: 5px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.sig-fill {
+  height: 5px;
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+.sig-tag {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.62rem;
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  text-align: center;
+}
+.sig-tag.critical { background: rgba(212,175,55,0.18); color: #d4af37; border: 1px solid rgba(212,175,55,0.35); }
+.sig-tag.high     { background: rgba(196,154,42,0.12);  color: #c49a2a; border: 1px solid rgba(196,154,42,0.3);  }
+.sig-tag.med      { background: rgba(160,120,24,0.12);  color: #a07818; border: 1px solid rgba(160,120,24,0.3);  }
+.sig-tag.neg      { background: rgba(149,117,176,0.15); color: #9575b0; border: 1px solid rgba(149,117,176,0.3); }
+.sig-tag.info     { background: rgba(255,255,255,0.05); color: #777;    border: 1px solid rgba(255,255,255,0.1); }
+
+/* Formül kutusu */
+.algo-formula {
+  background: rgba(0,0,0,0.35);
+  border: 1px solid rgba(212,175,55,0.2);
+  border-radius: 10px;
+  padding: 14px 18px;
+  margin: 8px 0 16px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: #a0a0a0;
+  line-height: 1.8;
+}
+.algo-formula-label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(212,175,55,0.6);
+  margin-bottom: 8px;
+}
+
+/* Benzersiz özellik kutusu */
+.algo-unique {
+  background: rgba(212,175,55,0.05);
+  border-left: 3px solid #d4af37;
+  border-radius: 0 10px 10px 0;
+  padding: 16px 18px;
+  margin-top: 20px;
+  font-family: 'Lora', serif;
+  font-size: 0.95rem;
+  color: #b0b0b0;
+  line-height: 1.75;
+}
+.algo-unique-label {
+  display: block;
+  font-family: 'Cinzel', serif;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #d4af37;
+  margin-bottom: 10px;
+}
+
+/* Mobil uyumu */
+@media (max-width: 600px) {
+  .algo-flow { flex-direction: column; }
+  .algo-arrow { transform: rotate(90deg); align-self: center; }
+  .sig-row { grid-template-columns: 1fr auto; }
+  .sig-bar { display: none; }
+}
+</style>
+
+<script>
+(function(){
+  var tabs  = document.querySelectorAll('.algo-tab');
+  var panels = document.querySelectorAll('.algo-panel');
+  tabs.forEach(function(tab){
+    tab.addEventListener('click', function(){
+      tabs.forEach(function(t){ t.classList.remove('active'); });
+      panels.forEach(function(p){ p.classList.remove('active'); });
+      tab.classList.add('active');
+      var target = document.getElementById('ap-' + tab.dataset.p);
+      if(target) target.classList.add('active');
+    });
+  });
+})();
+</script>
     </div>
 </section>
 

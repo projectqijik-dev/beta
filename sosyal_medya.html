@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sosyal Medya ve Bilgi Güvenliği | Boğaziçi Koleji</title>
+    <title>Sosyal Medya Okuryazarlığı | Boğaziçi Koleji</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600&family=Lora:ital,wght@0,400;0,700;1,400&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -185,6 +185,17 @@
             background: var(--glass);
             backdrop-filter: blur(15px);
             border-bottom: 1px solid var(--gold-muted);
+        }
+		/* ÜST BAR BAŞLIĞI */
+        .top-nav-title {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            /* Ekran küçüldükçe font otomatik küçülür ama 0.85rem'in altına inmez, en fazla 1.1rem olur */
+            font-size: clamp(0.85rem, 3.5vw, 1.1rem);
+            font-weight: 600;
+            white-space: nowrap; /* Asla alt satıra inmemesini sağlar */
+            letter-spacing: 1px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Okunabilirliği artırmak için hafif gölge */
         }
         .menu-toggle {
             background: transparent;
@@ -509,7 +520,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">Sosyal Medya Okuryazarlığı</div>
-        <div class="sidebar-sub">Medya Okuryazarlığı</div>
+        <div class="sidebar-sub">Menü</div>
         
         <nav class="nav-list">
 
@@ -589,6 +600,7 @@
         <button class="menu-toggle" id="menuToggle">
             <i class="fa-solid fa-bars"></i>
         </button>
+		<div class="top-nav-title">Sosyal Medya Okuryazarlığı</div>
     </nav>
 
     <main id="main">

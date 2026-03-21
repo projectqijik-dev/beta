@@ -203,19 +203,6 @@
         .menu-toggle:hover {
             background: rgba(212, 175, 55, 0.1);
         }
-        .back-btn {
-            color: var(--text-white);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: 0.3s;
-            padding: 6px 15px;
-            border-radius: 20px;
-            border: 1px solid var(--gold-muted);
-        }
-        .back-btn:hover {
-            background: var(--gold);
-            color: #000;
-        }
 
         /* ANA İÇERİK ALANI */
         main {
@@ -522,7 +509,7 @@
 
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-brand">Sosyal Medya Okuryazarlığı</div>
-        <div class="sidebar-sub">Boğaziçi Koleji</div>
+        <div class="sidebar-sub">Medya Okuryazarlığı</div>
         
         <nav class="nav-list">
 
@@ -602,10 +589,18 @@
         <button class="menu-toggle" id="menuToggle">
             <i class="fa-solid fa-bars"></i>
         </button>
-        <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left"></i> Portala Dön</a>
     </nav>
 
     <main id="main">
+	<section id="site-intro" style="min-height: auto; padding: 80px 60px 0 60px;">
+            <div class="content-box active" style="margin: 0 auto;">
+                <div class="fact-panel" style="margin: 0 auto; border-left: 4px solid var(--gold); border-radius: 12px; text-align: justify;">
+                    <p style="font-size: 1.05rem; margin-bottom: 0; line-height: 1.8;">
+                        Bu site <span class="highlight">Boğaziçi Koleji</span> 11. sınıf Medya Okuryazarlığı dersi kapsamında Sosyal Medya'nın bilinçli kullanılması için bir rehber niteliğindedir. Site içeriği hazırlanırken; ders notları, ilgili kamu kurumlarının yayınları, akademik kaynaklar, halk sağlığı (Türkiye, Amerika ve İngiltere) resmi internet sitelerinden yararlanılmıştır.
+                    </p>
+                </div>
+            </div>
+        </section>
         <section id="intro">
             <div class="content-box active" style="text-align: center;">
                 <h1 style="color: #fff;">İletişimin Evrimi</h1>
@@ -913,7 +908,7 @@
 
     <h3 class="algo-sub">Temel Sinyaller</h3>
     <div class="algo-signals">
-      <div class="sig-row"><span class="sig-name">Upvote / downvote oranı</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">Wilson güven skoru</span></div>
+      <div class="sig-row"><span class="sig-name">Upvote / downvote oranı (Olumu oy / Olumsuz oy oranı)</span><div class="sig-bar"><div class="sig-fill" style="width:100%;background:#d4af37"></div></div><span class="sig-tag critical">Wilson güven skoru</span></div>
       <div class="sig-row"><span class="sig-name">Gönderinin yaşı</span><div class="sig-bar"><div class="sig-fill" style="width:85%;background:#c49a2a"></div></div><span class="sig-tag high">Logaritmik zaman</span></div>
       <div class="sig-row"><span class="sig-name">Toplam oy hacmi</span><div class="sig-bar"><div class="sig-fill" style="width:70%;background:#c49a2a"></div></div><span class="sig-tag high">İstatistiksel güven</span></div>
       <div class="sig-row"><span class="sig-name">Yorum sayısı</span><div class="sig-bar"><div class="sig-fill" style="width:50%;background:#a07818"></div></div><span class="sig-tag med">Best modunda etkili</span></div>
@@ -946,7 +941,7 @@
       </div>
       <div class="algo-arrow">→</div>
       <div class="algo-node green">
-        <span class="anode-title">Feed Generator</span>
+        <span class="anode-title">Feed Oluşturucu</span>
         <span class="anode-desc">Seçilen algoritma</span>
       </div>
       <div class="algo-arrow">→</div>

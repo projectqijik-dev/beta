@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademik Metin Analizi ve Analitik Rubrik Sınavı</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 950px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #34495e;
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+        }
+        .bilgi-notu {
+            background-color: #eaf2f8;
+            border-left: 5px solid #2980b9;
+            padding: 15px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        .soru-karti {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-top: 4px solid #2c3e50;
+        }
+        .akademik-metin {
+            background-color: #fdfefe;
+            border-left: 4px solid #e74c3c;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            font-style: italic;
+            color: #555;
+            font-size: 0.95em;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.02);
+        }
+        .soru-kok {
+            font-weight: bold;
+            font-size: 1.05em;
+            margin-bottom: 15px;
+            color: #2c3e50;
+        }
+        textarea {
+            width: 100%;
+            height: 120px;
+            padding: 15px;
+            border: 1px solid #ccd1d1;
+            border-radius: 5px;
+            resize: vertical;
+            font-family: inherit;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+            background-color: #fafbfc;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            background-color: #fff;
+        }
+        .btn-cevap {
+            background-color: #34495e;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        .btn-cevap:hover {
+            background-color: #1abc9c;
+        }
+        .btn-cevap.acik {
+            background-color: #16a085;
+        }
+        .rubrik-alani {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f4f6f7;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+        }
+        .rubrik-tablosu {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .rubrik-tablosu th, .rubrik-tablosu td {
+            border: 1px solid #d5d8dc;
+            padding: 12px;
+            text-align: left;
+        }
+        .rubrik-tablosu th {
+            background-color: #eaeded;
+            color: #2c3e50;
+        }
+        .rubrik-tablosu tr:nth-child(2) td:first-child { color: #27ae60; font-weight: bold; } /* 3 Puan */
+        .rubrik-tablosu tr:nth-child(3) td:first-child { color: #f39c12; font-weight: bold; } /* 2 Puan */
+        .rubrik-tablosu tr:nth-child(4) td:first-child { color: #c0392b; font-weight: bold; } /* 1 Puan */
+    </style>
+</head>
+<body>
+
+    <h1>Tarihsel Analiz ve Akademik Metin Sınavı</h1>
+    
+    <div class="bilgi-notu">
+        <strong>Değerlendirme Kriteri:</strong> Bu sınavdaki sorular analitik rubrik sistemine göre değerlendirilecektir. Öğrencilerin metinleri kopyalaması değil; neden-sonuç ilişkisi kurması, tarihsel bağlamı kullanması ve sentez yapması beklenmektedir. "Rubriği Göster" butonuna tıklayarak puanlama anahtarını inceleyebilirsiniz.
+    </div>
+
+    <div id="sinav_alani">
+        </div>
+
+    <script>
+        const sorular = [
+            // ESKİ ÇAĞ HUKUKU (5 Soru)
+            { 
+                id: "klasik_u2_hukuk_1", 
+                metin: "Sümer site devletlerinde tapınak (ziggurat) rahipleri, halkın ürettiği tarım ürünlerini toplamak ve kaydetmekle yükümlüydü. Bu devasa lojistik operasyon, insan hafızasının sınırlarını aştığında, rahipler kil tabletler üzerine semboller çizmeye başladılar. Zamanla bu semboller sistemli bir çivi yazısına dönüştü. Dolayısıyla yazının icadı, soyut bir düşünce sıçramasından ziyade, tapınak ekonomisinin kurumsallaşması ve mülkiyetin kayıt altına alınması ihtiyacının doğrudan bir sonucudur.",
+                soru: "Bu metne göre, yazının icadını 'ekonomik zorunluluk' ve 'bürokratik ihtiyaçlar' bağlamında analiz ediniz.", 
+                rubrik: "Yazının icadını tapınak ekonomisindeki depolama/kayıt ihtiyacıyla tam olarak ilişkilendirir; mülkiyetin ve bürokrasinin kurumsallaşması kavramlarını doğru kullanır.|Sadece ekonomik zorunluluktan veya tarım ürünlerinin kaydından bahseder, bürokratik kurumsallaşma bağlamını eksik bırakır.|Metni doğrudan kopyalar veya sadece 'yazıyı Sümerler bulmuştur' gibi yüzeysel bir bilgi verir."
+            },
+            { 
+                id: "klasik_u2_hukuk_2", 
+                metin: "Eski Babil Kralı Hammurabi, kanunlarını bir dikilitaşın üzerine kazıtmış ve bu taşın en üstüne kendisini, Adalet Güneşi Tanrısı Şamaş'tan kanunları teslim alırken resmettirtmiştir. Bu ikonografik tercih tesadüf değildir. Antik Çağ'da kanun koyucular, halkın itaatsizliğini önlemek ve siyasi otoritelerini sarsılmaz kılmak için kendi yarattıkları kurallara kutsal bir zırh giydirmek zorundaydılar.",
+                soru: "Hammurabi'nin kanunlarını ilahi bir kaynağa dayandırmasının altındaki siyasi motivasyonu ve 'meşruiyet' kavramını kullanarak açıklayınız.", 
+                rubrik: "Teokratik meşruiyet kavramını kullanarak kralların mutlak itaat sağlamak, kanunların sorgulanmasını önlemek ve siyasi otoriteyi güçlendirmek için dini bir araç olarak kullandığını analiz eder.|Kanunların tanrıdan geldiğini söyleyerek halkı korkutmayı amaçladığını belirtir ancak siyasi meşruiyet ve otorite kavramlarını eksik bırakır.|Sadece Hammurabi'nin kanunları taşlara yazdırdığından veya Tanrı Şamaş'tan bahseder, siyasi amaca değinmez."
+            },
+            { 
+                id: "klasik_u2_hukuk_3", 
+                metin: "Roma Cumhuriyeti'nin ilk dönemlerinde yazılı olmayan geleneksel hukuk (fas), tamamen soylu sınıfı olan Patricilerin tekelindeydi. Plebler (sıradan halk), neyin suç olduğunu ve cezasının ne olacağını önceden bilemiyordu. Pleblerin askeri grevlere varan uzun soluklu isyanları sonucunda, yasalar MÖ 451'de on iki tunç levhaya kazınarak forumda herkesin görebileceği bir yere asıldı.",
+                soru: "Yasaların sözlü gelenekten çıkarılıp 'yazılı hale getirilmesinin' sınıf mücadeleleri (Patrici-Pleb) ve hukuki öngörülebilirlik açısından önemini tartışınız.", 
+                rubrik: "Yazılı hukukun yargıç (soylu) keyfiliğini önlediğini, hukuki öngörülebilirlik/şeffaflık sağladığını ve bu durumun sınıflar arası eşitsizliği gidermede bir dönüm noktası olduğunu savunur.|Yasaların yazılmasının halkın kuralları öğrenmesini sağladığını belirtir ancak sınıf mücadelesi veya soyluların keyfiliğinin önlenmesi boyutunu eksik tartışır.|Sadece 12 Levha Kanunlarının Roma'da yapıldığını ve halk için iyi olduğunu söylemekle yetinir."
+            },
+            { 
+                id: "klasik_u2_hukuk_4", 
+                metin: "Hitit kanun metinlerinde, çağdaşı olan Mezopotamya uygarlıklarında sıkça görülen 'kısasa kısas' (göze göz, dişe diş) ilkesinin yerini büyük oranda tazminat (bedel ödeme) sisteminin aldığı görülür. Örneğin; birinin gözünü kör eden kişi ölümle veya aynı şekilde sakat bırakılmakla cezalandırılmaz, bunun yerine mağdura kanunla belirlenmiş miktarda gümüş öderdi. Bu durum hukukun intikam aracı olmaktan çıkıp zararın tazminine yöneldiğini gösterir.",
+                soru: "Hitit hukukundaki 'tazminat' esasının, dönemin diğer medeniyetlerine kıyasla nasıl bir adalet anlayışını (onarıcı vs. cezalandırıcı) temsil ettiğini analiz ediniz.", 
+                rubrik: "Hitit adalet sisteminin hümanist/onarıcı adalet anlayışına sahip olduğunu, intikam (kısas) yerine mağduriyetin giderilmesini (tazminat) hedeflediğini Mezopotamya ile karşılaştırarak açıklar.|Hititlerde ölüm cezası yerine para cezası olduğunu belirtir ancak bunun adalet felsefesindeki 'onarıcı/intikamcı' bağlamdaki değişimini yeterince tartışmaz.|Sadece gümüş ödendiğinden bahseder, karşılaştırma ve analiz yapmaz."
+            },
+            { 
+                id: "klasik_u2_hukuk_5", 
+                metin: "İbranilerde Hukuk, doğrudan doğruya 'On Emir' başta olmak üzere Tevrat'ın dini hükümlerine (şeriat) dayanırdı. Krallar veya yöneticiler bu kanunları değiştirme yetkisine sahip değildi; onlar sadece bu ilahi yasaların uygulayıcısı ve koruyucusu konumundaydılar. Bu durum, Eski Çağ'ın genelinde görülen 'Kral-Kanun Koyucu' figüründen radikal bir kopuşu ifade eder.",
+                soru: "İbrani hukuk sisteminin 'Kanun Koyucu' kavramına getirdiği bu farklı yaklaşımın, kralın yetkilerini nasıl sınırlandırdığını değerlendiriniz.", 
+                rubrik: "İlahi hukukun üstünlüğünü (hukuk devleti ilkel formunu) kavrar; kralın kanun yapma tekelini kaybedip sadece icra makamına dönüştüğünü ve böylece mutlak otoritesinin sınırlandığını analiz eder.|Kanunların dinden geldiğini ve kralın bunları değiştiremediğini belirtir ancak bunun kralın siyasi gücünü nasıl kısıtladığını detaylandırmaz.|Sadece On Emir'den bahseder, yöneticinin yetki sınırlandırması konusuna girmez."
+            },
+
+            // İNANÇ, BİLİM VE SANAT (5 Soru)
+            { 
+                id: "klasik_u2_inanc_1", 
+                metin: "Antik Mısır'da ölümden sonra yaşam inancı merkezi bir öneme sahipti. Ruhun (Ka), öteki dünyada var olabilmesi için fiziksel bedenin sağlam kalması gerektiğine inanılırdı. Bu teolojik zorunluluk, Mısırlıları insan bedeni üzerinde titiz çalışmalar yapmaya itti; iç organların çıkarılması, bedenin reçine ve tuzlarla kurutulması gibi karmaşık işlemler geliştirildi.",
+                soru: "Mısırlıların bu dini ritüelinin (mumyalama), insanlık tarihindeki pozitif bilimlerin (tıp, anatomi, eczacılık) gelişimine sağladığı istem dışı katkıları açıklayınız.", 
+                rubrik: "Dini inancın anatomi (iç organların yapısı), tıp ve kimya/eczacılık (kimyasal koruyucular) alanlarında deneysel bilginin birikmesine doğrudan ve zorunlu bir zemin hazırladığını açıklar.|Mumyalamanın tıbbı geliştirdiğini belirtir ancak anatomi veya kimya/eczacılık gibi spesifik alt bilim dallarıyla olan bağını detaylandırmaz.|Sadece Mısırlıların ölümden sonra yaşama inandığını ve bedenleri sakladığını yazar."
+            },
+            { 
+                id: "klasik_u2_inanc_2", 
+                metin: "Antik Yunan mitolojisinde tanrılar, doğaüstü güçlere sahip olsalar da görünüm, karakter ve zaaflar bakımından tamamen insana benzer (antropomorfik) varlıklar olarak hayal edilirdi. Tanrılar aşık olur, kıskanır, hile yapar ve savaşırdı. Bu inanç sistemi, evrenin merkezine 'insan'ı koyan bir dünya görüşünün doğmasına neden oldu.",
+                soru: "Yunanlıların 'insan formundaki tanrı' tasavvurunun, Antik Yunan heykel sanatında ideal insan vücudu arayışını (hümanist sanatı) nasıl şekillendirdiğini yorumlayınız.", 
+                rubrik: "Tanrıların insan görünümünde olmasının, sanatçıları kusursuz kas yapısını, ideal orantıyı ve estetik mükemmelliği insan bedeninde aramaya ittiğini; bunun da heykeltıraşlıkta zirveye yol açtığını analiz eder.|Heykellerin tanrılara benzetilmek için güzel yapıldığını belirtir ancak insan merkezli (hümanist) sanat anlayışına vurgu yapmaz.|Sadece Yunanlıların çok tanrılı inanca sahip olduğunu ve heykeller yaptıklarını yazar."
+            },
+            { 
+                id: "klasik_u2_inanc_3", 
+                metin: "Hitit kralları, her yılın sonunda o yıl içinde yaptıkları savaşları, siyasi antlaşmaları ve icraatları 'Anal' adı verilen kil tabletlere yazdırırlardı. Ancak bu metinler halka değil, hesap vermek amacıyla doğrudan Baş Tanrı Teşup'a sunulurdu. Bu yüzden krallar, tanrıdan yalan söyleyerek bir şey gizleyemeyecekleri inancıyla, zaferleri kadar yenilgilerini de bu yıllıklara kaydettirmişlerdir.",
+                soru: "Hititlerin bu dini korku ve sorumluluk duygusunun, tarih biliminin temel ilkelerinden biri olan 'objektif (tarafsız) tarih yazıcılığına' nasıl öncülük ettiğini değerlendiriniz.", 
+                rubrik: "Kralın tanrıdan bir şey gizleyememe inancının, propagandayı önleyerek doğruların (yenilgilerin bile) yazılmasını sağladığını ve bunun modern tarafsız tarihçiliğin temeli olduğunu açıklar.|Anallara zafer ve yenilgilerin yazıldığını belirtir ancak bunun 'objektif tarih' ile olan kavramsal bağını güçlü kuramaz.|Sadece Hititlerin yıllıklar yazdığını ve tanrıya sunduğunu söyler, tarih yazıcılığı boyutuna değinmez."
+            },
+            { 
+                id: "klasik_u2_inanc_4", 
+                metin: "Mezopotamya uygarlıklarından kalan mimari eserler (saraylar, tapınaklar), Mısır'ın görkemli piramitleri ve tapınakları kadar sağlam bir şekilde günümüze ulaşamamıştır. Bunun nedeni sadece savaşlar değil, Mezopotamya'nın jeolojik yapısıdır. Taş ocaklarından yoksun olan Mezopotamyalılar, devasa zigguratlarını kilden yapılan kerpiç tuğlalarla inşa etmek zorunda kalmışlardır.",
+                soru: "Bu metinden hareketle, coğrafi şartların ve hammadde imkanlarının bir medeniyetin sanatsal ve mimari 'kalıcılığını' nasıl belirlediğini karşılaştırmalı olarak açıklayınız.", 
+                rubrik: "Mısır'ın taş kaynakları ile Mezopotamya'nın alüvyon/kerpiç yapısını karşılaştırarak; hammaddenin doğa olaylarına (yağmur, erozyon) karşı direncini ve bunun mimarinin kalıcılığına etkisini tam olarak analiz eder.|Mezopotamya'da taş olmadığı için eserlerin yıkıldığını belirtir ancak Mısır ile olan zıtlığı ve coğrafi determinizm bağlamını eksik tartışır.|Sadece kerpiçten ev yaptıklarını için yıkıldığını söyler, analiz derinliği taşımaz."
+            },
+            { 
+                id: "klasik_u2_inanc_5", 
+                metin: "Sümer rahipleri, tanrıların gökyüzünde yaşadığına ve gök cisimlerinin hareketlerinin yeryüzündeki olayları (kıtlık, savaş, sel) belirlediğine inanırdı. Bu yüzden zigguratların en üst katını birer rasathane (gözlemevi) olarak kullandılar. Rahiplerin bu astrolojik amaçlı düzenli kayıtları, zamanla evrenin matematiksel kurallarını keşfetmelerini sağladı.",
+                soru: "Sümerlerdeki bu teolojik ve astrolojik arayışın, günümüzdeki modern astronomi ve matematik bilimlerinin (örneğin takvim hesabı) temellerini nasıl attığını tartışınız.", 
+                rubrik: "Dini/astrolojik motivasyonlarla yapılan gökyüzü gözlemlerinin, zamanla Ay takviminin icadına, gezegen hareketlerinin haritalanmasına ve 60 tabanlı matematik sistemine (zaman ölçümü) dönüşmesini sentezler.|Zigguratlarda yıldızların incelendiğini ve astronominin başladığını söyler ancak matematik/takvim gelişimi ile bağını zayıf kurar.|Sadece tapınakların üst katının rasathane olduğunu yazar."
+            },
+
+            // KONARGÖÇER YAŞAM (5 Soru)
+            { 
+                id: "klasik_u2_gocer_1", 
+                metin: "Orta Asya'nın sert karasal iklimi ve geniş bozkırları, burada yaşayan Türk boylarını hayvancılığa ve dolayısıyla konargöçer bir yaşama mecbur kılmıştır. Sürülerin beslenmesi için yazın serin yaylalara, kışın ise korunaklı kışlaklara göç edilmesi hayati bir döngüydü. Bu hareketli yaşam tarzı, eşyaların hafif, taşınabilir ve pratik olmasını zorunlu kılmıştır.",
+                soru: "Konargöçer ekonominin temelini oluşturan 'Yaylak-Kışlak' döngüsünü ve bu döngünün Orta Asya Türk sanatına (malzeme ve form açısından) getirdiği kısıtlamaları değerlendiriniz.", 
+                rubrik: "Mevsimsel göç zorunluluğunu ekolojik şartlarla açıklar; sanatın mimari veya devasa heykeller yerine neden küçük, taşınabilir (Hayvan üslubu, çadır, koşum takımı) malzemelerle sınırlı kaldığını net bir şekilde sentezler.|Yaylak-kışlak göçünün nedenini doğru açıklar ancak sanat eserlerinin neden küçük/taşınabilir olması gerektiği bağlantısını zayıf kurar.|Sadece göç ettikleri için sanatla uğraşamadıkları veya küçük eşyalar yaptıkları gibi yüzeysel bir cevap verir."
+            },
+            { 
+                id: "klasik_u2_gocer_2", 
+                metin: "Tarım toplumlarında toprağın mülkiyeti genellikle kralların veya soylu feodal beylerin elindedir; halk ise bu topraklara bağlı birer köle (serf) olarak çalışır. Ancak konargöçer Türklerde temel üretim aracı toprak değil, hayvan sürüleriydi. Bozkır meraları tüm boyun ortak kullanımına açıktı ve özel mülkiyete konu değildi.",
+                soru: "Bu metinden hareketle, Eski Türk toplumlarında neden Avrupa'daki gibi katı sosyal sınıfların (soylu-köle ayrımının) ve köleciliğin ortaya çıkmadığını 'mülkiyet yapısı' üzerinden analiz ediniz.", 
+                rubrik: "Toprak mülkiyetinin tekelde olmamasının ve meraların ortak kullanımının, bir insanı diğerine bağımlı kılacak (köleleştirecek) ekonomik zemini yok ettiğini; hayvancılığın yatay ve eşitlikçi bir toplum yarattığını açıklar.|Toprak mülkiyeti olmadığı için köleliğin olmadığını belirtir ancak tarım toplumu/feodalite ile olan üretim aracı (toprak vs. hayvan) karşılaştırmasını eksik yapar.|Sadece Türklerde herkesin eşit olduğunu ve köleliğin bulunmadığını yazar."
+            },
+            { 
+                id: "klasik_u2_gocer_3", 
+                metin: "Bozkırın tehlikelerle dolu dünyasında var olabilmek, sadece erkeklerin değil, kadınların da iyi birer binici ve okçu olmasını gerektiriyordu. Olası bir düşman baskınında obayı ve sürüleri savunmak, ya da avlanmak tüm toplumun ortak göreviydi. Bu nedenle Eski Türklerde sivil halk ile asker arasında net bir sınır çizgisi yoktu.",
+                soru: "Bozkır ekosisteminin zorunlu kıldığı bu yaşam pratiğinin, Türklerdeki 'Ordu-Millet' anlayışının doğuşuna etkisini neden-sonuç ilişkisi içinde açıklayınız.", 
+                rubrik: "Doğa şartları ve güvenlik kaygılarının, profesyonel/ücretli askerlik yerine tüm bireylerin (kadın-erkek) sürekli savaşa hazır olmasını zorunlu kıldığını; bu hayatta kalma refleksinin ordu-millet kavramını doğurduğunu sentezler.|Herkesin asker sayıldığını ve savaşmayı bildiğini belirtir ancak bozkırın getirdiği güvenlik/hayatta kalma zorunluluğu bağlamını zayıf işler.|Sadece Türklerin savaşçı bir millet olduğundan bahseder."
+            },
+            { 
+                id: "klasik_u2_gocer_4", 
+                metin: "Konargöçer devletler, et ve süt gibi hayvansal gıdalarda kendilerine yetebilseler de; ipekli kumaşlar, tahıl ürünleri ve kaliteli madeni silahlar için daima komşu tarım toplumlarına (örneğin Çin'e) ihtiyaç duymuşlardır. Bu nedenle Türk boyları ile Çin arasındaki ilişkiler sadece savaşlardan ibaret olmamış, aynı zamanda yoğun bir sınır ticareti şeklinde gelişmiştir.",
+                soru: "Konargöçer ekonominin tek tip (hayvancılığa dayalı) üretim yapısının, komşu yerleşik devletlerle olan diplomatik ve ticari ilişkileri nasıl şekillendirdiğini (bağımlılık/etkileşim) tartışınız.", 
+                rubrik: "Bozkır ekonomisinin ihtiyaç duyduğu tarım/sanayi ürünleri açığını kapatmak için yerleşiklerle zorunlu bir karşılıklı bağımlılık ve ticaret ağı kurduğunu; siyasi çatışmaların (İpek Yolu kontrolü vb.) aslında bu ekonomik temele dayandığını analiz eder.|Yerleşiklerden tahıl ve kumaş alındığını belirtir ancak bunun diplomatik ilişkilere ve devletlerarası politikalara yansımasını eksik açıklar.|Sadece Çin'den ipek aldıklarını veya ticaret yaptıklarını yazar."
+            },
+            { 
+                id: "klasik_u2_gocer_5", 
+                metin: "Eski Türklerde yazılı bir hukuk sistemi olmamasına rağmen, 'Töre' adı verilen ve hakan dahil herkesin uymak zorunda olduğu katı sözlü kurallar bütünü vardı. Töre'de cezalar genellikle anında ve kesin olarak uygulanırdı; örneğin vatana ihanet, ordudan kaçma veya cinayet suçlarının cezası doğrudan idamdı. Uzun süreli hapis cezaları pratikte uygulanmazdı.",
+                soru: "Eski Türk hukukunda (Töre) 'uzun süreli hapis cezalarının' bulunmamasını ve infazların hızlı yapılmasını, konargöçer yaşam tarzının pratik zorunlulukları bağlamında analiz ediniz.", 
+                rubrik: "Sürekli hareket halinde olan (yaylak/kışlak) bir toplumun hapishane inşa edemeyeceğini, suçluyu göç sırasında taşımanın ve beslemenin getireceği yükü belirterek; hızlı/katı infazın konargöçer hareketlilikten kaynaklanan lojistik bir zorunluluk olduğunu açıklar.|Göçebelikten dolayı hapishane olmadığını belirtir ancak lojistik yük, güvenlik ve anında infazın caydırıcılık boyutunu eksik tartışır.|Sadece göçebe oldukları için hapishane yapamadıklarını yazar."
+            },
+
+            // ORTA ÇAĞDA GÖÇLER (5 Soru)
+            { 
+                id: "klasik_u3_gocler_1", 
+                metin: "Tarihçiler Kavimler Göçü'nü genellikle bir bilardo masasına benzetir. Asya'daki kuraklık ve siyasi baskılardan kaçarak batıya yönelen Hunlar, Karadeniz'in kuzeyindeki Germen kabilelerine (Gotlar, Vandallar) çarpmış, yerinden edilen bu kabileler de hayatta kalabilmek için Roma İmparatorluğu'nun güvenli sınırlarından içeri girmek zorunda kalmıştır.",
+                soru: "Bu metni baz alarak, göç hareketlerinin 'zincirleme reaksiyon (domino) etkisini' ve bu etkinin yerleşik bir imparatorlukta (Roma) yarattığı demografik/siyasi tahribatı açıklayınız.", 
+                rubrik: "Göçün doğrudan hedefi olmayan bir bölgenin (Roma), yerinden edilen üçüncü taraf kabilelerin kitlesel sığınma/işgal talebiyle nasıl başa çıkamadığını; bu nüfus basıncının sınırları çökertip devleti yıkıma götüren bir zincirleme reaksiyon olduğunu analiz eder.|Hunların diğer kavimleri ittiğini ve onların da Roma'ya girdiğini anlatır ancak demografik basınç ve siyasi tahribat mekanizmasını yüzeysel bırakır.|Sadece Hunların Avrupa'ya gittiğini ve Roma'nın ikiye ayrıldığını söyler."
+            },
+            { 
+                id: "klasik_u3_gocler_2", 
+                metin: "8. Yüzyıldan itibaren İskandinavya'da yaşayan Vikingler, uzun gemileriyle Avrupa'nın dört bir yanına akınlar düzenlemeye başladılar. Bu denizaşırı seferlerin arkasında salt bir macera tutkusu yatmıyordu. İskandinavya'nın sert iklimi, sınırlı tarım alanları ve geleneksel miras hukukunun sadece en büyük oğula toprak bırakması, genç nüfusu dışarıya iten temel bir faktördü.",
+                soru: "Viking göçlerini ve istilalarını şekillendiren yapısal itici güçleri (demografik baskı, coğrafi kısıtlar ve hukuk sistemi) kendi cümlelerinizle değerlendiriniz.", 
+                rubrik: "Viking hareketliliğinin kişisel macera olmadığını; yetersiz tarım alanları, nüfus artışı ve mirastan mahrum kalan gençlerin ekonomik zorunluluklarla yeni kaynaklar (yağma/kolonizasyon) bulmaya itildiğini yapısal faktörler üzerinden eksiksiz açıklar.|Tarım alanlarının yetersizliği veya nüfus artışından bahseder ancak miras hukukunun yarattığı sosyal/ekonomik baskı boyutunu gözden kaçırır.|Sadece İskandinavya'nın soğuk olduğunu ve Vikinglerin yağma yapmak için Avrupa'ya gittiğini yazar."
+            },
+            { 
+                id: "klasik_u3_gocler_3", 
+                metin: "13. Yüzyılda Cengiz Han önderliğinde başlayan Moğol İstilası, Asya'nın demografik haritasını baştan aşağı değiştirdi. Yakıp yıkılan Maveraünnehir ve Horasan şehirlerinden kaçan on binlerce Türkmen boyu, zanaatkar (Ahiler) ve din bilgini, güvenli bir liman olarak gördükleri Anadolu'ya sığındı. Bu durum, Anadolu Selçuklu Devleti için devasa bir mülteci krizi yarattı.",
+                soru: "Moğol istilasının yarattığı bu yıkıcı göç dalgasının, Anadolu'nun Türkleşmesi ve ilerleyen dönemde Osmanlı'nın kuruluşu açısından nasıl paradoksal (çelişkili ama olumlu) bir sonuç doğurduğunu tartışınız.", 
+                rubrik: "İstilanın yıkıcı etkisine rağmen, Anadolu'ya akan nitelikli nüfusun (asker, zanaatkar, aydın) bölgenin demografik olarak Türkleşmesini tamamladığını ve Uç beyliklerinin (Osmanlı) kuruluşunu sağlayacak insan kaynağını yarattığını sentezler.|Moğollardan kaçanların Anadolu'ya geldiğini ve nüfusu artırdığını söyler ancak Ahiler/bilginler gibi nitelikli göçün devletleşme (Osmanlı) sürecine olan etkisini eksik açıklar.|Sadece Türklerin Moğollardan kaçıp Anadolu'ya geldiğini belirtir."
+            },
+            { 
+                id: "klasik_u3_gocler_4", 
+                metin: "Orta Çağ Avrupa'sında toprağa bağlı köylüler olan Serfler, senyörlerinin izni olmadan doğdukları köyü terk edemezlerdi. Feodal sistemin işleyebilmesi için köylülerin mekansal hareketliliğinin (göç etmelerinin) yasaklanması şarttı. Zira feodal bir beyin zenginliği ve gücü, sahip olduğu arazinin büyüklüğü ile değil, o toprağı işleyecek ve vergi verecek köylülerin sayısıyla ölçülürdü.",
+                soru: "Feodalizmin göç özgürlüğünü neden bu kadar sert bir şekilde kısıtlamak zorunda kaldığını, 'emek arzı' ve 'üretim ilişkileri' bağlamında açıklayınız.", 
+                rubrik: "Feodal sistemin tek zenginlik kaynağının toprak olduğunu, ancak emek (köylü) olmadan toprağın değersiz kalacağını; göç serbestisinin tarlaların boşalmasına ve senyörlerin ekonomik/siyasi gücünün çökmesine yol açacağını ekonomik mantıkla izah eder.|Senyörlerin köylüleri çalıştırmak için gitmelerine izin vermediğini söyler ancak emek-toprak ilişkisi ve feodal zenginlik tanımı üzerinden derinlikli analiz yapamaz.|Sadece köylülerin köle olduğunu ve kaçmalarının yasak olduğunu yazar."
+            },
+            { 
+                id: "klasik_u3_gocler_5", 
+                metin: "Orta Çağ'da göçler her zaman kitleler halinde silah zoruyla yapılmamıştır. Örneğin; Endülüs Emevi Devleti'nin İspanya'da kurduğu hoşgörü ortamı (Convivencia), Doğu'dan tıp, felsefe ve astronomi bilginlerinin buraya göç etmesini sağlamıştır. Buradaki zengin kütüphanelerden ve çeviri faaliyetlerinden yararlanmak isteyen Avrupalı Hristiyan öğrenciler de Toledo'ya akın etmiştir.",
+                soru: "Bu metinden hareketle, entelektüel göçlerin ve kültürel karşılaşmaların (Endülüs örneği), Avrupa'da Skolastik düşüncenin yıkılıp Rönesans'ın doğmasına yaptığı 'beyin göçü' katkısını değerlendiriniz.", 
+                rubrik: "Göçün sadece fiziksel değil bilgi transferi olduğunu; İslam dünyasının biriktirdiği Antik Yunan ve Doğu felsefesinin bu entelektüel göç/temas merkezleri (Toledo) vasıtasıyla karanlık Avrupa'ya taşındığını ve aydınlanmayı tetiklediğini sentezler.|Endülüs'te bilimin geliştiğini ve Avrupalıların buradan etkilendiğini belirtir ancak beyin göçü ve kültürel transfer bağlamını zayıf kullanır.|Sadece İspanya'ya bilim insanlarının gittiğini ve orada kütüphaneler olduğunu yazar."
+            }
+        ];
+
+        const sinavAlani = document.getElementById('sinav_alani');
+
+        sorular.forEach((item, index) => {
+            const soruKarti = document.createElement('div');
+            soruKarti.className = 'soru-karti';
+            
+            // Rubrik parçalama (Tam, Kısmi, Zayıf şeklinde)
+            const rubrikParcalari = item.rubrik.split('|');
+            
+            soruKarti.innerHTML = `
+                <div class="akademik-metin">"${item.metin}"</div>
+                <div class="soru-kok">Soru ${index + 1}: ${item.soru}</div>
+                <textarea id="${item.id}" placeholder="Analitik çıkarımlarınızı buraya yazınız..."></textarea>
+                
+                <button class="btn-cevap" onclick="rubrikGoster('${item.id}_rubrik', this)">Analitik Rubriği Göster</button>
+                
+                <div id="${item.id}_rubrik" class="rubrik-alani">
+                    <table class="rubrik-tablosu">
+                        <tr>
+                            <th style="width: 15%;">Puan</th>
+                            <th>Değerlendirme Kriteri (Beklenen Sentez)</th>
+                        </tr>
+                        <tr>
+                            <td>3 Puan (Tam Düzey)</td>
+                            <td>${rubrikParcalari[0]}</td>
+                        </tr>
+                        <tr>
+                            <td>2 Puan (Kısmi Düzey)</td>
+                            <td>${rubrikParcalari[1]}</td>
+                        </tr>
+                        <tr>
+                            <td>1 Puan (Geliştirilmeli)</td>
+                            <td>${rubrikParcalari[2]}</td>
+                        </tr>
+                    </table>
+                </div>
+            `;
+            
+            sinavAlani.appendChild(soruKarti);
+        });
+
+        function rubrikGoster(rubrikId, buton) {
+            const rubrikDiv = document.getElementById(rubrikId);
+            if (rubrikDiv.style.display === "none" || rubrikDiv.style.display === "") {
+                rubrikDiv.style.display = "block";
+                buton.textContent = "Rubriği Gizle";
+                buton.classList.add('acik');
+            } else {
+                rubrikDiv.style.display = "none";
+                buton.textContent = "Analitik Rubriği Göster";
+                buton.classList.remove('acik');
+            }
+        }
+    </script>
+</body>
+</html>

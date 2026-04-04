@@ -4,72 +4,183 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Boğaziçi MTAL Tarih Dersi Eğitim Portalı</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Josefin+Sans:wght@300;400;600;700&family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
+<link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
     <script src="https://cdn.plyr.io/3.7.8/plyr.js"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
 
     <link rel="stylesheet" href="sinif9stil.css">
 
     <style>
-        /* --- YENİ HAMBURGER MENÜ (DROPDOWN) STİLLERİ --- */
-        .dropdown-menu-container { position: relative; display: inline-flex; align-items: center; }
-        .glass-dropdown {
-            position: absolute; right: 0; top: 55px; width: 220px;
-            background: var(--container-bg, rgba(255, 255, 255, 0.9));
-            backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--card-border);
-            border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15);
-            display: flex; flex-direction: column; gap: 5px; padding: 10px;
-            opacity: 0; visibility: hidden; transform: translateY(-10px);
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 2000;
+        /* --- ANTİK MISIR GENEL TEMA VE TAM EKRAN DÜZENİ --- */
+        body.egypt-theme {
+            background: #0D1117 !important;
+            color: #F4E4B0 !important;
         }
-        .glass-dropdown.active { opacity: 1; visibility: visible; transform: translateY(0); }
-        .dropdown-item {
-            background: transparent; border: none; color: var(--text-color);
-            padding: 12px 15px; text-align: left; font-size: 14px; font-weight: 600;
-            border-radius: 10px; cursor: pointer; transition: all 0.2s;
-            display: flex; align-items: center; gap: 12px; text-decoration: none;
-            font-family: 'Inter', sans-serif;
+        
+        body:has(.container.login-mode) {
+            margin: 0 !important; 
+            padding: 0 !important;
         }
-        .dropdown-item:hover { background: rgba(22, 115, 166, 0.1); color: #1673a6; transform: translateX(5px); }
-        .dropdown-item i { width: 20px; text-align: center; font-size: 16px; }
-        body.dark-mode .glass-dropdown { background: rgba(30, 41, 59, 0.95); border-color: rgba(255,255,255,0.1); }
+
+        /* Giriş Ekranına Özel Tam Ekran Modu */
+        .container.login-mode {
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            height: 100dvh !important;
+            overflow-y: auto !important;
+            overflow-x: hidden !important;
+            display: flex;
+            flex-direction: column;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+        }
+
+/* Modern Butonların Karanlık Temaya Uyumlu Hali (Şeffaf) */
+        body.egypt-theme .settings-panel {
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 10px 15px !important;
+        }
+        .container.login-mode .settings-panel {
+            position: fixed !important;
+            top: 15px !important;
+            right: 15px !important;
+            z-index: 9999 !important;
+        }
+        body.egypt-theme .settings-btn {
+            color: #F4E4B0 !important;
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+        body.egypt-theme .settings-btn:hover {
+            color: #E8A020 !important;
+            background: rgba(201,168,76,0.15) !important;
+        }
+
+        /* Arka Plan Efektleri (Tüm Sayfalarda Geçerli, Odak Modunda Gizlenir) */
+        .egypt-bg, .egypt-starfield, .egypt-pyramids {
+            position: fixed; inset: 0; pointer-events: none; transition: opacity 0.8s ease;
+        }
+        .egypt-bg {
+            background: radial-gradient(ellipse at 50% 0%, rgba(42,122,110,0.2) 0%, transparent 50%),
+                        radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.15) 0%, transparent 50%),
+                        linear-gradient(180deg, #0D1117 0%, #111820 100%);
+            z-index: -3;
+        }
+        .egypt-starfield { z-index: -2; overflow: hidden; }
+        .egypt-pyramids { top: auto; bottom: 0; height: 120px; z-index: -1; overflow: hidden; }
+        .egypt-pyramids svg { width: 100%; height: 100%; display: block; }
+        .egypt-star { position: absolute; border-radius: 50%; background: white; animation: egyptTwinkle ease-in-out infinite alternate; }
+        @keyframes egyptTwinkle { from { opacity: 0.1; } to { opacity: 0.8; } }
+
+        /* Odak Modu (Sınav ve Okuma Sırasında Dikkat Dağıtıcıları Gizle) */
+        body.focus-mode .egypt-bg,
+        body.focus-mode .egypt-starfield,
+        body.focus-mode .egypt-pyramids {
+            opacity: 0 !important;
+        }
+
+        /* Giriş Ekranı İçerik Stilleri (Sadece #girisEkrani içinde) */
+        #girisEkrani {
+            position: relative; width: 100%; min-height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Josefin Sans', sans-serif; z-index: 10;
+        }
+        #girisEkrani.hidden { display: none !important; }
+
+        .egypt-container { width: 100%; max-width: 420px; position: relative; z-index: 10; animation: egyptReveal 0.9s ease forwards; padding: 0 16px; margin: auto; }
+        @keyframes egyptReveal { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+
+        .egypt-hiero { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+        .egypt-hiero span { font-size: 18px; opacity: 0.55; color: #C9A84C; animation: hieroPulse 3s ease-in-out infinite alternate; }
+        .egypt-hiero span:nth-child(2) { animation-delay: 0.5s; }
+        .egypt-hiero span:nth-child(3) { animation-delay: 1s; }
+        .egypt-hiero span:nth-child(4) { animation-delay: 1.5s; }
+        .egypt-hiero span:nth-child(5) { animation-delay: 2s; }
+        @keyframes hieroPulse { from { opacity: 0.3; } to { opacity: 0.75; } }
+
+        .egypt-eye-ra { text-align: center; font-size: 32px; margin-bottom: 5px; color: #C9A84C; filter: drop-shadow(0 0 12px rgba(201,168,76,0.5)); animation: egyptGlow 2.5s ease-in-out infinite alternate; }
+        @keyframes egyptGlow { from { filter: drop-shadow(0 0 8px rgba(201,168,76,0.4)); } to { filter: drop-shadow(0 0 18px rgba(201,168,76,0.8)); } }
+
+        .egypt-header { text-align: center; margin-bottom: 15px; }
+        .egypt-title { font-family: 'Marcellus', serif; font-size: 28px; color: #F4E4B0; line-height: 1.1; margin: 0; text-shadow: 0 0 30px rgba(201,168,76,0.3), 0 2px 10px rgba(0,0,0,0.6); }
+        .egypt-title span { color: #E8A020; }
+        .egypt-school { margin-top: 5px; font-size: 11px; color: rgba(244,228,176,0.5); letter-spacing: 0.5px; }
+
+        .egypt-card {
+            background: linear-gradient(160deg, rgba(30,24,10,0.95) 0%, rgba(13,17,23,0.97) 100%);
+            border: 1px solid rgba(201,168,76,0.3); border-radius: 8px; padding: 18px 20px 15px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 0 50px rgba(42,122,110,0.15), 0 8px 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.3);
+        }
+        .egypt-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, #2A7A6E, #C9A84C, #E8A020, #C9A84C, #2A7A6E); }
+
+        .egypt-tabs { display: flex; gap: 0; margin-bottom: 15px; border: 1px solid rgba(201,168,76,0.2); border-radius: 4px; overflow: hidden; }
+        
+        .egypt-tab, #girisEkrani button.tab-btn.egypt-tab {
+            flex: 1 !important; padding: 10px 8px !important; font-family: 'Josefin Sans', sans-serif !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: 1px !important; text-transform: uppercase !important; border: none !important; background: transparent !important; color: rgba(201,168,76,0.4) !important; cursor: pointer !important; transition: all 0.25s !important; margin: 0 !important; border-radius: 0 !important; box-shadow: none !important; height: auto !important; max-width: none !important;
+        }
+        .egypt-tab.active, #girisEkrani button.tab-btn.egypt-tab.active { background: linear-gradient(135deg, rgba(42,122,110,0.7), rgba(42,122,110,0.4)) !important; color: #F4E4B0 !important; }
+        .egypt-tab:not(:last-child) { border-right: 1px solid rgba(201,168,76,0.15) !important; }
+
+        .egypt-field { margin-bottom: 12px; text-align: left; position: relative; z-index: 5; }
+        .egypt-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #3BA898; margin-bottom: 6px; opacity: 0.85; }
+        .egypt-input-wrap { position: relative; }
+        .egypt-iicon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: rgba(201,168,76,0.35); pointer-events: none; }
+        .egypt-input { width: 100%; padding: 10px 14px 10px 38px; background: rgba(13,17,23,0.8); border: 1px solid rgba(201,168,76,0.18); border-radius: 4px; color: #F4E4B0; font-family: 'Josefin Sans', sans-serif; font-size: 14px; font-weight: 400; outline: none; transition: all 0.25s; -webkit-appearance: none; box-sizing: border-box; }
+        .egypt-input option { background: #0D1117; color: #F4E4B0; }
+        .egypt-input::placeholder { color: rgba(244,228,176,0.2); font-weight: 300; }
+        .egypt-input:focus { border-color: rgba(42,122,110,0.7); background: rgba(42,122,110,0.08); box-shadow: 0 0 0 3px rgba(42,122,110,0.1), inset 0 1px 4px rgba(0,0,0,0.4); }
+
+        .egypt-btn, #girisEkrani button.action-btn.btn-login.egypt-btn {
+            width: 100% !important; padding: 12px 20px !important; margin-top: 4px !important; margin-bottom: 0 !important; background: linear-gradient(135deg, #2A7A6E 0%, #3BA898 100%) !important; border: 1px solid rgba(201,168,76,0.4) !important; border-radius: 4px !important; color: #F4E4B0 !important; font-family: 'Josefin Sans', sans-serif !important; font-size: 13px !important; font-weight: 700 !important; letter-spacing: 3px !important; text-transform: uppercase !important; cursor: pointer !important; transition: all 0.3s !important; text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important; position: relative !important; overflow: hidden !important; z-index: 5 !important; box-shadow: none !important; display: inline-block !important; height: auto !important;
+        }
+        .egypt-btn:hover, #girisEkrani button.action-btn.btn-login.egypt-btn:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 26px rgba(42,122,110,0.5), 0 0 14px rgba(201,168,76,0.15) !important; }
+
+        .egypt-quote { text-align: center; margin-top: 12px; position: relative; z-index: 5; font-size: 10px; color: rgba(244,228,176,0.28); line-height: 1.6; font-weight: 300; letter-spacing: 0.3px; }
+        .egypt-quote cite { display: block; font-style: italic; font-size: 9px; color: rgba(201,168,76,0.4); margin-top: 2px; letter-spacing: 1px; }
+
+        .egypt-footer { text-align: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(201,168,76,0.1); display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .egypt-footer-text { font-size: 10px; color: rgba(244,228,176,0.3); letter-spacing: 0.3px; }
+        .egypt-footer a { color: #3BA898; text-decoration: none; font-size: 14px; transition: color 0.3s; margin-top: 2px; }
+        .egypt-footer a:hover { color: #C9A84C; }
     </style>
 </head>
 <body oncontextmenu="return false;"> 
 
+<div class="egypt-bg" id="egyptBg"></div>
+<div class="egypt-starfield" id="egyptStarfield"></div>
+<div class="egypt-pyramids" id="egyptPyramids">
+    <svg viewBox="0 0 800 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="80,120 160,40 240,120" fill="rgba(201,168,76,0.07)" stroke="rgba(201,168,76,0.12)" stroke-width="0.5"/>
+        <polygon points="300,120 410,10 520,120" fill="rgba(201,168,76,0.09)" stroke="rgba(201,168,76,0.15)" stroke-width="0.5"/>
+        <polygon points="570,120 640,55 710,120" fill="rgba(201,168,76,0.06)" stroke="rgba(201,168,76,0.1)" stroke-width="0.5"/>
+        <rect x="0" y="112" width="800" height="8" fill="rgba(42,122,110,0.3)"/>
+        <rect x="0" y="115" width="800" height="5" fill="rgba(42,122,110,0.15)"/>
+    </svg>
+</div>
+
 <div id="progress-container"><div id="progress-bar"></div></div>
 
-<style>
-    #iletisimBtnFloating {
-        background: rgba(22, 115, 166, 0.3) !important;
-        backdrop-filter: blur(8px);
-        -webkit-backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.2) !important;
-        color: rgba(255, 255, 255, 0.8) !important;
-        opacity: 0.5;
-        transform: scale(0.9);
-        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.05) !important;
-    }
-    #iletisimBtnFloating:hover {
-        opacity: 1;
-        background: rgba(22, 115, 166, 0.95) !important;
-        color: #fff !important;
-        transform: scale(1.1);
-        box-shadow: 0 8px 20px rgba(22, 115, 166, 0.3) !important;
-    }
-</style>
 <button class="floating-btn" id="iletisimBtnFloating" onclick="iletisimGoster()" title="Öğretmene Sor / Hata Bildir"><i class="fa-solid fa-comment-dots"></i></button>
 
 <div class="container">
     
-    <div class="settings-panel" style="display: flex; gap: 10px; align-items: center;">
+<div class="settings-panel" style="display: flex; gap: 10px; align-items: center;">
         <a href="index.html" class="settings-btn" title="Ana Sayfaya Dön" style="display: flex; align-items: center; justify-content: center; text-decoration: none;"><i class="fa-solid fa-house"></i></a>
-        <button class="settings-btn" id="btnTema" onclick="temaCycle()" title="Tema Değiştir"><i class="fa-solid fa-moon"></i></button>		
+        
+        <a href="https://sinema.kirkyama.uk" target="_blank" class="settings-btn" title="Boğaziçi Sinema" style="display: flex; align-items: center; justify-content: center; text-decoration: none;"><i class="fa-solid fa-film"></i></a>
+        <button class="settings-btn" onclick="rehberGoster()" title="Nasıl Kullanılır?"><i class="fa-solid fa-circle-question"></i></button>
         <button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Sözlük"><i class="fa-solid fa-book-open"></i> Sözlük</button>
         
         <div class="dropdown-menu-container">
@@ -79,8 +190,6 @@
             </button>
             <div class="glass-dropdown" id="hamburgerDropdown">
                 <button class="dropdown-item hidden" id="btnDuyuru" onclick="duyuruGoster()"><i class="fa-solid fa-bell"></i> Duyurular <span id="duyuruRozeti" class="notification-badge hidden" style="position:static; transform:none; display:inline-block; margin-left:5px;">!</span></button>
-                <a href="https://sinema.kirkyama.uk" target="_blank" class="dropdown-item"><i class="fa-solid fa-film"></i> Boğaziçi Sinema</a>
-                <button class="dropdown-item" onclick="rehberGoster()"><i class="fa-solid fa-circle-question"></i> Nasıl Kullanılır?</button>
                 <button class="dropdown-item" id="btnYedek" onclick="yedekleGoster()"><i class="fa-solid fa-gear"></i> Veri Yedeği</button>
                 <button class="dropdown-item" id="sifreDegistirBtn"><i class="fa-solid fa-key"></i> Şifre Değiştir</button>
             </div>
@@ -88,98 +197,115 @@
     </div>
 
     <div id="girisEkrani">
-        <div style="text-align: center; margin-bottom: 25px;">
-            <h1 style="margin-bottom: 10px;">9. Sınıf Tarih Portalı</h1>
-            <p style="color: var(--text-color); opacity: 0.8; margin: 0; font-weight: 700; font-size: 15px;">Özel Batman Boğaziçi Koleji MTAL</p>
+      <div class="egypt-container">
+        <div class="egypt-hiero">
+          <span>𓂀</span><span>𓅃</span><span>𓆣</span><span>𓇯</span><span>𓊖</span>
+        </div>
+        <div class="egypt-eye-ra">𓂀</div>
+
+        <div class="egypt-header">
+          <h1 class="egypt-title"><span>9. Sınıf</span><br>Tarih Portalı</h1>
+          <p class="egypt-school">Özel Batman Boğaziçi Koleji MTAL</p>
+        </div>
+
+        <div class="egypt-card">
+          <div class="egypt-tabs">
+            <button class="egypt-tab tab-btn active" id="btnOgrenciTab" onclick="girisTuruDegistir('ogrenci')">𓂀 Öğrenci</button>
+            <button class="egypt-tab tab-btn" id="btnOgretmenTab" onclick="girisTuruDegistir('ogretmen')">𓆣 Zümre</button>
+          </div>
+
+          <div id="ogrenciGirisFormu">
+            <div class="egypt-field">
+              <label class="egypt-label">Adınız Soyadınız</label>
+              <div class="egypt-input-wrap">
+                <span class="egypt-iicon">𓀁</span>
+                <input type="text" id="adSoyad" class="egypt-input" placeholder="Örn: Yunus Dursun" onkeypress="if(event.key==='Enter') girisYap()">
+              </div>
+            </div>
+
+            <div style="display: flex; gap: 10px;">
+              <div class="egypt-field" style="flex: 1;">
+                <label class="egypt-label">Sınıfınız</label>
+                <div class="egypt-input-wrap">
+                  <span class="egypt-iicon">𓇯</span>
+                  <select id="sinif" class="egypt-input" onkeypress="if(event.key==='Enter') girisYap()">
+                    <option value="">Seçiniz</option>
+                    <option value="9-A">9-A</option>
+                    <option value="9-B">9-B</option>
+                    <option value="9-C">9-C</option>
+                    <option value="9-D">9-D</option>
+                    <option value="9-E">9-E</option>
+                    <option value="9-F">9-F</option>
+                    <option value="9-G">9-G</option>
+                    <option value="9-H">9-H</option>
+                    <option value="9-İ">9-İ</option>
+                    <option value="9-J">9-J</option>
+                    <option value="9-K">9-K</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="egypt-field" style="flex: 1;">
+                <label class="egypt-label">Numaranız</label>
+                <div class="egypt-input-wrap">
+                  <span class="egypt-iicon">𓆣</span>
+                  <input type="number" id="numara" class="egypt-input" placeholder="Örn: 714" onkeypress="if(event.key==='Enter') girisYap()">
+                </div>
+              </div>
+            </div>
+
+            <div class="egypt-field">
+              <label class="egypt-label">Sınav Şifresi</label>
+              <div class="egypt-input-wrap">
+                <span class="egypt-iicon">𓋹</span>
+                <input type="password" id="sifre" class="egypt-input" placeholder="Şifrenizi girin" onkeypress="if(event.key==='Enter') girisYap()">
+              </div>
+            </div>
+
+            <button class="egypt-btn action-btn btn-login" onclick="girisYap()">𓂀 Giriş Yap 𓂀</button>
+          </div>
+
+          <div id="ogretmenGirisFormu" class="hidden">
+            <div class="egypt-field">
+              <label class="egypt-label">Adınız Soyadınız</label>
+              <div class="egypt-input-wrap">
+                <span class="egypt-iicon">𓀁</span>
+                <input type="text" id="ogretmenAd" class="egypt-input" placeholder="Örn: Pelda Aksoy Mutlu" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+              </div>
+            </div>
+
+            <div class="egypt-field">
+              <label class="egypt-label">Öğretmen Kodunuz</label>
+              <div class="egypt-input-wrap">
+                <span class="egypt-iicon">𓆣</span>
+                <input type="password" id="vipKodu" class="egypt-input" placeholder="Öğretmen Kodunuzu Girin" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+              </div>
+            </div>
+
+            <div class="egypt-field">
+              <label class="egypt-label">Hesap Şifreniz</label>
+              <div class="egypt-input-wrap">
+                <span class="egypt-iicon">𓋹</span>
+                <input type="password" id="ogretmenSifre" class="egypt-input" placeholder="Kendi belirleyeceğiniz şifre" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
+              </div>
+            </div>
+
+            <button class="egypt-btn action-btn btn-login" id="btnOgretmenLogin" onclick="ogretmenGirisYap()">𓆣 Sistemi Aç 𓆣</button>
+          </div>
+
+          <div class="egypt-quote">
+            "Söze başlamadan önce dilini üç kez kesen asla pişman olmaz."
+            <cite>— Mısır Atasözü</cite>
+          </div>
         </div>
         
-<div class="login-tabs" style="display: flex; justify-content: center; gap: 10px; margin-bottom: 25px;">
-            <button class="tab-btn active" id="btnOgrenciTab" onclick="girisTuruDegistir('ogrenci')" style="flex: 1; max-width: 200px; margin: 0; font-size: 14px;"><i class="fa-solid fa-user-graduate"></i> Öğrenci Girişi</button>
-            <button class="tab-btn" id="btnOgretmenTab" onclick="girisTuruDegistir('ogretmen')" style="flex: 1; max-width: 200px; margin: 0; font-size: 14px;"><i class="fa-solid fa-chalkboard-user"></i> Zümre Girişi</button>
+        <div class="egypt-footer">
+          <span class="egypt-footer-text">Boğaziçi Koleji Tarih Portalı v1.0 — Murat Mutlu</span>
+          <a href="mailto:murat@kirkyama.uk" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
         </div>
 
-        <div id="ogrenciGirisFormu">
-            <div class="login-grid">
-                <div class="form-group">
-                    <label>Adınız Soyadınız:</label>
-                    <input type="text" id="adSoyad" placeholder="Örn: Yunus Dursun" onkeypress="if(event.key==='Enter') girisYap()">
-                </div>
-                <div class="form-group">
-                    <label>Sınıfınız:</label>
-                    <select id="sinif" onkeypress="if(event.key==='Enter') girisYap()">
-                        <option value="">Sınıfınızı Seçin</option>
-                        <option value="9-A">9-A</option>
-                        <option value="9-B">9-B</option>
-                        <option value="9-C">9-C</option>
-                        <option value="9-D">9-D</option>
-                        <option value="9-E">9-E</option>
-                        <option value="9-F">9-F</option>
-                        <option value="9-G">9-G</option>
-                        <option value="9-H">9-H</option>
-                        <option value="9-İ">9-İ</option>
-                        <option value="9-J">9-J</option>
-                        <option value="9-K">9-K</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Okul Numaranız:</label>
-                    <input type="number" id="numara" placeholder="Örn: 714" onkeypress="if(event.key==='Enter') girisYap()">
-                </div>
-                <div class="form-group">
-                    <label>Sınav Şifresi:</label>
-                    <input type="password" id="sifre" placeholder="Şifreniz" onkeypress="if(event.key==='Enter') girisYap()">
-                </div>
-            </div>
-            <button class="action-btn btn-center btn-login" onclick="girisYap()">Öğrenci Girişi Yap</button>
-        </div>
-
-        <div id="ogretmenGirisFormu" class="hidden">
-            <div class="login-grid">
-                <div class="form-group" style="grid-column: 1 / -1;">
-                    <label>Adınız Soyadınız:</label>
-                    <input type="text" id="ogretmenAd" placeholder="Örn: Pelda Aksoy Mutlu" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
-                </div>
-                <div class="form-group">
-                    <label>Öğretmen Kodunuz:</label>
-                    <input type="password" id="vipKodu" placeholder="Öğretmen Kodunuzu Girin" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
-                </div>
-                <div class="form-group">
-                    <label>Hesap Şifreniz:</label>
-                    <input type="password" id="ogretmenSifre" placeholder="Kendi belirleyeceğiniz şifre" onkeypress="if(event.key==='Enter') ogretmenGirisYap()">
-                </div>
-            </div>
-            <button class="action-btn btn-center btn-login" id="btnOgretmenLogin" onclick="ogretmenGirisYap()" style="background-color: #34495e; box-shadow: 0 4px 15px rgba(52, 73, 94, 0.3);"><i class="fa-solid fa-key"></i> Sistemi Aç</button>
-        </div>
-
-        <style>
-.modern-footer {
-                display: flex; justify-content: space-between; align-items: center;
-                padding: 15px 20px; margin-top: 30px; border-radius: 12px;
-                background: transparent; border: none; box-shadow: none;
-                color: var(--text-color); font-size: 13px; font-weight: 500;
-            }
-            .footer-left { display: flex; align-items: center; gap: 10px; }
-            .version-badge { background: #1673a6; color: white; padding: 2px 6px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; }
-            .footer-right { display: flex; align-items: center; gap: 15px; opacity: 0.9; }
-            .footer-mail-btn { color: #1673a6; font-size: 18px; transition: transform 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: rgba(22, 115, 166, 0.1); border-radius: 50%; }
-            .footer-mail-btn:hover { transform: scale(1.15); background: #1673a6; color: #fff; }
-            @media (max-width: 768px) {
-                .modern-footer { flex-direction: column; text-align: center; gap: 12px; }
-                .footer-right { flex-direction: column; gap: 10px; }
-            }
-        </style>
-        <div class="modern-footer">
-            <div class="footer-left">
-                <span><strong>Boğaziçi Koleji Tarih Portalı</strong></span>
-                <span class="version-badge">v1.0</span>
-            </div>
-            <div class="footer-right">
-                <span>Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</span>
-                <a href="mailto:murat@kirkyama.uk" class="footer-mail-btn" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
-            </div>
-        </div>
+      </div>
     </div>
-
     <div id="menuEkrani" class="hidden">
         
         <h2 style="margin-top: 5px; margin-bottom: 20px; font-weight: 600; color: var(--text-color); font-size: 24px; text-align: left;">
@@ -250,7 +376,7 @@
                 <div id="odaTestleri" class="test-list-container"></div>
             </div>
 
-<div id="tabMateryaller" class="tab-content">
+            <div id="tabMateryaller" class="tab-content">
                 
                 <div class="search-container" style="margin-bottom: 20px;">
                     <span class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></span>
@@ -572,38 +698,6 @@
 
 </div> 
 
-<style>
-.glass-player {
-    position: fixed; bottom: -150px; left: 50%; transform: translateX(-50%); width: 90%; max-width: 450px;
-    background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255,255,255,0.5); box-shadow: 0 10px 40px rgba(0,0,0,0.15); border-radius: 24px;
-    padding: 15px 20px; display: flex; flex-direction: column; gap: 12px; z-index: 1000;
-    transition: bottom 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; visibility: hidden;
-}
-.glass-player.active { bottom: 25px; opacity: 1; visibility: visible; }
-body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px solid rgba(255,255,255,0.1); }
-@keyframes pulse-ring {
-    0% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(155, 89, 182, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(155, 89, 182, 0); }
-    100% { transform: scale(0.8); box-shadow: 0 0 0 0 rgba(155, 89, 182, 0); }
-}
-.player-icon-custom.playing i { animation: pulse-ring 2s infinite; color: #9b59b6; }
-.player-top-row { display: flex; justify-content: space-between; align-items: center; }
-.player-info-custom { display: flex; align-items: center; gap: 12px; overflow: hidden; flex: 1; }
-.player-icon-custom { width: 45px; height: 45px; border-radius: 14px; background: rgba(155, 89, 182, 0.1); color: #9b59b6; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; transition: 0.3s; }
-.player-text-custom { display: flex; flex-direction: column; overflow: hidden; }
-.player-title-custom { font-weight: 700; color: var(--text-color); font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.player-subtitle-custom { font-size: 12px; color: var(--text-color); opacity: 0.6; }
-.player-controls { display: flex; justify-content: center; align-items: center; gap: 25px; margin-top: -5px; }
-.ctrl-btn { background: none; border: none; color: var(--text-color); font-size: 20px; cursor: pointer; opacity: 0.7; transition: 0.2s; display: flex; align-items: center; justify-content: center; }
-.ctrl-btn:hover { opacity: 1; color: #9b59b6; transform: scale(1.1); }
-.play-btn { width: 50px; height: 50px; background: #9b59b6; color: white !important; border-radius: 50%; font-size: 20px; opacity: 1; box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4); }
-.play-btn:hover { transform: scale(1.05); background: #8e44ad; }
-.progress-container { display: flex; align-items: center; gap: 10px; font-size: 12px; font-weight: 600; color: var(--text-color); opacity: 0.8; }
-.progress-bar-custom { flex: 1; height: 6px; background: rgba(155, 89, 182, 0.2); border-radius: 3px; cursor: pointer; position: relative; overflow: hidden; }
-.progress-fill { position: absolute; top: 0; left: 0; height: 100%; background: #9b59b6; width: 0%; border-radius: 3px; transition: width 0.1s linear; }
-</style>
-
 <div id="audioPlayerContainer" class="glass-player">
     <div class="player-top-row">
         <div class="player-info-custom">
@@ -642,13 +736,89 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
     </div>
 </div>
 
-<div id="inlinePdfContainer" class="hidden" style="width: 100%; margin-top: 15px; margin-bottom: 5px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.1); border: 2px solid #1673a6; background: #fff; animation: fadeIn 0.4s ease; height: 500px; display: flex; flex-direction: column;">
-    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: #1673a6; color: #fff; flex-shrink: 0;">
-        <h3 id="inlinePdfBaslik" style="margin: 0; font-size: 15px; color: #fff; font-weight: 700; text-align: left;">Doküman</h3>
-        <button onclick="pdfKapat()" style="background: transparent; border: none; color: #fff; cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center;" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
+<div id="inlinePdfContainer" class="hidden" style="width: 100%; margin-top: 15px; margin-bottom: 5px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid var(--card-border); background: var(--container-bg); animation: fadeIn 0.4s ease; display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: rgba(13,17,23,0.95); border-bottom: 1px solid var(--card-border); color: var(--accent-color); flex-shrink: 0; flex-wrap: wrap; gap: 10px;">
+        <h3 id="inlinePdfBaslik" style="margin: 0; font-size: 15px; color: var(--accent-color); font-weight: 700; text-align: left; flex: 1; min-width: 150px;">Doküman</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button onclick="onPdfPrev()" style="background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="pdfPageInfo" style="font-size: 13px; font-weight: 600; min-width: 45px; text-align: center;">1 / 1</span>
+            <button onclick="onPdfNext()" style="background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
     </div>
-    <iframe id="pdfIframe" src="" style="width: 100%; height: 100%; border: none; flex: 1;"></iframe>
+    <div id="pdfRenderArea" style="width: 100%; height: 65vh; overflow: auto; display: flex; justify-content: center; background: rgba(0,0,0,0.1); padding: 20px 0;">
+        <canvas id="pdfCanvas" style="box-shadow: 0 4px 15px rgba(0,0,0,0.3); max-width: 100%; height: auto;"></canvas>
+    </div>
 </div>
+
+<div id="haritaModal" class="modal">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <div class="modal-content" style="max-width: 850px; width: 95%; padding: 20px; border-top: 6px solid var(--accent-color);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid var(--card-border); padding-bottom: 10px;">
+            <h3 id="haritaModalBaslik" style="margin: 0; font-size: 18px; color: var(--accent-color); font-weight: 700; text-align: left;"><i class="fa-solid fa-map-location-dot"></i> Harita</h3>
+            <button onclick="haritaKapat()" style="background: transparent; border: none; color: var(--accent-color); cursor: pointer; font-size: 24px; display: flex; align-items: center; justify-content: center; transition: 0.2s;" title="Kapat" onmouseover="this.style.color='#e74c3c'" onmouseout="this.style.color='var(--accent-color)'"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div id="mapCanvas" style="width: 100%; height: 60vh; position: relative; border-radius: 8px; border: 1px solid var(--card-border); background: #0D1117;"></div>
+        <div id="mapControlsContainer" style="padding: 15px; background: rgba(13,17,23,0.95); border: 1px solid var(--card-border); border-radius: 8px; display: none; color: var(--text-color); margin-top: 15px; text-align: center;"></div>
+    </div>
+</div>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const giris = document.getElementById('girisEkrani');
+    const menu = document.getElementById('menuEkrani');
+    const sinavOdasi = document.getElementById('sinavOdasi');
+    const testEkrani = document.getElementById('testEkrani');
+    const sonucEkrani = document.getElementById('sonucEkrani');
+    const container = document.querySelector('.container');
+    
+    function checkThemeMode() {
+        const isGiris = !giris.classList.contains('hidden');
+        const isMenu = !menu.classList.contains('hidden');
+        const isSinav = !sinavOdasi.classList.contains('hidden');
+        const isTest = !testEkrani.classList.contains('hidden');
+        const isSonuc = !sonucEkrani.classList.contains('hidden');
+
+        // Global Antik Mısır Teması Devrede
+        document.body.classList.add('egypt-theme');
+
+        // Sadece giriş ekranında tam ekran yayılması için
+        if(isGiris) {
+            container.classList.add('login-mode');
+        } else {
+            container.classList.remove('login-mode');
+        }
+
+        // Sınav, Test veya Sonuç ekranına geçildiğinde Odak Modu (Focus Mode) aktifleşir
+        if(isSinav || isTest || isSonuc) {
+            document.body.classList.add('focus-mode');
+        } else {
+            document.body.classList.remove('focus-mode');
+        }
+    }
+    
+    // Sayfa ilk yüklendiğinde durumu kontrol et
+    checkThemeMode();
+    
+    // JavaScript (motor_sinif9.js) ekranları değiştirdikçe anında tepki ver
+    const observer = new MutationObserver(checkThemeMode);
+    [giris, menu, sinavOdasi, testEkrani, sonucEkrani].forEach(el => {
+        if(el) observer.observe(el, { attributes: true, attributeFilter: ['class'] });
+    });
+
+    // Yıldız efekti kurulumu
+    const sf = document.getElementById('egyptStarfield');
+    if (sf) {
+        for (let i = 0; i < 60; i++) {
+            const s = document.createElement('div');
+            s.className = 'egypt-star';
+            const size = Math.random() * 2 + 1;
+            s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*70}%;animation-duration:${2+Math.random()*3}s;animation-delay:${Math.random()*3}s;`;
+            sf.appendChild(s);
+        }
+    }
+});
+</script>
 
 <script src="sinif9sorular/menu_verisi.js"></script>
 <script src="sinif9sorular/u1_genel.js"></script>
@@ -669,1549 +839,7 @@ body.dark-mode .glass-player { background: rgba(30, 41, 59, 0.85); border: 1px s
 <script src="sinif9sorular/u3_genel.js"></script>
 <script src="sinif9sorular/s9kavramlar.js"></script>
 <script src="sinif9sorular/bilgikartlari.js"></script>
-
-<script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwIj5rQkpizqiOqJYlUdYmefOyPMbhmquaqlHpN76dmlZ8S7pV_O-eEgRjQjkZMD14NnQ/exec"; 
-    const SIFRE_API_URL = "https://script.google.com/macros/s/AKfycbzH3YQxw_6r0i7uItFStlp2nkUzmxaPhUw_v1u8hs6swV6lqY9XXRZ3Q5x64C5vpPEROQ/exec"; 
-    const ODEV_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxcjHGzdFq96J7JD9YKJJE20DEUqQLgfdzilAci7kpUVS-lHMFM25a39zdvxeaOPhtgjw/exec"; 
-    
-    document.addEventListener('contextmenu', e => e.preventDefault());
-    document.onkeydown = function(e) { if(e.keyCode === 123 || (e.ctrlKey && e.keyCode === 85)) return false; };
-
-    let ogrenci = {};
-    let aktifTest = null;
-    let suankiSorular = [];
-    let timerInterval;
-    let baslangicZamani;
-    let flagged = {}; 
-    let ihlalSayisi = 0;
-    let autoSaveData = {};
-    let aktifOda = null;
-    let aktifMateryaller = [];
-	
-    const AKTIF_DUYURU_VERSIYONU = "duyuru_v1";
-
-    let fcCurrentIndex = 0;
-    let fcAktifKartlar = [];
-    let videoPlayer = null;
-
-    /* --- YENİ HAMBURGER MENÜ VE REHBER JAVASCRIPT MOTORU --- */
-    function menuToggle(event) {
-        event.stopPropagation();
-        const dropdown = document.getElementById('hamburgerDropdown');
-        if(dropdown) dropdown.classList.toggle('active');
-    }
-
-    function rehberGoster() { 
-        document.getElementById('rehberModal').style.display = 'block'; 
-        const dropdown = document.getElementById('hamburgerDropdown');
-        if(dropdown) dropdown.classList.remove('active');
-    }
-    
-    function rehberKapat() { document.getElementById('rehberModal').style.display = 'none'; }
-    /* -------------------------------------------------------- */
-
-    function enableDragScroll(slider) {
-        let isDown = false; let startX; let scrollLeft;
-        slider.addEventListener('mousedown', (e) => { isDown = true; slider.classList.add('active'); startX = e.pageX - slider.offsetLeft; scrollLeft = slider.scrollLeft; });
-        slider.addEventListener('mouseleave', () => { isDown = false; slider.classList.remove('active'); });
-        slider.addEventListener('mouseup', () => { isDown = false; slider.classList.remove('active'); });
-        slider.addEventListener('mousemove', (e) => { if (!isDown) return; e.preventDefault(); const x = e.pageX - slider.offsetLeft; const walk = (x - startX) * 2; slider.scrollLeft = scrollLeft - walk; });
-    }
-
-    function scrollKonu(direction) {
-        const container = document.getElementById('konuFiltreleri');
-        if(container) { container.scrollLeft += direction * 200; }
-    }
-
-    function sekmeDegistir(hedef) {
-        document.getElementById('btnTabTestler').classList.remove('active');
-        document.getElementById('btnTabMateryaller').classList.remove('active');
-        document.getElementById('tabTestler').classList.remove('active');
-        document.getElementById('tabMateryaller').classList.remove('active');
-        
-        if(hedef === 'testler') {
-            document.getElementById('btnTabTestler').classList.add('active');
-            document.getElementById('tabTestler').classList.add('active');
-        } else {
-            document.getElementById('btnTabMateryaller').classList.add('active');
-            document.getElementById('tabMateryaller').classList.add('active');
-            if (typeof kategorilereDon === 'function') kategorilereDon();
-        }
-    }
-
-    function baslatFlashcard(odaId) {
-        if(typeof BILGI_KARTLARI === 'undefined' || !BILGI_KARTLARI[odaId] || BILGI_KARTLARI[odaId].length === 0) {
-            alert("Öğretmeniniz bu üniteye henüz kavram kartı eklememiş.");
-            return;
-        }
-        fcAktifKartlar = BILGI_KARTLARI[odaId];
-        fcCurrentIndex = 0;
-        document.getElementById('flashcardModal').style.display = 'block';
-        gosterFlashcard();
-    }
-
-    function gosterFlashcard() {
-        const kart = document.getElementById('flashcardElement');
-        kart.classList.remove('is-flipped');
-        
-        setTimeout(() => {
-            document.getElementById('fcTerm').innerText = fcAktifKartlar[fcCurrentIndex].terim;
-            document.getElementById('fcDef').innerText = fcAktifKartlar[fcCurrentIndex].anlam;
-            document.getElementById('fcCounter').innerText = (fcCurrentIndex + 1) + " / " + fcAktifKartlar.length;
-        }, 150);
-    }
-
-    function fcCevir() { document.getElementById('flashcardElement').classList.toggle('is-flipped'); }
-    function fcIleri() { if(fcCurrentIndex < fcAktifKartlar.length - 1) { fcCurrentIndex++; gosterFlashcard(); } }
-    function fcGeri() { if(fcCurrentIndex > 0) { fcCurrentIndex--; gosterFlashcard(); } }
-    function fcKapat() { document.getElementById('flashcardModal').style.display = 'none'; }
-
-    window.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape') { 
-            const modals = document.querySelectorAll('.modal'); 
-            modals.forEach(modal => { if (modal.style.display === 'block') { modal.style.display = 'none'; } }); 
-            const fcModal = document.getElementById('flashcardModal');
-            if (fcModal && fcModal.style.display === 'block') { fcModal.style.display = 'none'; }
-            videoKapat(); 
-        }
-        if(document.getElementById('flashcardModal').style.display === 'block') {
-            if(event.key === 'ArrowRight') fcIleri();
-            if(event.key === 'ArrowLeft') fcGeri();
-            if(event.key === ' ' || event.key === 'ArrowUp' || event.key === 'ArrowDown') { event.preventDefault(); fcCevir(); }
-        }
-    });
-
-    function youtubeIdCikar(url) {
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    }
-
-    function oynatVideo(url, baslik, element) {
-        if(url === "#") {
-            alert("Öğretmeniniz bu video içeriğini henüz yüklemedi."); return;
-        }
-        
-        const videoId = youtubeIdCikar(url);
-        if (!videoId) {
-            alert("Geçerli bir YouTube linki bulunamadı. Lütfen öğretmeninize bildirin.");
-            return;
-        }
-
-        const inlineContainer = document.getElementById('inlineVideoContainer');
-        
-        if (inlineContainer.previousElementSibling === element && !inlineContainer.classList.contains('hidden')) {
-            videoKapat();
-            return;
-        }
-
-        document.getElementById('inlineVideoBaslik').innerText = baslik;
-        element.parentNode.insertBefore(inlineContainer, element.nextSibling);
-        inlineContainer.classList.remove('hidden');
-
-        if (!videoPlayer) {
-            const iframe = document.getElementById('youtubeIframe');
-            iframe.src = `https://www.youtube.com/embed/${videoId}?origin=https://plyr.io&iv_load_policy=3&modestbranding=1&playsinline=1&showinfo=0&rel=0&enablejsapi=1`;
-            
-            videoPlayer = new Plyr('#player', {
-                youtube: { noCookie: false, rel: 0, showinfo: 0, iv_load_policy: 3, modestbranding: 1 }
-            });
-        } else {
-            videoPlayer.source = {
-                type: 'video',
-                sources: [
-                    { src: videoId, provider: 'youtube' }
-                ]
-            };
-        }
-        
-        setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
-    }
-
-    function videoKapat() {
-        const inlineContainer = document.getElementById('inlineVideoContainer');
-        if (inlineContainer) {
-            inlineContainer.classList.add('hidden');
-            if (videoPlayer) { videoPlayer.stop(); }
-            document.body.appendChild(inlineContainer); 
-        }
-    }
-
-    function oynatPdf(url, baslik, element) {
-        if(url === "#") { alert("Öğretmeniniz bu dokümanı henüz yüklemedi."); return; }
-
-        const inlineContainer = document.getElementById('inlinePdfContainer');
-        if (inlineContainer.previousElementSibling === element && !inlineContainer.classList.contains('hidden')) {
-            pdfKapat(); return;
-        }
-
-        document.getElementById('inlinePdfBaslik').innerText = baslik;
-        element.parentNode.insertBefore(inlineContainer, element.nextSibling);
-        inlineContainer.classList.remove('hidden');
-
-        let isleyiciUrl = url;
-        if (!url.includes('drive.google.com')) {
-            isleyiciUrl = 'https://docs.google.com/viewer?url=' + encodeURIComponent(url) + '&embedded=true';
-        }
-
-        document.getElementById('pdfIframe').src = isleyiciUrl;
-        setTimeout(() => { inlineContainer.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 100);
-    }
-
-    function pdfKapat() {
-        const inlineContainer = document.getElementById('inlinePdfContainer');
-        if (inlineContainer) {
-            inlineContainer.classList.add('hidden');
-            document.getElementById('pdfIframe').src = ""; 
-            document.body.appendChild(inlineContainer); 
-        }
-    }
-
-    function materyalleriYukle(uniteId) {
-        aktifMateryaller = [];
-        
-        if (uniteId === 'u1') {
-            aktifMateryaller = [
-                { baslik: "Tarih Bilimine Giriş", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Zaman ve Takvim", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Tarihe Yardımcı Bilimler", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Göbeklitepe Gizemi", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Tarih Yazıcılığı", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Bir Savaş Makinesinin Analizi - Roma Ordusu (Kuruluştan İtibaren Tüm Aşamalarıyla) (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Bir%20Sava%C5%9F%20Makinesinin%20Analizi%20-%20Roma%20Ordusu%20(Kurulu%C5%9Ftan%20%C4%B0tibaren%20T%C3%BCm%20A%C5%9Famalar%C4%B1yla).mp3" },
-                { baslik: "Büyük İskender Nasıl Başarılı Oldu 12 Yılda Dünya Tarihini Nasıl Değiştirdi (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-B%C3%BCy%C3%BCk%20%C4%B0skender%20Nas%C4%B1l%20Ba%C5%9Far%C4%B1l%C4%B1%20Oldu%2012%20Y%C4%B1lda%20D%C3%BCnya%20Tarihini%20Nas%C4%B1l%20De%C4%9Fi%C5%9Ftirdi.m4a" },
-				{ baslik: "Xenophon-Anabasis-On Binlerin Yürüyüşü (TRT Radyo Tiyatrosu)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Radyo%20Tiyatrolar%C4%B1/Xenophon-Anabasis-On%20Binlerin%20Y%C3%BCr%C3%BCy%C3%BC%C5%9F%C3%BC.mp3" },
-				{ baslik: "Hannibal Barca Alpleri Nasıl Geçti - Tarihin En Tehlikeli Askeri Harekatı (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Hannibal%20Barca%20Alpleri%20Nas%C4%B1l%20Ge%C3%A7ti%20-%20Tarihin%20En%20Tehlikeli%20Askeri%20Harekat%C4%B1.mp3" },
-				{ baslik: "Truvalı Helen - İhtirasın, İhanetin ve Savaşın Öyküsü (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Truval%C4%B1%20Helen%20-%20%C4%B0htiras%C4%B1n%2C%20%C4%B0hanetin%20ve%20Sava%C5%9F%C4%B1n%20%C3%96yk%C3%BCs%C3%BC.mp3" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-                { baslik: "Geçmişten Geleceğe", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
-                { baslik: "İnsanlığın Hafızası Tarih", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/1-%20%C4%B0nsanl%C4%B1%C4%9F%C4%B1n%20Haf%C4%B1zas%C4%B1%20Tarih.pdf" },
-				{ baslik: "Neden Tarih", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/2-%20Neden%20Tarih.pdf" },
-				{ baslik: "Zamanın Taksimi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/3-%20Zaman%C4%B1n%20Taksimi.pdf" },
-				{ baslik: "Notİsmi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "NotLinki" },
-				{ baslik: "Notİsmi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "NotLinki" },
-				{ baslik: "Notİsmi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "NotLinki" },
-				{ baslik: "Tarih Öğrenmenin Faydaları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/1.%20%C3%9Cnite/1-Tarih%20%C3%96%C4%9Frenmenin%20Faydalar%C4%B1.pdf" },
-				{ baslik: "Tarih Araştırma ve Yazımında Dijital Dönüşüm", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/1.%20%C3%9Cnite/2-Dijitalle%C5%9Fme.pdf" },
-                { baslik: "Kavram Haritası", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
-                { baslik: "Tarih Çalışma Kağıdı", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "#" },
-                { baslik: "Zaman Çizelgesi", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
-            ];
-        } else if (uniteId === 'u2') {
-            aktifMateryaller = [
-                { baslik: "Mezopotamya Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Z4cZjZZBsjg" },
-                { baslik: "Anadolu Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Xom434ZL6_c" },
-                { baslik: "Doğu Akdeniz, Ege, Yunan ve Makedonya Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/ri7U-d9jk-A" },
-				{ baslik: "İran ve Mısır Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Qe3jmh0CR1M" },
-				{ baslik: "Çin ve Hint Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/8ABBovKfDes" },
-				{ baslik: "İskitler ve Hunlar", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/jY5sMXqR2o8" },
-				{ baslik: "Roma Uygarlıkları", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/Ke1Y8whiatA" },
-				{ baslik: "Eskiçağ Uygarlıkları (Genel Özet)", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "https://youtu.be/o8AEWSe5hio" },
-                { baslik: "Sümerlerin İzinde", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Antik Mısırın Ünlü Firavunu II. Ramses ve Kadeş Savaşı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/kronik-2.ramses%20ve%20kade%C5%9F%20savasi.mp3" },
-                { baslik: "Cengiz Han'ın Komutanları - Bozkırın Demir Adamları (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Cengiz%20Han'%C4%B1n%20Komutanlar%C4%B1%20-%20Bozk%C4%B1r%C4%B1n%20Demir%20Adamlar%C4%B1.mp3" },
-				{ baslik: "Moğolların Askeri Yapısı - Taktik, Organizasyon ve Strateji (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Mo%C4%9Follar%C4%B1n%20Askeri%20Yap%C4%B1s%C4%B1%20-%20Taktik%20%26%20Organizasyon%20%26%20Strateji.mp3" },
-				{ baslik: "Moğolların Savaş Taktikleri - Düşmanlarını Nasıl Yendiler (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Mo%C4%9Follar%C4%B1n%20Sava%C5%9F%20Taktikleri%20-%20D%C3%BC%C5%9Fmanlar%C4%B1n%C4%B1%20Nas%C4%B1l%20Yendiler.mp3" },
-				{ baslik: "Mete Han - Bozkırın Efendisi (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Mete%20Han%20-%20Bozk%C4%B1r%C4%B1n%20Efendisi.mp3" },
-				{ baslik: "Şamanizm Nedir İlkeleri ve Kökenleri (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-%C5%9Eamanizm%20Nedir%20%C4%B0lkeleri%20ve%20K%C3%B6kenleri.mp3" },
-				{ baslik: "Papalığın Kuruluşu - Bir Balıkçı Avrupa'nın Kaderini Nasıl Değiştirdi (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Papal%C4%B1%C4%9F%C4%B1n%20Kurulu%C5%9Fu%20-%20Bir%20Bal%C4%B1k%C3%A7%C4%B1%20Avrupa'n%C4%B1n%20Kaderini%20Nas%C4%B1l%20De%C4%9Fi%C5%9Ftirdi.mp3" },
-				{ baslik: "Ortaçağda Bir İlimler Akademisi - Beytü'l Hikme (İslam'ın Altın Çağı) (Kronik Tarih)", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "https://depo.kirkyama.uk/Podcast/Kronik%20Tarih/Kronik-Orta%C3%A7a%C4%9Fda%20Bir%20%C4%B0limler%20Akademisi%20-%20Beyt%C3%BC'l%20Hikme%20(%C4%B0slam'%C4%B1n%20Alt%C4%B1n%20%C3%87a%C4%9F%C4%B1).mp3" },
-                { baslik: "İnsanlığın İlk İzleri", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/4-%20%C4%B0nsanl%C4%B1%C4%9F%C4%B1n%20%C4%B0lk%20%C4%B0zleri.pdf" },
-                { baslik: "Yazının Gelişimi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/5-%20Yaz%C4%B1n%C4%B1n%20Geli%C5%9Fimi.pdf" },
-				{ baslik: "İlk Çağ'da Yeryüzündeki Belli Başlı Medeniyet Havzaları", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/6-%20%C4%B0lk%20%C3%87a%C4%9F'da%20Yery%C3%BCz%C3%BCndeki%20Belli%20Ba%C5%9Fl%C4%B1%20Medeniyet%20Havzalar%C4%B1.pdf" },
-				{ baslik: "İnsan ve Göç", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/8-%20%C4%B0nsan%20ve%20G%C3%B6%C3%A7.pdf" },
-				{ baslik: " İlk Çağ'ın Tüccar Toplulukları", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/9-%20%C4%B0lk%20%C3%87a%C4%9F'%C4%B1n%20T%C3%BCccar%20Topluluklar%C4%B1.pdf" },
-				{ baslik: "Kabileden Devlete", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/10-%20Kabileden%20Devlete.pdf" },
-				{ baslik: "Kanunlar Doğuyor", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/11-%20Kanunlar%20Do%C4%9Fuyor.pdf" },
-				{ baslik: "Artı Üründen Sosyal Sınıflara", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/14-%20Art%C4%B1%20%C3%9Cr%C3%BCnden%20Sosyal%20S%C4%B1n%C4%B1flara.pdf" },
-				{ baslik: "Mezopotamya Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/1-Mezopotamya%20Uygarl%C4%B1klar%C4%B1.pdf" },
-				{ baslik: "Anadolu Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/2-Anadolu%20ve%20Mezopotamya.pdf" },
-				{ baslik: "Anadolu ve Mezopotamya Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/3-Mezopotamya%20ve%20Anadolu.pdf" },
-				{ baslik: "Doğu Akdeniz, Ege, Yunan ve Makedonya Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/4-Do%C4%9Fu%20Akdeniz%2C%20Ege%2C%20Yunan%20ve%20Makedonya%20Uygarl%C4%B1klar%C4%B1.pdf" },
-				{ baslik: "Mısır ve İran Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/5-M%C4%B1s%C4%B1r%20ve%20%C4%B0ran%20Uygarl%C4%B1klar%C4%B1.pdf" },
-				{ baslik: "Çin ve Hint Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/6-%C3%87in%20ve%20Hint%20Uygarl%C4%B1klar%C4%B1.pdf" },
-				{ baslik: "İskitler ve Sakalar", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/7-%C4%B0skitler%20ve%20Sakalar.pdf" },
-				{ baslik: "Roma Uygarlığı", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/8-Roma%20Uygarl%C4%B1%C4%9F%C4%B1.pdf" },
-				{ baslik: "Eskiçağ Uygarlıkları Genel Özet", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "https://depo.kirkyama.uk/PDF/9.SinifSunular/2.Unite/8-Eski%C3%A7a%C4%9F%20Uygarl%C4%B1klar%C4%B1%20Genel%20%C3%96zet.pdf" },
-                { baslik: "İlk Çağ Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" },
-                { baslik: "Göç Yolları Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
-            ];
-        } else if (uniteId === 'u3') {
-            aktifMateryaller = [
-                { baslik: "Orta Çağ'da Dünya", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Kavimler Göçü Etkileri", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Feodalizm ve Şövalyeler", tur: "Video Ders", icon: "fa-film", renk: "#e74c3c", link: "#" },
-                { baslik: "Karanlık Çağ Belgeseli", tur: "Belgesel", icon: "fa-film", renk: "#e74c3c", link: "#" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-				{ baslik: "Podcastİsmi", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "PodcastLinki" },
-                { baslik: "Roma'nın Çöküşü", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
-                { baslik: "Orta Çağ Avrupa'sı", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
-                { baslik: "Ticaret Yolları", tur: "Podcast", icon: "fa-podcast", renk: "#9b59b6", link: "#" },
-				{ baslik: "Kavimler Göçü", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/18-%20Kavimler%20G%C3%B6%C3%A7%C3%BC.pdf" },
-				{ baslik: "Orta Çağ'da Siyasi Yapılar", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/12-%20Orta%20%C3%87a%C4%9F'da%20Siyasi%20Yap%C4%B1lar.pdf" },
-				{ baslik: "İmparatorluklarda Sosyal, Ekonomik ve Askeri Durum", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/13-%20%C4%B0mparatorluklarda%20Sosyal%2C%20Ekonomik%20ve%20Askeri%20Durum.pdf" },
-				{ baslik: "Orta Çağ'da Ticaret", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/15-%20Orta%20%C3%87a%C4%9F'da%20Ticaret.pdf" },
-				{ baslik: "Orta Çağ'da Ordu", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/29-%20Orta%20%C3%87a%C4%9F'da%20Ordu.pdf" },
-				{ baslik: "Avrasya'da İlk Türk İzleri", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/31-%20Avrasya'da%20%C4%B0lk%20T%C3%BCrk%20%C4%B0zleri.pdf" },
-				{ baslik: "Türklerde Coğrafya ile Oluşan Yaşam Tarzı", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/17-%20T%C3%BCrklerde%20Co%C4%9Frafya%20ile%20Olu%C5%9Fan%20Ya%C5%9Fam%20Tarz%C4%B1.pdf" },
-				{ baslik: "İlk ve Orta Çağlarda Türk Dünyası", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/32-%20%C4%B0lk%20ve%20Orta%20%C3%87a%C4%9Flarda%20T%C3%BCrk%20D%C3%BCnyas%C4%B1.pdf" },
-				{ baslik: "Boylardan Devlete", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/16-%20Boylardan%20Devlete.pdf" },
-				{ baslik: "İlk Türk Devletlerinin Çevre Devletlerle İlişkileri", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/19-%20%C4%B0lk%20T%C3%BCrk%20Devletlerinin%20%C3%87evre%20Devletlerle%20%C4%B0li%C5%9Fkileri.pdf" },
-				{ baslik: " İlk Türk Devletleri ve Komşuları", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/20-%20%C4%B0lk%20T%C3%BCrk%20Devletleri%20ve%20Kom%C5%9Fular%C4%B1.pdf" },
-				{ baslik: "İslamiyet'in Doğduğu Dönemde Dünya", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/21-%20%C4%B0slamiyet'in%20Do%C4%9Fdu%C4%9Fu%20D%C3%B6nemde%20D%C3%BCnya.pdf" },
-				{ baslik: " İslamiyet Yayılıyor", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/22-%20%C4%B0slamiyet%20Yay%C4%B1l%C4%B1yor.pdf" },
-				{ baslik: "Dört Halife Dönemi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/23-%20D%C3%B6rt%20Halife%20D%C3%B6nemi.pdf" },
-				{ baslik: "Emeviler Devleti (661-750)", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/24-%20Emeviler%20Devleti%20(661-750).pdf" },
-				{ baslik: "Abbasi Devleti ve Mısır'da Kurulan Türk-İslam Devletleri", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/25-%20Abbasi%20Devleti%20ve%20M%C4%B1s%C4%B1r'da%20Kurulan%20T%C3%BCrk-%C4%B0slam%20Devletleri.pdf" },
-				{ baslik: "Bilim Medeniyeti", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/26-%20Bilim%20Medeniyeti.pdf" },
-				{ baslik: "Türklerin İslamiyeti Kabulü", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/27-%20T%C3%BCrklerin%20%C4%B0slamiyeti%20Kabul%C3%BC.pdf" },
-				{ baslik: " İslamiyet'in Türk Devlet ve Toplum Yapısına Etkisi", tur: "PDF Not", icon: "fa-file-pdf", renk: "#e67e22", link: "https://depo.kirkyama.uk/PDF/9.%20S%C4%B1n%C4%B1f%20OGM/28-%20%C4%B0slamiyet'in%20T%C3%BCrk%20Devlet%20ve%20Toplum%20Yap%C4%B1s%C4%B1na%20Etkisi.pdf" },
-				{ baslik: "Uygarlıkları", tur: "Sunu", icon: "fa-chalkboard-user", renk: "#e84393", link: "link" },
-                { baslik: "Kavimler Göçü Haritası", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" },
-                { baslik: "İpek ve Baharat Yolu", tur: "İnteraktif Harita", icon: "fa-map-location-dot", renk: "#2ecc71", link: "#" }
-            ];
-        }
-    }
-
-    function kategoriSec(hedefTur) {
-        if(hedefTur === 'Flashcard') {
-            baslatFlashcard(aktifOda);
-            return;
-        }
-
-        document.getElementById('materyalKategorileri').classList.add('hidden');
-        document.getElementById('materyalListesiAlani').classList.remove('hidden');
-        
-        const matAlani = document.getElementById('odaMateryalleri');
-        matAlani.innerHTML = '';
-        
-        let filtrelenmis = aktifMateryaller.filter(m => {
-            if (hedefTur === 'Video') return m.tur === 'Video Ders' || m.tur === 'Belgesel';
-            return m.tur === hedefTur;
-        });
-
-        if(filtrelenmis.length === 0) {
-            matAlani.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:20px; opacity:0.6; font-weight: bold;">Bu kategoride henüz materyal bulunmamaktadır.</div>';
-            return;
-        }
-
-        filtrelenmis.forEach(m => {
-            if (m.tur === 'Podcast') {
-                matAlani.innerHTML += `
-                    <div class="mat-card" style="cursor:pointer;" onclick="oynatPodcast('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}')">
-                        <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                        <div class="mat-info">
-                            <span class="mat-title">${m.baslik}</span>
-                            <span class="mat-type">${m.tur}</span>
-                        </div>
-                    </div>
-                `;
-            } else if (m.tur === 'Video Ders' || m.tur === 'Belgesel') {
-                matAlani.innerHTML += `
-                    <div class="mat-card" style="cursor:pointer;" onclick="oynatVideo('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
-                        <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                        <div class="mat-info">
-                            <span class="mat-title">${m.baslik}</span>
-                            <span class="mat-type">${m.tur}</span>
-                        </div>
-                    </div>
-                `;
-            } else if (m.tur === 'PDF Not' || m.tur === 'Sunu') {
-                matAlani.innerHTML += `
-                    <div class="mat-card" style="cursor:pointer;" onclick="oynatPdf('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
-                        <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                        <div class="mat-info">
-                            <span class="mat-title">${m.baslik}</span>
-                            <span class="mat-type">${m.tur}</span>
-                        </div>
-                    </div>
-                `;
-            } else {
-                matAlani.innerHTML += `
-                    <a href="${m.link}" target="_blank" class="mat-card">
-                        <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                        <div class="mat-info">
-                            <span class="mat-title">${m.baslik}</span>
-                            <span class="mat-type">${m.tur}</span>
-                        </div>
-                    </a>
-                `;
-            }
-        });
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    function oynatPodcast(link, baslik) {
-        if(link === "#") { alert("Öğretmeniniz bu podcast içeriğini henüz yüklemedi."); return; }
-        
-        const playerContainer = document.getElementById('audioPlayerContainer');
-        const playerAudio = document.getElementById('mainAudio');
-        const playerTitle = document.getElementById('playerTitle');
-        const floatingBtn = document.getElementById('iletisimBtnFloating');
-        const playBtn = document.getElementById('playPauseBtn');
-        const iconBox = document.getElementById('podcastIconBox');
-        
-        playerTitle.innerText = baslik;
-        playerAudio.src = link;
-        playerContainer.classList.add('active');
-        
-        playerAudio.play().then(() => {
-            playBtn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            iconBox.classList.add('playing');
-        }).catch(e => {
-            playBtn.innerHTML = '<i class="fa-solid fa-play" style="margin-left: 3px;"></i>';
-            iconBox.classList.remove('playing');
-        });
-        
-        if (floatingBtn) floatingBtn.style.bottom = window.innerWidth <= 768 ? '155px' : '135px';
-    }
-
-    function kapatPlayer() {
-        const playerContainer = document.getElementById('audioPlayerContainer');
-        const playerAudio = document.getElementById('mainAudio');
-        const floatingBtn = document.getElementById('iletisimBtnFloating');
-        const iconBox = document.getElementById('podcastIconBox');
-        const playBtn = document.getElementById('playPauseBtn');
-        
-        playerAudio.pause();
-        playerAudio.src = "";
-        playerContainer.classList.remove('active');
-        iconBox.classList.remove('playing');
-        playBtn.innerHTML = '<i class="fa-solid fa-play" style="margin-left: 3px;"></i>';
-        
-        if (floatingBtn) floatingBtn.style.bottom = '25px';
-    }
-
-    function togglePlay() {
-        const audio = document.getElementById('mainAudio');
-        const btn = document.getElementById('playPauseBtn');
-        const iconBox = document.getElementById('podcastIconBox');
-        
-        if (audio.paused) {
-            audio.play();
-            btn.innerHTML = '<i class="fa-solid fa-pause"></i>';
-            iconBox.classList.add('playing');
-        } else {
-            audio.pause();
-            btn.innerHTML = '<i class="fa-solid fa-play" style="margin-left: 3px;"></i>';
-            iconBox.classList.remove('playing');
-        }
-    }
-
-    function skipAudio(seconds) {
-        const audio = document.getElementById('mainAudio');
-        audio.currentTime += seconds;
-    }
-
-    function updateProgress() {
-        const audio = document.getElementById('mainAudio');
-        const fill = document.getElementById('progressBarFill');
-        const currentDisplay = document.getElementById('currentTimeDisplay');
-        
-        if (audio.duration) {
-            const percent = (audio.currentTime / audio.duration) * 100;
-            fill.style.width = percent + '%';
-            currentDisplay.innerText = formatTime(audio.currentTime);
-        }
-    }
-
-    function setDuration() {
-        const audio = document.getElementById('mainAudio');
-        const durationDisplay = document.getElementById('durationDisplay');
-        if(audio.duration) durationDisplay.innerText = formatTime(audio.duration);
-    }
-
-    function seekAudio(event) {
-        const audio = document.getElementById('mainAudio');
-        const bar = document.getElementById('progressBarBg');
-        const clickX = event.clientX - bar.getBoundingClientRect().left;
-        if(audio.duration) audio.currentTime = (clickX / bar.getBoundingClientRect().width) * audio.duration;
-    }
-
-    function formatTime(seconds) {
-        const min = Math.floor(seconds / 60); const sec = Math.floor(seconds % 60);
-        return (min < 10 ? '0' : '') + min + ':' + (sec < 10 ? '0' : '') + sec;
-    }
-
-    function audioEnded() {
-        document.getElementById('playPauseBtn').innerHTML = '<i class="fa-solid fa-play" style="margin-left: 3px;"></i>';
-        document.getElementById('podcastIconBox').classList.remove('playing');
-        document.getElementById('progressBarFill').style.width = '0%';
-        document.getElementById('currentTimeDisplay').innerText = '00:00';
-    }
-
-    function kategorilereDon() {
-        document.getElementById('materyalKategorileri').classList.remove('hidden');
-        document.getElementById('materyalListesiAlani').classList.add('hidden');
-        const aramaInput = document.getElementById('materyalArama');
-        if(aramaInput) { aramaInput.value = ""; document.getElementById('matAramaTemizle').style.display = 'none'; }
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    function materyalAra() {
-        const input = document.getElementById('materyalArama');
-        const clearBtn = document.getElementById('matAramaTemizle');
-        const filter = input.value.toLocaleLowerCase('tr-TR').trim();
-        const matAlani = document.getElementById('odaMateryalleri');
-        
-        if (filter.length > 0) { 
-            clearBtn.style.display = 'flex'; 
-            document.getElementById('materyalKategorileri').classList.add('hidden');
-            document.getElementById('materyalListesiAlani').classList.remove('hidden');
-            
-            let filtrelenmis = aktifMateryaller.filter(m => m.baslik.toLocaleLowerCase('tr-TR').includes(filter));
-            matAlani.innerHTML = '';
-            
-            if(filtrelenmis.length === 0) {
-                matAlani.innerHTML = '<div style="grid-column: 1 / -1; text-align:center; padding:20px; opacity:0.6; font-weight: bold;">Aradığınız kritere uygun materyal bulunamadı.</div>';
-                return;
-            }
-
-            filtrelenmis.forEach(m => {
-                if (m.tur === 'Podcast') {
-                    matAlani.innerHTML += `
-                        <div class="mat-card" style="cursor:pointer;" onclick="oynatPodcast('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}')">
-                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                            <div class="mat-info">
-                                <span class="mat-title">${m.baslik}</span>
-                                <span class="mat-type">${m.tur}</span>
-                            </div>
-                        </div>
-                    `;
-                } else if (m.tur === 'Video Ders' || m.tur === 'Belgesel') {
-                    matAlani.innerHTML += `
-                        <div class="mat-card" style="cursor:pointer;" onclick="oynatVideo('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
-                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                            <div class="mat-info">
-                                <span class="mat-title">${m.baslik}</span>
-                                <span class="mat-type">${m.tur}</span>
-                            </div>
-                        </div>
-                    `;
-                } else if (m.tur === 'PDF Not' || m.tur === 'Sunu') {
-                    matAlani.innerHTML += `
-                        <div class="mat-card" style="cursor:pointer;" onclick="oynatPdf('${m.link.replace(/'/g, "\\'")}', '${m.baslik.replace(/'/g, "\\'")}', this)">
-                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                            <div class="mat-info">
-                                <span class="mat-title">${m.baslik}</span>
-                                <span class="mat-type">${m.tur}</span>
-                            </div>
-                        </div>
-                    `;
-                } else {
-                    matAlani.innerHTML += `
-                        <a href="${m.link}" target="_blank" class="mat-card">
-                            <div class="mat-icon" style="color: ${m.renk};"><i class="fa-solid ${m.icon}"></i></div>
-                            <div class="mat-info">
-                                <span class="mat-title">${m.baslik}</span>
-                                <span class="mat-type">${m.tur}</span>
-                            </div>
-                        </a>
-                    `;
-                }
-            });
-        } else { 
-            clearBtn.style.display = 'none'; 
-            kategorilereDon();
-        }
-    }
-
-    function matAramaTemizleBtn() {
-        const input = document.getElementById('materyalArama');
-        input.value = "";
-        materyalAra();
-        input.focus();
-    }
-
-    function odayaGir(uniteId) {
-        aktifOda = uniteId;
-        document.getElementById('anaKlasorler').style.display = 'none';
-
-        const oda = document.getElementById('sinavOdasi');
-        const data = window.MENU_VERI ? window.MENU_VERI[uniteId] : null;
-        
-        if (!data) {
-            alert("Sistem Hatası: Soru kataloğu yüklenemedi. Lütfen bağlantınızı kontrol ediniz.");
-            salonaDon(); return;
-        }
-
-        document.getElementById('odaBasligi').innerText = data.baslik;
-
-        sekmeDegistir('testler');
-        materyalleriYukle(uniteId);
-
-        const konular = new Set();
-        data.testler.forEach(t => { if(!t.isKlasik && t.konu && t.konu !== "Geçmişin İnşa Sürecinde Tarih") konular.add(t.konu); });
-        const hasKlasik = data.testler.some(t => t.isKlasik);
-
-        const chipAlani = document.getElementById('konuFiltreleri');
-        chipAlani.innerHTML = "<button class='konu-chip active' onclick=\"konuFiltrele('Tümü', this)\">Tümü</button>";
-        
-        konular.forEach(k => {
-            const safeK = k.replace(/'/g, "\\'");
-            chipAlani.innerHTML += "<button class='konu-chip' onclick=\"konuFiltrele('" + safeK + "', this)\">" + k + "</button>";
-        });
-        if (hasKlasik) {
-            chipAlani.innerHTML += "<button class='konu-chip klasik' onclick=\"konuFiltrele('Klasik Sınavlar', this)\"><i class=\"fa-solid fa-pen-nib\"></i> Klasik Sınavlar</button>";
-        }
-
-        oda.classList.remove('hidden');
-        enableDragScroll(chipAlani);
-        konuFiltrele('Tümü', chipAlani.firstElementChild);
-        
-        window.scrollTo({top: 0, behavior: 'smooth'});
-    }
-
-    function konuFiltrele(konuAdi, btnElement) {
-        document.querySelectorAll('#konuFiltreleri .konu-chip').forEach(btn => btn.classList.remove('active'));
-        if(btnElement) btnElement.classList.add('active');
-
-        const aramaInput = document.getElementById('testArama');
-        if(aramaInput) { aramaInput.value = ""; document.getElementById('aramaTemizle').style.display = 'none'; }
-
-        const data = window.MENU_VERI[aktifOda];
-        const testAlani = document.getElementById('odaTestleri');
-        testAlani.innerHTML = '';
-
-        const filtrelenmisTestler = data.testler.filter(t => {
-            if (t.konu === "Geçmişin İnşa Sürecinde Tarih") return false;
-            if (konuAdi === 'Tümü') return true;
-            if (konuAdi === 'Klasik Sınavlar' && t.isKlasik) return true;
-            return t.konu === konuAdi && !t.isKlasik;
-        });
-
-        if (filtrelenmisTestler.length === 0) {
-            testAlani.innerHTML = '<div style="text-align:center; padding:20px; opacity:0.6; font-weight:bold;">Bu kritere uygun test bulunamadı.</div>';
-        } else {
-            let cozulenler = JSON.parse(localStorage.getItem('cozulenTestler')) || [];
-            
-            filtrelenmisTestler.forEach(t => {
-                const row = document.createElement('div');
-                row.className = "test-item-row " + (t.isKlasik ? "klasik" : "");
-                const icon = t.isKlasik ? '<i class="fa-solid fa-pen-to-square"></i>' : '<i class="fa-solid fa-file-signature"></i>';
-                
-                let solvedBadge = cozulenler.includes(t.id) ? '<span style="color:#27ae60; font-size:12px; font-weight:bold; margin-left:10px; padding:3px 8px; background:rgba(39,174,96,0.1); border-radius:8px;"><i class="fa-solid fa-check"></i> Çözüldü</span>' : '';
-
-                let rHtml = "<div class='test-item-left'><div class='test-item-icon'>" + icon + "</div><div class='test-item-info'>";
-                rHtml += "<span class='test-item-title'>" + t.baslik + solvedBadge + "</span><span class='test-item-meta'>" + t.aciklama + "</span></div></div>";
-                rHtml += "<button class='test-item-start-btn' onclick=\"testSec('" + t.id + "')\">Başla ►</button>";
-                row.innerHTML = rHtml;
-                testAlani.appendChild(row);
-            });
-        }
-    }
-
-    function salonaDon() {
-        document.getElementById('sinavOdasi').classList.add('hidden');
-        aktifOda = null;
-        document.getElementById('anaKlasorler').style.display = 'grid';
-    }
-
-    window.onload = function() {
-        const kayitliTema = localStorage.getItem('tema');
-        const btnTema = document.getElementById('btnTema');
-        
-        if(kayitliTema !== null) { 
-            document.body.className = kayitliTema;
-            if(btnTema) {
-                if(kayitliTema === 'dark-mode') btnTema.innerHTML = '<i class="fa-solid fa-scroll"></i>';
-                else if(kayitliTema === 'sepia-mode') btnTema.innerHTML = '<i class="fa-solid fa-sun"></i>';
-                else btnTema.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            }
-        } else {
-            document.body.className = '';
-            if(btnTema) btnTema.innerHTML = '<i class="fa-solid fa-moon"></i>';
-            localStorage.setItem('tema', '');
-        }
-        
-        if(localStorage.getItem('fontSize')) {
-            document.documentElement.style.setProperty('--font-size-base', localStorage.getItem('fontSize') + 'px');
-        }
-        
-        const kayitliOgrenci = localStorage.getItem('aktifOgrenci');
-        if(kayitliOgrenci) {
-            ogrenci = JSON.parse(kayitliOgrenci);
-            document.getElementById("girisEkrani").classList.add("hidden");
-            document.getElementById("menuEkrani").classList.remove("hidden");
-            document.getElementById("kullaniciAdiSpan").innerText = ogrenci.ad;
-            watermarkOlustur(ogrenci.ad + " " + ogrenci.no);
-            document.getElementById("btnSozluk").classList.remove("hidden");
-            if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
-        }
-
-        const savedSession = localStorage.getItem('sinavSession');
-        if (savedSession) {
-            if(confirm("Yarım kalmış bir sınavınız var. Devam etmek ister misiniz?")) {
-                restoreSession(JSON.parse(savedSession));
-            } else {
-                localStorage.removeItem('sinavSession');
-            }
-        }
-        
-        window.onbeforeunload = function() {
-            if (!document.getElementById("testEkrani").classList.contains("hidden")) {
-                return "Sınavınız bitmedi. Çıkarsanız verileriniz kaybolabilir.";
-            }
-        };
-    };
-
-    function temaCycle() {
-        const body = document.body;
-        const btnTema = document.getElementById('btnTema');
-        const isDark = body.classList.contains('dark-mode');
-        const isSepia = body.classList.contains('sepia-mode');
-
-        if (!isDark && !isSepia) {
-            body.classList.add('dark-mode');
-            localStorage.setItem('tema', 'dark-mode');
-            btnTema.innerHTML = '<i class="fa-solid fa-scroll"></i>';
-        } else if (isDark) {
-            body.classList.remove('dark-mode');
-            body.classList.add('sepia-mode');
-            localStorage.setItem('tema', 'sepia-mode');
-            btnTema.innerHTML = '<i class="fa-solid fa-sun"></i>';
-        } else if (isSepia) {
-            body.classList.remove('sepia-mode');
-            localStorage.setItem('tema', '');
-            btnTema.innerHTML = '<i class="fa-solid fa-moon"></i>';
-        }
-    }
-
-    function fontDegistir(delta) {
-        const htmlRoot = document.documentElement;
-        let currentStyle = getComputedStyle(htmlRoot).getPropertyValue('--font-size-base').trim();
-        let currentSize = parseInt(currentStyle) || 16; 
-        let newSize = currentSize + delta;
-        if(newSize >= 14 && newSize <= 24) {
-            htmlRoot.style.setProperty('--font-size-base', newSize + 'px');
-            localStorage.setItem('fontSize', newSize);
-        }
-    }
-
-    function girisBasariliIslemleri(ogr) {
-        localStorage.setItem('aktifOgrenci', JSON.stringify(ogr));
-        watermarkOlustur(ogr.ad + " " + ogr.no);
-        document.getElementById("girisEkrani").classList.add("hidden");
-        document.getElementById("menuEkrani").classList.remove("hidden");
-        document.getElementById("kullaniciAdiSpan").innerText = ogr.ad;
-        document.getElementById("btnSozluk").classList.remove("hidden");
-        if (document.getElementById("btnDuyuru")) { document.getElementById("btnDuyuru").classList.remove("hidden"); duyuruRozetKontrol(); }
-    }
-
-    function girisTuruDegistir(tur) {
-        document.getElementById('btnOgrenciTab').classList.remove('active');
-        document.getElementById('btnOgretmenTab').classList.remove('active');
-        document.getElementById('ogrenciGirisFormu').classList.add('hidden');
-        document.getElementById('ogretmenGirisFormu').classList.add('hidden');
-        
-        if(tur === 'ogrenci') {
-            document.getElementById('btnOgrenciTab').classList.add('active');
-            document.getElementById('ogrenciGirisFormu').classList.remove('hidden');
-        } else {
-            document.getElementById('btnOgretmenTab').classList.add('active');
-            document.getElementById('ogretmenGirisFormu').classList.remove('hidden');
-        }
-    }
-
-    function girisYap() {
-        const ad = document.getElementById("adSoyad").value.trim();
-        const sinif = document.getElementById("sinif").value;
-        const numara = document.getElementById("numara").value.trim();
-        const girilenSifre = document.getElementById("sifre").value.trim();
-        
-        if (ad.toLocaleLowerCase('tr-TR') === "murat mutlu") {
-            if (girilenSifre === "1310") {
-                ogrenci = { ad: "Murat Mutlu (Öğretmen)", sinif: sinif || "Master", no: numara || "1310" };
-                girisBasariliIslemleri(ogrenci);
-            } else { alert("Master şifresi hatalı!"); }
-            return;
-        }
-
-        if (!ad || !sinif || !numara || !girilenSifre) { alert("Lütfen tüm alanları eksiksiz doldurunuz!"); return; }
-
-        const loginBtn = document.querySelector("#ogrenciGirisFormu .btn-login");
-        const eskiMetin = loginBtn.innerText;
-        loginBtn.innerText = "Bağlanıyor...";
-        loginBtn.disabled = true;
-
-        fetch(SIFRE_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ islem: "giris", sinif: sinif, ogrenciNo: numara, sifre: girilenSifre })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.durum === "basarili") {
-                const temizGirilenAd = ad.replace(/\s+/g, ' ').toLocaleLowerCase('tr-TR');
-                const temizTabloAd = data.adSoyad.replace(/\s+/g, ' ').toLocaleLowerCase('tr-TR');
-                
-                if (temizGirilenAd !== temizTabloAd) {
-                    alert("Girdiğiniz Ad Soyad sistemdekiyle uyuşmuyor. Lütfen kontrol ediniz.");
-                } else {
-                    ogrenci = { ad: data.adSoyad, sinif: data.sinif, no: numara };
-                    girisBasariliIslemleri(ogrenci);
-                }
-            } else {
-                alert(data.mesaj); 
-            }
-        })
-        .catch(error => {
-            alert("Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.");
-        })
-        .finally(() => {
-            loginBtn.innerText = eskiMetin;
-            loginBtn.disabled = false;
-        });
-    }
-
-    function ogretmenGirisYap() {
-        const ad = document.getElementById("ogretmenAd").value.trim();
-        const vipKodu = document.getElementById("vipKodu").value.trim();
-        const sifre = document.getElementById("ogretmenSifre").value.trim();
-
-        if (!ad || !sifre) { alert("Lütfen adınızı ve şifrenizi giriniz! (VIP kodu sadece ilk kayıtta zorunludur)"); return; }
-
-        const loginBtn = document.getElementById("btnOgretmenLogin");
-        const eskiMetin = loginBtn.innerHTML;
-        loginBtn.innerHTML = "<i class='fa-solid fa-spinner fa-spin'></i> Sisteme Giriliyor...";
-        loginBtn.disabled = true;
-
-        fetch(SIFRE_API_URL, {
-            method: 'POST',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-            body: JSON.stringify({ islem: "ogretmen_kayit", adSoyad: ad, vipKodu: vipKodu, sifre: sifre })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.durum === "basarili") {
-                ogrenci = { ad: data.adSoyad + " (Zümre)", sinif: data.sinif, no: data.no };
-                girisBasariliIslemleri(ogrenci);
-            } else {
-                alert(data.mesaj); 
-            }
-        })
-        .catch(error => {
-            alert("Sunucuya bağlanılamadı. Lütfen internet bağlantınızı kontrol edin.");
-        })
-        .finally(() => {
-            loginBtn.innerHTML = eskiMetin;
-            loginBtn.disabled = false;
-        });
-    }
-
-    function sozlukGoster() { document.getElementById('sozlukModal').style.display = 'block'; kavramAra(); document.getElementById('sozlukArama').focus(); }
-    function sozlukKapat() { document.getElementById('sozlukModal').style.display = 'none'; document.getElementById('sozlukArama').value = ""; }
-    
-    function kavramAra() {
-        const query = document.getElementById('sozlukArama').value.toLowerCase();
-        const listeDiv = document.getElementById('kavramListesi');
-        listeDiv.innerHTML = "";
-        
-        if (typeof KAVRAMLAR !== 'undefined') {
-            KAVRAMLAR.forEach(k => {
-                if(k.terim.toLowerCase().includes(query) || k.anlam.toLowerCase().includes(query)) {
-                    listeDiv.innerHTML += "<div class='kavram-item'><span class='kavram-baslik'>" + k.terim + "</span><span style='opacity: 0.8;'>" + k.anlam + "</span></div>";
-                }
-            });
-        }
-        if(listeDiv.innerHTML === "") { listeDiv.innerHTML = "<div style='padding:15px; text-align:center; color:#e74c3c;'>Kavram bulunamadı.</div>"; }
-    }
-
-    function iletisimGoster() { document.getElementById('iletisimModal').style.display = 'block'; }
-    function iletisimKapat() { document.getElementById('iletisimModal').style.display = 'none'; document.getElementById('ogrenciMesaji').value = ""; }
-    
-    function mesajGonder() {
-        const mesaj = document.getElementById('ogrenciMesaji').value;
-        if(mesaj.trim() === "") { alert("Lütfen bir mesaj yazınız."); return; }
-        if(!ogrenci || !ogrenci.ad) { alert("Ana ekrandan giriş yapmalısınız."); return; }
-
-        const btn = document.querySelectorAll('#iletisimModal .action-btn')[1];
-        const eskiMetin = btn ? btn.innerText : "Gönder";
-        if(btn) { btn.innerText = "Gönderiliyor..."; btn.disabled = true; }
-
-        const data = { isim: ogrenci.ad, sinif: ogrenci.sinif, numara: ogrenci.no || "Belirtilmedi", puan: "İLETİŞİM/MESAJ", rapor: mesaj };
-        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) })
-        .then(() => { alert("Mesajınız iletilmiştir."); iletisimKapat(); if(btn) { btn.innerText = eskiMetin; btn.disabled = false; } })
-        .catch(e => { alert("Mesaj gönderilemedi."); if(btn) { btn.innerText = eskiMetin; btn.disabled = false; } });
-    }
-
-    function duyuruGoster() { 
-        document.getElementById('duyuruModal').style.display = 'block'; 
-        localStorage.setItem("okunanDuyuru", AKTIF_DUYURU_VERSIYONU); 
-        document.getElementById('duyuruRozeti').classList.add('hidden'); 
-        const genelRozet = document.getElementById('duyuruRozetiGenel');
-        if(genelRozet) genelRozet.classList.add('hidden'); 
-        const dropdown = document.getElementById('hamburgerDropdown');
-        if(dropdown) dropdown.classList.remove('active');
-    }
-
-    function duyuruRozetKontrol() {
-        const okunan = localStorage.getItem("okunanDuyuru");
-        if (okunan !== AKTIF_DUYURU_VERSIYONU) {
-            document.getElementById('duyuruRozeti').classList.remove('hidden'); 
-            const genelRozet = document.getElementById('duyuruRozetiGenel');
-            if(genelRozet) genelRozet.classList.remove('hidden'); 
-        }
-    }
-    
-    function duyuruKapat() { document.getElementById('duyuruModal').style.display = 'none'; }
-    function odeveGit() { duyuruKapat(); testSec('test_u2_genel_1'); }
-
-    function testSec(testKodu) {
-        aktifTest = testKodu;
-        const isKlasik = testKodu.includes('klasik');
-        const alan = document.getElementById("sorularAlani");
-        alan.innerHTML = "";
-
-        let hamSorular = (window.allTests && window.allTests[testKodu]) ? window.allTests[testKodu] : [];
-        
-        if (!hamSorular || hamSorular.length === 0) {
-            alan.innerHTML = "<div style='padding:30px; text-align:center; border:2px dashed #e74c3c; border-radius:10px; background:#fadbd8;'><h3 style='color:#c0392b;'><i class=\"fa-solid fa-triangle-exclamation\"></i> Sorular Yüklenemedi!</h3><p style='color:#333; font-weight:bold;'>Sistem '" + testKodu + "' isimli test verisini bulamadı.</p><p style='font-size:14px; color:#555;'>Lütfen JS dosyanızın içindeki tanımlamanın (Örn: window.allTests['" + testKodu + "']) menü koduyla harfi harfine aynı olduğunu kontrol edin.</p></div>";
-            document.getElementById("menuEkrani").classList.add("hidden");
-            document.getElementById("testEkrani").classList.remove("hidden");
-            document.getElementById("testBaslik").innerText = "Hata Sayfası";
-            document.getElementById("sayac").innerText = "--:--";
-            return; 
-        }
-
-        document.getElementById("menuEkrani").classList.add("hidden");
-        document.getElementById("testEkrani").classList.remove("hidden");
-        if (document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(e=>{});
-
-        ihlalSayisi = 0;
-        document.addEventListener("visibilitychange", ihlalTakip);
-
-        let testAdi = isKlasik ? "Klasik Sınav (Açık Uçlu)" : "Çoktan Seçmeli Test";
-        if (window.MENU_VERI && aktifOda) {
-            const testData = window.MENU_VERI[aktifOda].testler.find(t => t.id === testKodu);
-            if (testData) testAdi = testData.baslik;
-        }
-        document.getElementById("testBaslik").innerText = testAdi;
-
-        sayacBaslat(isKlasik ? 40 * 60 : 30 * 60);
-
-        flagged = {};
-        autoSaveData = { cevaplar: {}, flagged: {}, ihlal: 0, testKodu: testKodu, ogrenci: ogrenci, startTime: Date.now() };
-
-        if (isKlasik) {
-            renderKlasik(alan, hamSorular);
-        } else {
-            suankiSorular = shuffle(JSON.parse(JSON.stringify(hamSorular))).map(s => {
-                s.shuffledOptions = shuffle([...s.secenekler]); return s;
-            });
-            renderTest(alan);
-        }
-        updateProgress();
-        saveToLocal();
-    }
-
-    function cleanText(text) { return text.replace(/^[A-E]\)\s*/, ''); }
-
-    function renderTest(alan) {
-        const map = document.getElementById("navMap");
-        map.innerHTML = "";
-        enableDragScroll(map); 
-        
-        suankiSorular.forEach((soru, index) => {
-            const dot = document.createElement("div");
-            dot.className = "nav-dot"; dot.innerText = index + 1; dot.id = "dot-" + index;
-            dot.onclick = () => document.getElementById("soru-kart-" + index).scrollIntoView({behavior: "smooth"});
-            map.appendChild(dot);
-
-            const kart = document.createElement("div");
-            kart.className = "question-card"; kart.id = "soru-kart-" + index;
-            
-            let qHtml = "<div class='question-header'>";
-            let konuEtiketi = soru.robotKonu ? " <span style='font-size:13px; font-weight:600; color:var(--text-color); opacity:0.6; margin-left: 8px;'>[" + soru.robotKonu + "]</span>" : "";
-            qHtml += "<span class='question-number'>Soru " + (index + 1) + konuEtiketi + "</span>";
-            qHtml += "<button class='flag-btn' id='flag-" + index + "' onclick='bayrakKoy(" + index + ")'><i class=\"fa-solid fa-flag\"></i> Sonra Bak</button>";
-            qHtml += "</div>";
-            qHtml += "<div class='question-text'>" + soru.soru + "</div>";
-            qHtml += "<div class='options'>";
-            
-            const labels = ["A", "B", "C", "D", "E"];
-            soru.shuffledOptions.forEach((optText, i) => {
-                const cleanOpt = cleanText(optText);
-                const safeOpt = cleanOpt.replace(/'/g, "\\'");
-                qHtml += "<label><input type='radio' name='soru" + index + "' value='" + safeOpt + "' onchange=\"cevapVerildi(" + index + ", '" + safeOpt + "')\"> <b>" + labels[i] + ")</b> " + cleanOpt + "</label>";
-            });
-            qHtml += "</div>";
-            kart.innerHTML = qHtml;
-            alan.appendChild(kart);
-        });
-    }
-
-    function renderKlasik(alan, sourceSorular) {
-        const map = document.getElementById("navMap");
-        map.innerHTML = "";
-        enableDragScroll(map); 
-
-        sourceSorular.forEach((item, index) => {
-            const div = document.createElement("div");
-            div.className = "question-card";
-            
-            let cHtml = "<div class='question-text'>Soru " + (index+1) + ": " + item.soru + "</div>";
-            cHtml += "<text" + "area id='klasikCevap" + index + "' oninput='cevapVerildi(" + index + ", this.value)' style='width:100%; height:140px;' placeholder='Cevabınızı buraya yazınız...'></text" + "area>";
-            
-            div.innerHTML = cHtml;
-            alan.appendChild(div);
-        });
-    }
-
-    function cevapVerildi(index, value) {
-        autoSaveData.cevaplar[index] = value;
-        if(!aktifTest.includes('klasik')) { document.getElementById("dot-" + index).classList.add("answered"); updateProgress(); }
-        saveToLocal();
-    }
-
-    function bayrakKoy(index) {
-        const btn = document.getElementById("flag-" + index);
-        const dot = document.getElementById("dot-" + index);
-        if (flagged[index]) {
-            delete flagged[index]; delete autoSaveData.flagged[index];
-            btn.classList.remove("active"); dot.classList.remove("flagged"); btn.innerHTML = '<i class="fa-solid fa-flag"></i> Sonra Bak';
-        } else {
-            flagged[index] = true; autoSaveData.flagged[index] = true;
-            btn.classList.add("active"); dot.classList.add("flagged"); btn.innerHTML = '<i class="fa-solid fa-flag"></i> İşaretlendi';
-        }
-        saveToLocal();
-    }
-
-    function updateProgress() {
-        if(!aktifTest || aktifTest.includes('klasik') || suankiSorular.length === 0) return;
-        const answered = Object.keys(autoSaveData.cevaplar).length;
-        document.getElementById("progress-bar").style.width = ((answered / suankiSorular.length) * 100) + "%";
-    }
-
-    function saveToLocal() {
-        autoSaveData.ihlal = ihlalSayisi; localStorage.setItem('sinavSession', JSON.stringify(autoSaveData));
-    }
-
-    function restoreSession(data) {
-        document.getElementById("girisEkrani").classList.add("hidden");
-        document.getElementById("menuEkrani").classList.remove("hidden");
-        ogrenci = data.ogrenci; document.getElementById("kullaniciAdiSpan").innerText = ogrenci.ad;
-        watermarkOlustur(ogrenci.ad + " " + ogrenci.no);
-        document.getElementById("btnSozluk").classList.remove("hidden");
-        if(document.getElementById("btnDuyuru")) document.getElementById("btnDuyuru").classList.remove("hidden");
-    }
-
-    function ihlalTakip() { if (!document.hidden) return; ihlalSayisi++; document.title = "⚠️ UYARI (" + ihlalSayisi + ") - Sekme Değiştirildi!"; saveToLocal(); }
-
-    function sayacBaslat(saniye) {
-        clearInterval(timerInterval); baslangicZamani = new Date(); let kalan = saniye;
-        const display = document.getElementById("sayac");
-        timerInterval = setInterval(() => {
-            let dk = Math.floor(kalan / 60); let sn = kalan % 60;
-            display.innerText = dk + ":" + (sn < 10 ? '0' : '') + sn;
-            if (--kalan < 0) { clearInterval(timerInterval); alert("Süre doldu!"); testiBitir(true); }
-        }, 1000);
-    }
-
-    function shuffle(array) {
-        for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; }
-        return array;
-    }
-	function watermarkOlustur(text) {
-        
-    }
-
-    function ozetGoster() {
-        const isKlasik = aktifTest.includes('klasik');
-        let sourceSorular = typeof window.allTests !== 'undefined' && window.allTests[aktifTest] ? window.allTests[aktifTest] : [];
-        const toplam = isKlasik ? sourceSorular.length : suankiSorular.length;
-        if(toplam === 0) { alert("Test boştur."); return; }
-        
-        const cevaplanan = Object.keys(autoSaveData.cevaplar).length;
-        const bos = toplam - cevaplanan;
-        const isaretli = Object.keys(flagged).length;
-
-        let oHtml = "<div class='modal-stat'><i class=\"fa-solid fa-check\"></i> Cevaplanan: <b>" + cevaplanan + "</b></div>";
-        oHtml += "<div class='modal-stat' style='color:" + (bos>0?'#e74c3c':'#27ae60') + "'><i class=\"fa-solid fa-triangle-exclamation\"></i> Boş Bırakılan: <b>" + bos + "</b></div>";
-        oHtml += "<div class='modal-stat' style='color:#f39c12'><i class=\"fa-solid fa-flag\"></i> İşaretlenen: <b>" + isaretli + "</b></div>";
-        oHtml += "<p style='margin-top: 20px; font-weight: 500;'>Sınavı bitirmek istediğinize emin misiniz?</p>";
-        
-        document.getElementById("modalIcerik").innerHTML = oHtml;
-        document.getElementById("ozetModal").style.display = "block";
-    }
-
-    function modalKapat() { document.getElementById("ozetModal").style.display = "none"; }
-
-    function testiBitir(otomatik = false) {
-        modalKapat(); clearInterval(timerInterval);
-        document.removeEventListener("visibilitychange", ihlalTakip);
-        localStorage.removeItem('sinavSession'); 
-
-        if (aktifTest && !aktifTest.includes('robot_sinavi')) {
-            let cozulenler = JSON.parse(localStorage.getItem('cozulenTestler')) || [];
-            if (!cozulenler.includes(aktifTest)) {
-                cozulenler.push(aktifTest);
-                localStorage.setItem('cozulenTestler', JSON.stringify(cozulenler));
-            }
-        }
-
-        const bitisZamani = new Date();
-        const gecenSureSn = Math.floor((bitisZamani - baslangicZamani) / 1000);
-        const gecenSureStr = Math.floor(gecenSureSn / 60) + " dk " + (gecenSureSn % 60) + " sn";
-        let raporMetni = ""; let puan = 0; let detayHtml = "";
-
-        if (aktifTest.includes('klasik')) {
-            raporMetni = "[KLASİK] ";
-            detayHtml = "<h3 style='color:var(--text-color); border-bottom:2px solid var(--card-border); padding-bottom:15px; margin-bottom: 20px;'>Cevap Anahtarı</h3>";
-            let sourceSorular = typeof window.allTests !== 'undefined' && window.allTests[aktifTest] ? window.allTests[aktifTest] : [];
-            
-            sourceSorular.forEach((item, index) => {
-                const cvp = autoSaveData.cevaplar[index] || "";
-                raporMetni += "S" + (index+1) + ": " + cvp.replace(/\n/g," ") + " || ";
-                detayHtml += "<div class='explanation-card'><div style='font-weight:700; margin-bottom:10px; font-size:16px;'>Soru " + (index+1) + ": " + item.soru + "</div><div style='margin-bottom:15px; padding: 10px; background: rgba(230, 126, 34, 0.1); border-radius: 8px;'><span style='color:#e67e22; font-weight:800; display:block; margin-bottom:5px;'>Sizin Cevabınız:</span>" + (cvp || "<i>Boş bırakıldı</i>") + "</div><div style='background:rgba(39, 174, 96, 0.1); padding:15px; border-radius:8px;'><span style='color:#27ae60; font-weight:800; display:block; margin-bottom:5px;'>Beklenen Cevap:</span>" + item.cevap + "</div></div>";
-            });
-
-            puan = "DEĞERLENDİRİLECEK";
-            document.getElementById("klasikMesaj").style.display = "block";
-        } else {
-            let dogruSayisi = 0; raporMetni = "[" + aktifTest.toUpperCase() + "] ";
-            
-            suankiSorular.forEach((soru, index) => {
-                const secilen = autoSaveData.cevaplar[index] || "BOŞ";
-                const dogruMetin = cleanText(soru.cevap);
-                const isCorrect = (secilen === dogruMetin);
-                
-                if (isCorrect) {
-                    dogruSayisi++;
-                    detayHtml += "<div class='explanation-card correct'><div style='font-weight:800; font-size:16px; margin-bottom:8px; color:#27ae60;'>Soru " + (index+1) + " <i class=\"fa-solid fa-check\"></i></div><div style='margin-bottom:8px; font-weight: 500;'>" + soru.soru + "</div><div style='margin-bottom:8px;'>Sizin Cevabınız: <b>" + secilen + "</b></div><div style='opacity:0.9; font-size:14px;'><i>" + (soru.aciklama || "") + "</i></div></div>";
-                } else {
-                    detayHtml += "<div class='explanation-card wrong'><div style='font-weight:800; font-size:16px; margin-bottom:8px; color:#e74c3c;'>Soru " + (index+1) + " <i class=\"fa-solid fa-xmark\"></i></div><div style='margin-bottom:8px; font-weight: 500;'>" + soru.soru + "</div><div style='margin-bottom:4px; text-decoration: line-through; opacity: 0.8;'>Sizin Cevabınız: " + secilen + "</div><div style='margin-bottom:8px;'>Doğru Cevap: <b style='color:#e74c3c;'>" + dogruMetin + "</b></div><div style='opacity:0.9; font-size:14px;'><i>" + (soru.aciklama || "") + "</i></div></div>";
-                    raporMetni += "S" + (index+1) + ":Y (" + secilen + ") | ";
-                }
-            });
-
-            puan = Math.round((dogruSayisi / suankiSorular.length) * 100);
-            raporMetni += " Doğru: " + dogruSayisi + "/" + suankiSorular.length;
-            
-            const msgBox = document.getElementById("ozelMotivasyonKutusu");
-            if(puan < 50) { msgBox.innerHTML = "Daha fazla çalışmalısın. <i class=\"fa-solid fa-stop\"></i>"; msgBox.style.color = "#e74c3c"; msgBox.style.background = "rgba(231, 76, 60, 0.1)"; }
-            else if(puan < 85) { msgBox.innerHTML = "İyi gidiyorsun, biraz daha gayret! <i class=\"fa-solid fa-thumbs-up\"></i>"; msgBox.style.color = "#f39c12"; msgBox.style.background = "rgba(243, 156, 18, 0.1)"; }
-            else { msgBox.innerHTML = "Tebrikler! Harika bir sonuç. <i class=\"fa-solid fa-star\"></i>"; msgBox.style.color = "#27ae60"; msgBox.style.background = "rgba(39, 174, 96, 0.1)"; }
-            
-            document.getElementById("puanKutusu").style.display = "block";
-            document.getElementById("puanGostergesi").innerText = puan + " Puan";
-        }
-
-        document.getElementById("testEkrani").classList.add("hidden");
-        document.getElementById("sonucEkrani").classList.remove("hidden");
-        document.getElementById("bitirmeSuresi").innerText = "Süre: " + gecenSureStr;
-        document.getElementById("detayliCozumler").innerHTML = detayHtml;
-
-        if(ihlalSayisi > 0) {
-            document.getElementById("ihlalSayisi").innerHTML = "<i class=\"fa-solid fa-triangle-exclamation\"></i> " + ihlalSayisi + " kez sekme değiştirdiniz!";
-            raporMetni += " [İHLAL: " + ihlalSayisi + "]";
-        } else {
-            document.getElementById("ihlalSayisi").innerHTML = "<i class=\"fa-solid fa-check\"></i> Sınav odağı korundu.";
-            document.getElementById("ihlalSayisi").style.color = "#27ae60";
-        }
-
-        const data = { isim: ogrenci.ad, sinif: ogrenci.sinif, numara: ogrenci.no, puan: puan, rapor: "(Süre: " + gecenSureStr + ") " + raporMetni };
-        fetch(SCRIPT_URL, { method: 'POST', mode: 'no-cors', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) }).catch(e => console.log(e));
-    }
-
-    function anasayfayaDon() {
-        document.getElementById("sonucEkrani").classList.add("hidden");
-        document.getElementById("menuEkrani").classList.remove("hidden");
-        if(typeof salonaDon === 'function') salonaDon();
-        aktifTest = null; ihlalSayisi = 0;
-        document.getElementById("puanKutusu").style.display = "none";
-        document.getElementById("klasikMesaj").style.display = "none";
-        window.scrollTo(0,0);
-    }
-
-    function testtenCik() {
-        if(confirm("Testten çıkmak istediğinize emin misiniz? Kaydetmediğiniz ilerlemeler kaybolacaktır.")) {
-            clearInterval(timerInterval); document.removeEventListener("visibilitychange", ihlalTakip);
-            localStorage.removeItem('sinavSession'); document.getElementById("testEkrani").classList.add("hidden");
-            document.getElementById("menuEkrani").classList.remove("hidden");
-            aktifTest = null; ihlalSayisi = 0; window.scrollTo(0,0);
-        }
-    }
-
-    function testAra() {
-        const input = document.getElementById('testArama');
-        const clearBtn = document.getElementById('aramaTemizle');
-        const filter = input.value.toLocaleLowerCase('tr-TR');
-        const testItems = document.querySelectorAll('.test-item-row');
-        
-        if (filter.length > 0) { clearBtn.style.display = 'flex'; } 
-        else { clearBtn.style.display = 'none'; }
-
-        testItems.forEach(item => {
-            const title = item.querySelector('.test-item-title').innerText.toLocaleLowerCase('tr-TR');
-            const desc = item.querySelector('.test-item-meta').innerText.toLocaleLowerCase('tr-TR');
-            if (title.includes(filter) || desc.includes(filter)) {
-                item.style.display = ''; 
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    }
-
-    function aramaTemizleBtn() {
-        const input = document.getElementById('testArama');
-        input.value = "";
-        testAra();
-        input.focus();
-    }
-
-    function robotGoster() {
-        if (typeof window.MENU_VERI === 'undefined') {
-            alert("Sistem Hatası: Soru kataloğu yüklenemedi."); return;
-        }
-        const uniteSelect = document.getElementById('robotUnite');
-        uniteSelect.innerHTML = '<option value="tumu">Tüm Ünitelerden Karma</option>';
-        for (const [key, value] of Object.entries(window.MENU_VERI)) {
-            uniteSelect.innerHTML += `<option value="${key}">${value.baslik}</option>`;
-        }
-        robotKonuGuncelle();
-        document.getElementById('robotModal').style.display = 'block';
-    }
-
-    function robotKonuGuncelle() {
-        const uniteSelect = document.getElementById('robotUnite').value;
-        const konuSelect = document.getElementById('robotKonu');
-        konuSelect.innerHTML = '<option value="tumu">Tüm Konulardan Karma</option>';
-
-        let konular = new Set();
-        if (uniteSelect === 'tumu') {
-            for (const key in window.MENU_VERI) {
-                window.MENU_VERI[key].testler.forEach(t => {
-                    if (!t.isKlasik && t.konu && t.konu !== "Geçmişin İnşa Sürecinde Tarih") konular.add(t.konu);
-                });
-            }
-        } else {
-            window.MENU_VERI[uniteSelect].testler.forEach(t => {
-                if (!t.isKlasik && t.konu && t.konu !== "Geçmişin İnşa Sürecinde Tarih") konular.add(t.konu);
-            });
-        }
-
-        konular.forEach(k => {
-            const safeK = k.replace(/'/g, "\\'");
-            konuSelect.innerHTML += `<option value="${safeK}">${k}</option>`;
-        });
-    }
-
-    function robotKapat() { document.getElementById('robotModal').style.display = 'none'; }
-
-    function robotSinavBaslat() {
-        const unite = document.getElementById('robotUnite').value;
-        const konu = document.getElementById('robotKonu').value;
-        const sayi = parseInt(document.getElementById('robotSoruSayisi').value);
-
-        let testIdHavuzu = [];
-
-        for (const [key, data] of Object.entries(window.MENU_VERI)) {
-            if (unite !== 'tumu' && key !== unite) continue;
-
-            data.testler.forEach(t => {
-                if (t.isKlasik) return; 
-                if (t.konu === "Geçmişin İnşa Sürecinde Tarih") return; 
-                if (konu !== 'tumu' && t.konu !== konu) return;
-                testIdHavuzu.push({id: t.id, konu: t.konu});
-            });
-        }
-
-        let soruHavuzu = [];
-        testIdHavuzu.forEach(tItem => {
-            if (window.allTests && window.allTests[tItem.id]) {
-                let testSorulari = JSON.parse(JSON.stringify(window.allTests[tItem.id]));
-                testSorulari.forEach(s => s.robotKonu = tItem.konu);
-                soruHavuzu = soruHavuzu.concat(testSorulari);
-            }
-        });
-
-        if (soruHavuzu.length === 0) {
-            alert("Seçtiğiniz kriterlere uygun soru bulunamadı. Lütfen başka bir ünite/konu seçiniz.");
-            return;
-        }
-
-        soruHavuzu = shuffle(soruHavuzu);
-        let secilenSorular = soruHavuzu.slice(0, sayi);
-
-        if(typeof window.allTests === 'undefined') window.allTests = {};
-        window.allTests["robot_sinavi"] = secilenSorular;
-
-        robotKapat();
-        aktifOda = null; 
-        testSec("robot_sinavi");
-        
-        document.getElementById("testBaslik").innerHTML = '<i class="fa-solid fa-robot"></i> Özel Karma Sınav (' + secilenSorular.length + ' Soru)';
-    }
-
-    function yedekleGoster() { 
-        document.getElementById('yedekModal').style.display = 'block'; 
-        const dropdown = document.getElementById('hamburgerDropdown');
-        if(dropdown) dropdown.classList.remove('active');
-    }
-    
-    function yedekleKapat() { document.getElementById('yedekModal').style.display = 'none'; }
-
-    function verileriIndir() {
-        const data = {
-            aktifOgrenci: localStorage.getItem('aktifOgrenci'),
-            cozulenTestler: localStorage.getItem('cozulenTestler'),
-            tema: localStorage.getItem('tema'),
-            fontSize: localStorage.getItem('fontSize')
-        };
-        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
-        const a = document.createElement('a');
-        a.href = dataStr;
-        a.download = "Tarih_Portali_Yedek.json";
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-    }
-
-    function veriYukle(event) {
-        const file = event.target.files[0];
-        if(!file) return;
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            try {
-                const data = JSON.parse(e.target.result);
-                if(data.aktifOgrenci) localStorage.setItem('aktifOgrenci', data.aktifOgrenci);
-                if(data.cozulenTestler) localStorage.setItem('cozulenTestler', data.cozulenTestler);
-                if(data.tema) localStorage.setItem('tema', data.tema);
-                if(data.fontSize) localStorage.setItem('fontSize', data.fontSize);
-                alert("Veriler başarıyla yüklendi! Sayfa yenileniyor.");
-                location.reload();
-            } catch (err) {
-                alert("Hata: Geçersiz yedek dosyası!");
-            }
-        };
-        reader.readAsText(file);
-    }
-
-    const sifreModal = document.getElementById("sifreModal");
-    const sifreBtn = document.getElementById("sifreDegistirBtn");
-    const sifreKaydetBtn = document.getElementById("sifreKaydetBtn");
-    const sifreMesajDiv = document.getElementById("sifreMesaj");
-
-    if(sifreBtn) {
-        sifreBtn.onclick = function() { 
-            sifreModal.style.display = "block"; 
-            sifreMesajDiv.innerHTML = ""; 
-            const dropdown = document.getElementById('hamburgerDropdown');
-            if(dropdown) dropdown.classList.remove('active');
-        };
-    }
-
-    function sifreKapat() {
-        sifreModal.style.display = "none";
-        document.getElementById("eskiSifre").value = "";
-        document.getElementById("yeniSifre").value = "";
-    }
-
-    if(sifreKaydetBtn) {
-        sifreKaydetBtn.onclick = function() {
-            const no = ogrenci.no;
-            const eski = document.getElementById("eskiSifre").value.trim();
-            const yeni = document.getElementById("yeniSifre").value.trim();
-
-            if(!eski || !yeni) {
-                sifreMesajDiv.innerHTML = "Lütfen eski ve yeni şifrenizi girin.";
-                sifreMesajDiv.style.color = "#e74c3c";
-                return;
-            }
-
-            sifreKaydetBtn.innerText = "Güncelleniyor...";
-            sifreKaydetBtn.disabled = true;
-
-            fetch(SIFRE_API_URL, {
-                method: 'POST',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify({ islem: "sifre_degistir", ogrenciNo: no, eskiSifre: eski, yeniSifre: yeni })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if(data.durum === "basarili") {
-                    sifreMesajDiv.innerHTML = data.mesaj;
-                    sifreMesajDiv.style.color = "#27ae60";
-                    document.getElementById("eskiSifre").value = "";
-                    document.getElementById("yeniSifre").value = "";
-                } else {
-                    sifreMesajDiv.innerHTML = data.mesaj;
-                    sifreMesajDiv.style.color = "#e74c3c";
-                }
-            })
-            .catch(error => {
-                sifreMesajDiv.innerHTML = "Bağlantı hatası. Lütfen tekrar deneyin.";
-                sifreMesajDiv.style.color = "#e74c3c";
-            })
-            .finally(() => {
-                sifreKaydetBtn.innerText = "Şifreyi Güncelle";
-                sifreKaydetBtn.disabled = false;
-            });
-        };
-    }
-    
-    let odevKuyrugu = [];
-    let suAnkiYuklemeIndeksi = 0;
-    let yuklemeId = "";
-    
-    function odevGoster() {
-        if(!ogrenci || !ogrenci.ad) { alert("Lütfen önce ana ekrandan giriş yapın."); return; }
-        document.getElementById('odevModal').style.display = 'block';
-        odevKuyrugu = [];
-        document.getElementById('secilenDosyalarListesi').innerHTML = "";
-        document.getElementById('odevGonderBtn').disabled = true;
-        document.getElementById('yuklemeBariBg').style.display = 'none';
-        document.getElementById('genelYuklemeDurumu').style.display = 'none';
-        document.getElementById('dosyaSecici').value = "";
-    }
-
-    function odevKapat() { document.getElementById('odevModal').style.display = 'none'; }
-
-    function dosyalariHazirla(event) {
-        const files = event.target.files;
-        if(files.length === 0) return;
-        if(files.length > 10) { alert("Tek seferde en fazla 10 dosya seçebilirsiniz."); return; }
-        
-        odevKuyrugu = Array.from(files);
-        const listeDiv = document.getElementById('secilenDosyalarListesi');
-        listeDiv.innerHTML = "";
-        
-        odevKuyrugu.forEach((file, index) => {
-            listeDiv.innerHTML += `<div class="file-item" id="fileItem-${index}">
-                <span><i class="${file.type.includes('pdf') ? 'fa-solid fa-file-pdf' : 'fa-solid fa-image'}"></i> ${file.name.substring(0,20)}...</span>
-                <span class="status waiting" id="fileStatus-${index}">Bekliyor</span>
-            </div>`;
-        });
-        
-        document.getElementById('odevGonderBtn').disabled = false;
-    }
-
-    async function odevleriGonder() {
-        if(odevKuyrugu.length === 0) return;
-        
-        document.getElementById('odevGonderBtn').disabled = true;
-        document.getElementById('odevIptalBtn').disabled = true;
-        document.getElementById('yuklemeBariBg').style.display = 'block';
-        document.getElementById('genelYuklemeDurumu').style.display = 'block';
-        
-        yuklemeId = Math.random().toString(36).substring(2, 8).toUpperCase(); 
-        suAnkiYuklemeIndeksi = 0;
-        
-        kuyruguIsle();
-    }
-
-    async function kuyruguIsle() {
-        if (suAnkiYuklemeIndeksi >= odevKuyrugu.length) {
-            document.getElementById('genelYuklemeDurumu').innerText = "Tüm dosyalar başarıyla yüklendi!";
-            document.getElementById('odevIptalBtn').innerText = "Kapat";
-            document.getElementById('odevIptalBtn').disabled = false;
-            alert("Ödevleriniz başarıyla öğretmeninize iletildi!");
-            return;
-        }
-        
-        let i = suAnkiYuklemeIndeksi;
-        let file = odevKuyrugu[i];
-        
-        document.getElementById(`fileStatus-${i}`).innerText = "Yükleniyor...";
-        document.getElementById(`fileStatus-${i}`).className = "status uploading";
-        document.getElementById('genelYuklemeDurumu').innerText = `${i + 1} / ${odevKuyrugu.length} Yükleniyor...`;
-        document.getElementById('yuklemeBariFill').style.width = ((i) / odevKuyrugu.length * 100) + "%";
-
-        try {
-            let base64Data = "";
-            if (file.type.startsWith('image/')) {
-                base64Data = await resimSikistirVeBase64Yap(file); 
-            } else {
-                base64Data = await fileToBase64(file);
-            }
-            
-            const payload = {
-                islem: "odev_yukle",
-                ad: ogrenci.ad,
-                no: ogrenci.no,
-                sinif: ogrenci.sinif,
-                dosyaAdi: file.name,
-                mimeType: file.type,
-                base64Data: base64Data.split("base64,")[1],
-                yuklemeId: yuklemeId
-            };
-
-            await fetch(ODEV_SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-                body: JSON.stringify(payload)
-            });
-
-            document.getElementById(`fileStatus-${i}`).innerText = "Başarılı";
-            document.getElementById(`fileStatus-${i}`).className = "status success";
-            
-        } catch (error) {
-            console.error(error);
-            document.getElementById(`fileStatus-${i}`).innerText = "Hata!";
-            document.getElementById(`fileStatus-${i}`).className = "status error";
-        }
-
-        suAnkiYuklemeIndeksi++;
-        document.getElementById('yuklemeBariFill').style.width = ((suAnkiYuklemeIndeksi) / odevKuyrugu.length * 100) + "%";
-        
-        setTimeout(kuyruguIsle, 1000); 
-    }
-
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = error => reject(error);
-        });
-    }
-
-    function resimSikistirVeBase64Yap(file) {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 1200;
-                    const MAX_HEIGHT = 1200;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } 
-                    else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    resolve(canvas.toDataURL(file.type, 0.7)); 
-                };
-            };
-        });
-    }
-
-    window.addEventListener('click', function(event) { 
-        if (event.target.classList.contains('modal')) { 
-            event.target.style.display = 'none'; 
-        } 
-        
-        /* --- YENİ EKLENEN: MENÜ DIŞINA TIKLANINCA MENÜYÜ KAPATMA MOTORU --- */
-        const dropdown = document.getElementById('hamburgerDropdown');
-        if (dropdown && dropdown.classList.contains('active') && !event.target.closest('.dropdown-menu-container')) {
-            dropdown.classList.remove('active');
-        }
-    });
-    
-</script>
-
+<script src="sinif9sorular/sinif9haritalar.js"></script>
+<script src="motor_sinif9.js"></script>
 </body>
 </html>

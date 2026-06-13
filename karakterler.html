@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Tarihi Şahsiyetler — Tarih Portalı</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --bg-app: #e8e4d9; --panel-bg: #fdfcf9; --ink: #1a1815; --muted: #736b60; --border-light: rgba(0,0,0,0.06); --c-9: #8E523A; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg-app); color: var(--ink); font-family: 'Inter', sans-serif; overflow: hidden; }
+.header { padding: 24px 20px 16px; text-align: center; }
+
+/* Animasyonlar */
+.swipe-left { animation: swipeL 0.5s forwards; }
+.swipe-right { animation: swipeR 0.5s forwards; }
+@keyframes swipeL { to { transform: translateX(-200px) rotate(-20deg) scale(0.8); opacity: 0; } }
+@keyframes swipeR { to { transform: translateX(200px) rotate(20deg) scale(0.8); opacity: 0; } }
+</style>
+<link rel="stylesheet" href="stiller/portal.css">
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" style="color: var(--muted); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; margin-bottom: 10px; display: inline-block;"><i class="fa-solid fa-arrow-left"></i> Portala Dön</a>
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 2rem;"><i class="fa-solid fa-masks-theater" style="color: #9B1C1C;"></i> Şahsiyetler</h1>
+    <p style="font-size: 0.8rem; color: var(--muted); margin-top: 5px;">Tarihe Yön Veren Sözler</p>
+</div>
+
+<div class="cards-container" id="cards-container">
+    <div id="end-message" style="position: absolute; text-align: center; font-family: 'Playfair Display', serif; opacity: 0; transition: opacity 0.5s; z-index: 1;">
+        <h2 style="color: var(--c-9); margin-bottom: 10px;">Deste Bitti!</h2>
+        <p style="color: var(--muted); font-size: 0.9rem;">Kart Kaşifi rozetini kazandın.</p>
+    </div>
+    <!-- Kartlar JS ile Yüklenecek -->
+</div>
+
+<div style="text-align: center; padding: 20px; font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--muted);">
+    Karakterleri incelemek için aşağıdaki butonları kullanın.
+</div>
+
+<script src="motorlar/portal.js"></script>
+<script>
+const charDB = [
+    { name: "Mustafa Kemal Atatürk", title: "Türkiye Cumhuriyeti Kurucusu", image: "https://upload.wikimedia.org/wikipedia/commons/a/a8/Ataturk1930s.jpg", quote: "Tarih yazmak, tarih yapmak kadar mühimdir. Yazan yapana sadık kalmazsa değişmeyen hakikat, insanlığı şaşırtacak bir mahiyet alır." },
+    { name: "Fatih Sultan Mehmet", title: "Osmanlı Padişahı", image: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Gentile_Bellini_-_Portrait_of_Sultan_Mehmed_II_-_National_Gallery_London.jpg", quote: "İmparatorluğun sınırlarını kılıçla genişletmek kolaydır. Zor olan, o sınırların içindeki adaleti sağlamaktır." },
+    { name: "Sokrates", title: "Antik Yunan Filozofu", image: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Socrates_Louvre.jpg", quote: "Bildiğim tek şey, hiçbir şey bilmediğimdir." },
+    { name: "Napolyon Bonapart", title: "Fransa İmparatoru", image: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg", quote: "Eğer dünya tek bir devlet olsaydı, başkenti İstanbul olurdu." },
+    { name: "İbn-i Haldun", title: "Sosyoloji'nin Kurucusu", image: "https://upload.wikimedia.org/wikipedia/commons/3/30/Ibn_Khaldun_statue_in_Tunis_%28cropped%29.jpg", quote: "Coğrafya kaderdir." },
+    { name: "Mete Han", title: "Büyük Hun İmparatoru", image: "https://upload.wikimedia.org/wikipedia/commons/6/6f/Mete_Khan_statue.jpg", quote: "Okum nereye düşerse, mızraklarınız oraya saplansın!" },
+    { name: "Galileo Galilei", title: "Astronomi Bilgini", image: "https://upload.wikimedia.org/wikipedia/commons/c/cc/Justus_Sustermans_-_Portrait_of_Galileo_Galilei%2C_1636.jpg", quote: "Siz ne derseniz deyin, dünya yine de dönüyor." }
+];
+
+let currentIndex = 0;
+
+function initCards() {
+    const container = document.getElementById('cards-container');
+    
+    // Kartları ters sırayla ekleyelim ki ilk kart en üstte (z-index yüksek) olsun.
+    for (let i = charDB.length - 1; i >= 0; i--) {
+        const c = charDB[i];
+        const el = document.createElement('div');
+        el.className = 'swipe-card';
+        el.id = 'card-' + i;
+        el.style.zIndex = charDB.length - i;
+        
+        // Ufak bir rotasyon ve kayma efekti vererek deste hissi uyandıralım
+        let randomRot = (Math.random() * 4) - 2;
+        let scale = 1 - (i * 0.02);
+        let topOffset = i * 5;
+        
+        // Sadece ilk 3 kartı görünür ve dizilmiş yap, gerisini düz ve arkada bırak
+        if(i > 2) {
+            randomRot = 0; scale = 0.94; topOffset = 15;
+        }
+        
+        el.style.transform = `translateY(${topOffset}px) scale(${scale}) rotate(${randomRot}deg)`;
+        
+        el.innerHTML = `
+            <img src="${c.image}" alt="${c.name}" class="card-image">
+            <div class="card-name">${c.name}</div>
+            <div class="card-title">${c.title}</div>
+            <div class="card-quote">"${c.quote}"</div>
+            <div class="card-actions">
+                <button class="c-btn no" onclick="swipeCard(${i}, 'left')"><i class="fa-solid fa-xmark"></i></button>
+                <button class="c-btn yes" onclick="swipeCard(${i}, 'right')"><i class="fa-solid fa-heart"></i></button>
+            </div>
+        `;
+        container.appendChild(el);
+    }
+}
+
+function swipeCard(index, direction) {
+    if(index !== currentIndex) return; // Sadece en üstteki karta tıklanabilir
+    
+    const card = document.getElementById('card-' + index);
+    if(!card) return;
+    
+    // Animasyon ekle
+    if(direction === 'left') card.classList.add('swipe-left');
+    else card.classList.add('swipe-right');
+    
+    setTimeout(() => {
+        card.style.display = 'none';
+        currentIndex++;
+        
+        // Alttaki kartların pozisyonunu güncelle
+        updateDeckPositions();
+        
+        if (currentIndex >= charDB.length) {
+            document.getElementById('end-message').style.opacity = '1';
+            unlockBadge('kart_kasifi');
+        }
+    }, 500);
+}
+
+function updateDeckPositions() {
+    for (let i = currentIndex; i < charDB.length; i++) {
+        let card = document.getElementById('card-' + i);
+        let pos = i - currentIndex; // Yeni derinlik sırası
+        
+        let randomRot = (Math.random() * 4) - 2;
+        let scale = 1 - (pos * 0.02);
+        let topOffset = pos * 5;
+        
+        if(pos > 2) { randomRot = 0; scale = 0.94; topOffset = 15; }
+        
+        card.style.transform = `translateY(${topOffset}px) scale(${scale}) rotate(${randomRot}deg)`;
+    }
+}
+
+window.addEventListener('DOMContentLoaded', initCards);
+</script>
+</body>
+</html>

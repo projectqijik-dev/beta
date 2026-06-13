@@ -1,22 +1,24 @@
 {
-  "name": "Boğaziçi Koleji Tarih Portalı",
-  "short_name": "Tarih Portalı",
-  "description": "Özel Batman Boğaziçi Koleji MTAL Tarih Eğitim Portalı",
+  "name": "Boğaziçi Tarih",
+  "short_name": "Boğaziçi Tarih",
+  "description": "Boğaziçi Koleji Tarih Dersi Eğitim Uygulaması",
   "start_url": "./index.html",
   "display": "standalone",
-  "background_color": "#f4f6f8",
+  "background_color": "#ffffff",
   "theme_color": "#1a1a1a",
   "orientation": "portrait",
   "icons": [
     {
-      "src": "icon-192.png",
+      "src": "icon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     },
     {
-      "src": "icon-512.png",
+      "src": "icon-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any maskable"
     }
   ]
 }

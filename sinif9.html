@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Boğaziçi MTAL Tarih Dersi Eğitim Portalı</title>
+    <title>9. Sınıf Tarih Portalı – Boğaziçi MTAL</title>
+	<link rel="icon" type="image/png" href="https://depo.kirkyama.uk/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Josefin+Sans:wght@300;400;600;700&family=Marcellus&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -15,137 +16,8 @@
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
     </script>
 
-    <link rel="stylesheet" href="sinif9stil.css">
-
-    <style>
-        /* --- ANTİK MISIR GENEL TEMA VE TAM EKRAN DÜZENİ --- */
-        body.egypt-theme {
-            background: #0D1117 !important;
-            color: #F4E4B0 !important;
-        }
-        
-        body:has(.container.login-mode) {
-            margin: 0 !important; 
-            padding: 0 !important;
-        }
-
-        /* Giriş Ekranına Özel Tam Ekran Modu */
-        .container.login-mode {
-            max-width: 100% !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            height: 100dvh !important;
-            overflow-y: auto !important;
-            overflow-x: hidden !important;
-            display: flex;
-            flex-direction: column;
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-        }
-
-/* Modern Butonların Karanlık Temaya Uyumlu Hali (Şeffaf) */
-        body.egypt-theme .settings-panel {
-            background: transparent !important;
-            border: none !important;
-            box-shadow: none !important;
-            padding: 10px 15px !important;
-        }
-        .container.login-mode .settings-panel {
-            position: fixed !important;
-            top: 15px !important;
-            right: 15px !important;
-            z-index: 9999 !important;
-        }
-
-        /* Arka Plan Efektleri (Tüm Sayfalarda Geçerli, Odak Modunda Gizlenir) */
-        .egypt-bg, .egypt-starfield, .egypt-pyramids {
-            position: fixed; inset: 0; pointer-events: none; transition: opacity 0.8s ease;
-        }
-        .egypt-bg {
-            background: radial-gradient(ellipse at 50% 0%, rgba(42,122,110,0.2) 0%, transparent 50%),
-                        radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.15) 0%, transparent 50%),
-                        linear-gradient(180deg, #0D1117 0%, #111820 100%);
-            z-index: -3;
-        }
-        .egypt-starfield { z-index: -2; overflow: hidden; }
-        .egypt-pyramids { top: auto; bottom: 0; height: 120px; z-index: -1; overflow: hidden; }
-        .egypt-pyramids svg { width: 100%; height: 100%; display: block; }
-        .egypt-star { position: absolute; border-radius: 50%; background: white; animation: egyptTwinkle ease-in-out infinite alternate; }
-        @keyframes egyptTwinkle { from { opacity: 0.1; } to { opacity: 0.8; } }
-
-        /* Odak Modu (Sınav ve Okuma Sırasında Dikkat Dağıtıcıları Gizle) */
-        body.focus-mode .egypt-bg,
-        body.focus-mode .egypt-starfield,
-        body.focus-mode .egypt-pyramids {
-            opacity: 0 !important;
-        }
-
-        /* Giriş Ekranı İçerik Stilleri (Sadece #girisEkrani içinde) */
-        #girisEkrani {
-            position: relative; width: 100%; min-height: 100%;
-            display: flex; align-items: center; justify-content: center;
-            font-family: 'Josefin Sans', sans-serif; z-index: 10;
-        }
-        #girisEkrani.hidden { display: none !important; }
-
-        .egypt-container { width: 100%; max-width: 420px; position: relative; z-index: 10; animation: egyptReveal 0.9s ease forwards; padding: 0 16px; margin: auto; }
-        @keyframes egyptReveal { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
-
-        .egypt-hiero { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
-        .egypt-hiero span { font-size: 18px; opacity: 0.55; color: #C9A84C; animation: hieroPulse 3s ease-in-out infinite alternate; }
-        .egypt-hiero span:nth-child(2) { animation-delay: 0.5s; }
-        .egypt-hiero span:nth-child(3) { animation-delay: 1s; }
-        .egypt-hiero span:nth-child(4) { animation-delay: 1.5s; }
-        .egypt-hiero span:nth-child(5) { animation-delay: 2s; }
-        @keyframes hieroPulse { from { opacity: 0.3; } to { opacity: 0.75; } }
-
-        .egypt-eye-ra { text-align: center; font-size: 32px; margin-bottom: 5px; color: #C9A84C; filter: drop-shadow(0 0 12px rgba(201,168,76,0.5)); animation: egyptGlow 2.5s ease-in-out infinite alternate; }
-        @keyframes egyptGlow { from { filter: drop-shadow(0 0 8px rgba(201,168,76,0.4)); } to { filter: drop-shadow(0 0 18px rgba(201,168,76,0.8)); } }
-
-        .egypt-header { text-align: center; margin-bottom: 15px; }
-        .egypt-title { font-family: 'Marcellus', serif; font-size: 28px; color: #F4E4B0; line-height: 1.1; margin: 0; text-shadow: 0 0 30px rgba(201,168,76,0.3), 0 2px 10px rgba(0,0,0,0.6); }
-        .egypt-title span { color: #E8A020; }
-        .egypt-school { margin-top: 5px; font-size: 11px; color: rgba(244,228,176,0.5); letter-spacing: 0.5px; }
-
-        .egypt-card {
-            background: linear-gradient(160deg, rgba(30,24,10,0.95) 0%, rgba(13,17,23,0.97) 100%);
-            border: 1px solid rgba(201,168,76,0.3); border-radius: 8px; padding: 18px 20px 15px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 0 50px rgba(42,122,110,0.15), 0 8px 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.3);
-        }
-        .egypt-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: linear-gradient(to right, #2A7A6E, #C9A84C, #E8A020, #C9A84C, #2A7A6E); }
-
-        .egypt-tabs { display: flex; gap: 0; margin-bottom: 15px; border: 1px solid rgba(201,168,76,0.2); border-radius: 4px; overflow: hidden; }
-        
-        .egypt-tab, #girisEkrani button.tab-btn.egypt-tab {
-            flex: 1 !important; padding: 10px 8px !important; font-family: 'Josefin Sans', sans-serif !important; font-size: 12px !important; font-weight: 600 !important; letter-spacing: 1px !important; text-transform: uppercase !important; border: none !important; background: transparent !important; color: rgba(201,168,76,0.4) !important; cursor: pointer !important; transition: all 0.25s !important; margin: 0 !important; border-radius: 0 !important; box-shadow: none !important; height: auto !important; max-width: none !important;
-        }
-        .egypt-tab.active, #girisEkrani button.tab-btn.egypt-tab.active { background: linear-gradient(135deg, rgba(42,122,110,0.7), rgba(42,122,110,0.4)) !important; color: #F4E4B0 !important; }
-        .egypt-tab:not(:last-child) { border-right: 1px solid rgba(201,168,76,0.15) !important; }
-
-        .egypt-field { margin-bottom: 12px; text-align: left; position: relative; z-index: 5; }
-        .egypt-label { display: block; font-size: 10px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #3BA898; margin-bottom: 6px; opacity: 0.85; }
-        .egypt-input-wrap { position: relative; }
-        .egypt-iicon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 14px; color: rgba(201,168,76,0.35); pointer-events: none; }
-        .egypt-input { width: 100%; padding: 10px 14px 10px 38px; background: rgba(13,17,23,0.8); border: 1px solid rgba(201,168,76,0.18); border-radius: 4px; color: #F4E4B0; font-family: 'Josefin Sans', sans-serif; font-size: 14px; font-weight: 400; outline: none; transition: all 0.25s; -webkit-appearance: none; box-sizing: border-box; }
-        .egypt-input option { background: #0D1117; color: #F4E4B0; }
-        .egypt-input::placeholder { color: rgba(244,228,176,0.2); font-weight: 300; }
-        .egypt-input:focus { border-color: rgba(42,122,110,0.7); background: rgba(42,122,110,0.08); box-shadow: 0 0 0 3px rgba(42,122,110,0.1), inset 0 1px 4px rgba(0,0,0,0.4); }
-
-        .egypt-btn, #girisEkrani button.action-btn.btn-login.egypt-btn {
-            width: 100% !important; padding: 12px 20px !important; margin-top: 4px !important; margin-bottom: 0 !important; background: linear-gradient(135deg, #2A7A6E 0%, #3BA898 100%) !important; border: 1px solid rgba(201,168,76,0.4) !important; border-radius: 4px !important; color: #F4E4B0 !important; font-family: 'Josefin Sans', sans-serif !important; font-size: 13px !important; font-weight: 700 !important; letter-spacing: 3px !important; text-transform: uppercase !important; cursor: pointer !important; transition: all 0.3s !important; text-shadow: 0 1px 3px rgba(0,0,0,0.4) !important; position: relative !important; overflow: hidden !important; z-index: 5 !important; box-shadow: none !important; display: inline-block !important; height: auto !important;
-        }
-        .egypt-btn:hover, #girisEkrani button.action-btn.btn-login.egypt-btn:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 26px rgba(42,122,110,0.5), 0 0 14px rgba(201,168,76,0.15) !important; }
-
-        .egypt-quote { text-align: center; margin-top: 12px; position: relative; z-index: 5; font-size: 10px; color: rgba(244,228,176,0.28); line-height: 1.6; font-weight: 300; letter-spacing: 0.3px; }
-        .egypt-quote cite { display: block; font-style: italic; font-size: 9px; color: rgba(201,168,76,0.4); margin-top: 2px; letter-spacing: 1px; }
-
-        .egypt-footer { text-align: center; margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(201,168,76,0.1); display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .egypt-footer-text { font-size: 10px; color: rgba(244,228,176,0.3); letter-spacing: 0.3px; }
-        .egypt-footer a { color: #3BA898; text-decoration: none; font-size: 14px; transition: color 0.3s; margin-top: 2px; }
-        .egypt-footer a:hover { color: #C9A84C; }
-    </style>
+    <link rel="stylesheet" href="stiller/ortak-stil.css">
+    <link rel="stylesheet" href="stiller/sinif9.css">
 </head>
 <body oncontextmenu="return false;"> 
 
@@ -168,8 +40,7 @@
 <div class="container">
     
 <div class="settings-panel" style="display: flex; gap: 10px; align-items: center;">
-        <a href="sinif9.html" class="settings-btn" title="Ana Sayfaya Dön" style="display: flex; align-items: center; justify-content: center; text-decoration: none;"><i class="fa-solid fa-house"></i></a>
-        
+        <button class="settings-btn uzun-buton" id="btnMuzik" onclick="toggleMuzikPanel()" title="Tarihî Müzik Kutusu"><i class="fa-solid fa-music"></i></button>
         <button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Sözlük"><i class="fa-solid fa-book-open"></i> Sözlük</button>
         
         <div class="dropdown-menu-container">
@@ -178,11 +49,12 @@
                 <span id="duyuruRozetiGenel" class="notification-badge hidden" style="right: -2px; top: -2px;">!</span>
             </button>
             <div class="glass-dropdown" id="hamburgerDropdown">
-                <a href="https://sinema.kirkyama.uk" target="_blank" class="dropdown-item"><i class="fa-solid fa-film"></i> Boğaziçi Sinema</a>
-                <button class="dropdown-item hidden" id="btnDuyuru" onclick="duyuruGoster()"><i class="fa-solid fa-bell"></i> Duyurular <span id="duyuruRozeti" class="notification-badge hidden" style="position:static; transform:none; display:inline-block; margin-left:5px;">!</span></button>
+			    <button class="dropdown-item hidden" id="btnDuyuru" onclick="duyuruGoster()"><i class="fa-solid fa-bell"></i> Duyurular <span id="duyuruRozeti" class="notification-badge hidden" style="position:static; transform:none; display:inline-block; margin-left:5px;">!</span></button>
                 <button class="dropdown-item" onclick="rehberGoster()"><i class="fa-solid fa-circle-question"></i> Nasıl Kullanılır?</button>
-                <button class="dropdown-item" id="btnYedek" onclick="yedekleGoster()"><i class="fa-solid fa-gear"></i> Veri Yedeği</button>
-                <button class="dropdown-item" id="sifreDegistirBtn"><i class="fa-solid fa-key"></i> Şifre Değiştir</button>
+				<button class="dropdown-item" onclick="kaynaklarGoster()"><i class="fa-solid fa-book-bookmark"></i> Kaynakça</button>
+                <button class="dropdown-item" id="btnYedek" onclick="yedekleGoster()"><i class="fa-solid fa-gear"></i> Veri Yedeği</button> 
+               <button class="dropdown-item" id="sifreDegistirBtn"><i class="fa-solid fa-key"></i> Şifre Değiştir</button>
+			   <a href="https://sinema.kirkyama.uk" target="_blank" class="dropdown-item"><i class="fa-solid fa-film"></i> Boğaziçi Sinema</a>
             </div>
         </div>
     </div>
@@ -441,6 +313,9 @@
             <div class="footer-right">
                 <span>Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</span>
                 <a href="mailto:murat@kirkyama.uk" class="footer-mail-btn" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
+<a href="https://kirkyama.uk/" target="_blank" title="kırkyama">
+    <img src="https://depo.kirkyama.uk/k%C4%B1rkyama%20pe%C3%A7.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; vertical-align: middle; margin-left: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+</a>
             </div>
         </div>
     </div>
@@ -602,7 +477,21 @@
             </div>
         </div>
     </div>
-
+    <div id="kaynaklarModal" class="modal">
+        <div class="modal-content" style="border-top: 6px solid #3ba898; max-width: 650px;">
+            <h3 style="color:#3ba898; margin-top: 0; font-size: 22px;"><i class="fa-solid fa-book-bookmark"></i> Bibliyografya</h3>
+            <p style="font-size:14px; color:var(--text-color); opacity:0.8; margin-bottom: 20px;">
+                Bu portalda yer alan içerikler, aşağıdaki akademik ve bilimsel kaynaklardan yararlanılarak hazırlanmıştır. <br>
+                İncelemek istediğiniz kaynağı PDF formatında almak için <a href="mailto:murat@kirkyama.uk" style="color:#3ba898; text-decoration: underline;">murat@kirkyama.uk</a> adresine isim, soyisim ve gerekçenizi belirten kısa bir mail gönderiniz.
+            </p>
+            
+            <div id="kaynakListesiAlani" style="max-height: 45vh; overflow-y: auto; background: var(--option-hover); border-radius: 12px; border: 2px solid var(--card-border); padding: 5px; text-align: left;"></div>
+            
+            <div class="modal-btn-group">
+                <button class="action-btn back-btn" onclick="kaynaklarKapat()" style="margin-top:0;">Kapat</button>
+            </div>
+        </div>
+    </div>
     <div id="ozetModal" class="modal">
         <div class="modal-content">
             <h3 style="color:var(--text-color); font-size: 22px; margin-bottom: 20px;">Sınav Özeti</h3>
@@ -688,7 +577,45 @@
     </div>
 
 </div> 
+<div id="muzikPanel" class="muzik-panel">
+        <div class="muzik-panel-header">
+            <h3><i class="fa-solid fa-compact-disc fa-spin" style="margin-right: 8px; color: var(--accent-color);"></i> portal player v.ı</h3>
+            <button class="muzik-kapat-btn" onclick="toggleMuzikPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="muzik-liste-container" id="muzikListeContainer"></div>
+<!-- ZARİF VE YAPIŞKAN (STICKY) ŞERİT PLAYER -->
+        <div style="position: sticky; bottom: 0; left: 0; width: 100%; background: var(--container-bg); backdrop-filter: blur(12px); border-top: 1px solid var(--card-border); padding: 10px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); border-radius: 0 0 12px 12px;">
+            
+            <!-- Üst Kısım: Şarkı Bilgisi (Sol) ve Butonlar (Sağ) Yan Yana -->
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                
+                <!-- Şarkı Bilgisi -->
+                <div style="display: flex; flex-direction: column; overflow: hidden; white-space: nowrap; max-width: 55%;">
+                    <span id="calanSarkiBaslik" style="font-weight: 700; font-size: 14px; color: var(--accent-color); text-overflow: ellipsis; overflow: hidden;">Şarkı Seçilmedi</span>
+                    <span id="calanSarkiSanatci" style="font-size: 11.5px; color: var(--text-color); opacity: 0.6; text-overflow: ellipsis; overflow: hidden; margin-top: 2px;">Bekleniyor...</span>
+                </div>
 
+                <!-- Oynatma Kontrolleri -->
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button onclick="oncekiSarki()" style="background: transparent; border: none; color: var(--text-color); opacity: 0.8; font-size: 16px; cursor: pointer; padding: 0; outline: none;"><i class="fa-solid fa-backward-step"></i></button>
+                    
+                    <button id="muzikPlayBtn" onclick="toggleMuzikPlay()" style="background: var(--accent-color); border: none; color: #0D1117; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(201,168,76,0.3); outline: none;">
+                        <i class="fa-solid fa-play" style="margin-left: 2px;"></i>
+                    </button>
+                    
+                    <button onclick="sonrakiSarki()" style="background: transparent; border: none; color: var(--text-color); opacity: 0.8; font-size: 16px; cursor: pointer; padding: 0; outline: none;"><i class="fa-solid fa-forward-step"></i></button>
+                </div>
+            </div>
+
+            <!-- Alt Kısım: İnce İlerleme Çubuğu -->
+            <div id="muzikProgressBg" onclick="seekMuzik(event)" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; position: relative;">
+                <div id="muzikProgressFill" style="width: 0%; height: 100%; background: var(--accent-color); border-radius: 4px; transition: width 0.15s linear;"></div>
+            </div>
+
+            <!-- Gizli Ses Motoru -->
+            <audio id="muzikAudio" ontimeupdate="updateMuzikProgress()" onended="sonrakiSarki()"></audio>
+        </div>
+    </div>
 <div id="audioPlayerContainer" class="bottom-audio-bar">
     <div class="progress-bar-custom" id="progressBarBg" onclick="seekAudio(event)">
         <div class="progress-fill" id="progressBarFill"></div>
@@ -758,7 +685,9 @@
         <div id="mapCanvas" style="width: 100%; height: 60vh; position: relative; border-radius: 8px; border: 1px solid var(--card-border); background: #0D1117;"></div>
         <div id="mapControlsContainer" style="padding: 15px; background: rgba(13,17,23,0.95); border: 1px solid var(--card-border); border-radius: 8px; display: none; color: var(--text-color); margin-top: 15px; text-align: center;"></div>
     </div>
+	
 </div>
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
@@ -817,7 +746,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 });
 </script>
-
+<script src="muzik_verisi.js"></script>
 <script src="sinif9sorular/menu_verisi.js"></script>
 <script src="sinif9sorular/u1_genel.js"></script>
 <script src="sinif9sorular/u1_insa.js"></script>
@@ -836,8 +765,9 @@ document.addEventListener("DOMContentLoaded", function() {
 <script src="sinif9sorular/u3_bilim.js"></script>
 <script src="sinif9sorular/u3_genel.js"></script>
 <script src="sinif9sorular/s9kavramlar.js"></script>
+<script src="sinif9sorular/sinif9kaynak.js"></script>
 <script src="sinif9sorular/bilgikartlari.js"></script>
 <script src="sinif9sorular/sinif9haritalar.js"></script>
-<script src="motor_sinif9.js"></script>
+<script src="motorlar/motor_sinif9.js"></script>
 </body>
 </html>

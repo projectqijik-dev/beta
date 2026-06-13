@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>İnteraktif Haritalar — Tarih Portalı</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700;1,900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root { --bg-app: #e8e4d9; --panel-bg: #fdfcf9; --ink: #1a1815; --muted: #736b60; --border-light: rgba(0,0,0,0.06); --c-9: #8E523A; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg-app); color: var(--ink); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+.header { padding: 24px 20px 16px; text-align: center; }
+</style>
+<link rel="stylesheet" href="stiller/portal.css">
+</head>
+<body>
+
+<div class="header">
+    <a href="index.html" style="color: var(--muted); text-decoration: none; font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; margin-bottom: 10px; display: inline-block;"><i class="fa-solid fa-arrow-left"></i> Portala Dön</a>
+    <h1 style="font-family: 'Playfair Display', serif; font-size: 2rem;"><i class="fa-solid fa-map-location-dot" style="color: #1F425A;"></i> Keşif Haritaları</h1>
+    <p style="font-size: 0.8rem; color: var(--muted); margin-top: 5px;">Osmanlı Coğrafyası (Tıklanabilir)</p>
+</div>
+
+<div class="map-container">
+    <!-- Basitleştirilmiş, stilistik SVG Harita (Anadolu, Balkanlar, Mısır) -->
+    <svg viewBox="0 0 500 400" class="map-svg" id="history-map">
+        <!-- Deniz (Arkaplan) -->
+        <rect width="500" height="400" fill="#c2d5d8" rx="12"></rect>
+        
+        <!-- Balkanlar -->
+        <path class="map-region" d="M 50,50 L 180,50 L 200,120 L 250,150 L 200,220 L 150,220 L 120,280 L 80,250 L 50,150 Z" onclick="showRegion('balkanlar', this)"/>
+        <text x="120" y="150" font-family="monospace" font-size="12" fill="#1a1815" pointer-events="none">BALKANLAR</text>
+        
+        <!-- Anadolu -->
+        <path class="map-region" d="M 220,130 L 450,130 L 480,220 L 450,280 L 280,280 L 230,220 Z" onclick="showRegion('anadolu', this)"/>
+        <text x="320" y="200" font-family="monospace" font-size="14" font-weight="bold" fill="#1a1815" pointer-events="none">ANADOLU</text>
+        
+        <!-- Kırım -->
+        <path class="map-region" d="M 320,50 L 400,50 L 420,90 L 380,110 L 300,90 Z" onclick="showRegion('kirim', this)"/>
+        <text x="340" y="80" font-family="monospace" font-size="10" fill="#1a1815" pointer-events="none">KIRIM</text>
+        
+        <!-- Mısır / Ortadoğu -->
+        <path class="map-region" d="M 280,300 L 450,300 L 480,380 L 250,380 L 220,350 Z" onclick="showRegion('ortadogu', this)"/>
+        <text x="330" y="340" font-family="monospace" font-size="12" fill="#1a1815" pointer-events="none">MISIR & HİCAZ</text>
+    </svg>
+</div>
+
+<div id="mapModal" class="modal-overlay">
+    <div class="modal-content" style="max-width: 350px;">
+        <button class="modal-close" onclick="document.getElementById('mapModal').classList.remove('active')"><i class="fas fa-times"></i></button>
+        <div class="modal-header" id="modal-title">Bölge Adı</div>
+        <p style="font-size: 0.9rem; line-height: 1.5; color: var(--ink);" id="modal-desc">Bölge açıklaması.</p>
+    </div>
+</div>
+
+<script src="motorlar/portal.js"></script>
+<script>
+const regionsDB = {
+    'anadolu': { title: 'Anadolu', desc: 'Osmanlı Devleti\'nin çekirdeği. 1071 Malazgirt Zaferi ile kapıları Türklere açılmış, Selçuklu ve Osmanlı gibi büyük medeniyetlere ev sahipliği yapmıştır.' },
+    'balkanlar': { title: 'Balkanlar (Rumeli)', desc: 'Osmanlı\'nın Avrupa\'ya açılan kapısı. Orhan Bey döneminde Çimpe Kalesi\'nin alınmasıyla fetihler başlamış, asırlarca hoşgörü politikası (istimalet) ile yönetilmiştir.' },
+    'kirim': { title: 'Kırım', desc: '1475 yılında Fatih Sultan Mehmet döneminde Gedik Ahmet Paşa tarafından fethedilmiş, böylece Karadeniz bir Türk gölü haline gelmiştir.' },
+    'ortadogu': { title: 'Mısır ve Hicaz', desc: '1517 Ridaniye Seferi ile Yavuz Sultan Selim tarafından fethedilmiştir. Bu fetihle Memlük Devleti yıkılmış ve Halifelik Osmanlı\'ya geçmiştir.' }
+};
+
+function showRegion(id, el) {
+    document.querySelectorAll('.map-region').forEach(r => r.classList.remove('active'));
+    el.classList.add('active');
+    
+    let info = regionsDB[id];
+    if(info) {
+        document.getElementById('modal-title').innerText = info.title;
+        document.getElementById('modal-desc').innerText = info.desc;
+        document.getElementById('mapModal').classList.add('active');
+    }
+}
+</script>
+</body>
+</html>

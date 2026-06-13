@@ -4,292 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>10. Sınıf Tarih Portalı – Boğaziçi MTAL</title>
-
+    <link rel="icon" type="image/png" href="https://depo.kirkyama.uk/favicon.png">
     <!-- Tema-5 ile aynı font çifti; sadece renk değişiyor -->
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;600;700&family=Marcellus&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.plyr.io/3.7.8/plyr.css" />
-    <link rel="stylesheet" href="sinif9stil.css">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    </script>
 
-    <style>
-    /* ═══════════════════════════════════════════════════════════════
-       10. SINIF – OSMANLI / SELÇUKLU / BİZANS TEMA
-       Renk paleti:
-         --sand   : altın vurgu   #C9A84C
-         --amber  : parlak altın  #E8A020
-         --crimson: Osmanlı kırmızı #8B1A1A
-         --crim-l : açık kırmızı  #A83232
-         --obsid  : gece siyahı   #0D1117
-         --papyrus: krem metin    #F4E4B0
-    ═══════════════════════════════════════════════════════════════ */
-
-    /* ── sinif9stil.css ekranları için renk override ── */
-    :root { --accent-color: #C0392B; }
-    body.sepia-mode { --accent-color: #c0392b; }
-    body.dark-mode  { --accent-color: #e74c3c; }
-
-    .dropdown-item:hover { background: rgba(192,57,43,0.1); color: var(--accent-color); }
-    .intro-icon { color: var(--accent-color); }
-    #iletisimBtnFloating { background: rgba(139,26,26,0.35) !important; }
-    #iletisimBtnFloating:hover { background: rgba(139,26,26,0.92) !important; box-shadow: 0 8px 20px rgba(139,26,26,0.4) !important; }
-    .version-badge { background: var(--accent-color); }
-    .footer-mail-btn { color: var(--accent-color); background: rgba(192,57,43,0.1); }
-    .footer-mail-btn:hover { background: var(--accent-color); color:#fff; }
-
-    @keyframes pulse-ring {
-        0%  { transform:scale(0.8); box-shadow:0 0 0 0 rgba(192,57,43,0.7); }
-        70% { transform:scale(1);   box-shadow:0 0 0 10px rgba(192,57,43,0); }
-        100%{ transform:scale(0.8); box-shadow:0 0 0 0 rgba(192,57,43,0); }
-    }
-    .player-icon-custom.playing i { animation:pulse-ring 2s infinite; color:var(--accent-color); }
-    .player-icon-custom { background:rgba(192,57,43,0.1); color:var(--accent-color); }
-    .ctrl-btn:hover { color:var(--accent-color); }
-    .play-btn { background:var(--accent-color); box-shadow:0 4px 15px rgba(192,57,43,0.4); }
-    .play-btn:hover { background:#a93226; }
-    .progress-bar-custom { background:rgba(192,57,43,0.2); }
-    .progress-fill { background:var(--accent-color); }
-
-    /* ── Body tam ekran (giriş) ── */
-    body:has(.container.login-mode) { margin:0 !important; padding:0 !important; }
-
-    .container.login-mode {
-        max-width:100% !important; margin:0 !important; padding:0 !important;
-        height:100dvh !important; overflow-y:auto !important; overflow-x:hidden !important;
-        display:flex; flex-direction:column;
-        background:transparent !important; border:none !important; box-shadow:none !important;
-    }
-
-    body.ottoman-theme .settings-panel {
-        background:transparent !important; border:none !important; box-shadow:none !important; padding:10px 15px !important;
-    }
-    .container.login-mode .settings-panel {
-        position:fixed !important; top:15px !important; right:15px !important; z-index:9999 !important;
-    }
-
-    /* ── Arka plan ── */
-    body.ottoman-theme {
-        background:#0D1117 !important;
-        color:#F4E4B0 !important;
-    }
-    .ottoman-bg, .ottoman-starfield, .ottoman-skyline {
-        position:fixed; inset:0; pointer-events:none; transition:opacity 0.8s ease;
-    }
-    .ottoman-bg {
-        background:
-            radial-gradient(ellipse at 50% 0%, rgba(139,26,26,0.25) 0%, transparent 50%),
-            radial-gradient(ellipse at 20% 80%, rgba(201,168,76,0.12) 0%, transparent 50%),
-            linear-gradient(180deg, #0D1117 0%, #0F1018 100%);
-        z-index:-3;
-    }
-    .ottoman-starfield { z-index:-2; overflow:hidden; }
-    .ottoman-star {
-        position:absolute; border-radius:50%; background:white;
-        animation:twinkle ease-in-out infinite alternate;
-    }
-    @keyframes twinkle { from{opacity:0.1;} to{opacity:0.8;} }
-
-    /* ── Cami Silueti ── */
-    .ottoman-skyline {
-        top:auto; bottom:0; height:130px; z-index:-1; overflow:hidden;
-    }
-    .ottoman-skyline svg { width:100%; height:100%; display:block; }
-
-    /* Odak modu: sınav ekranlarında arka planı gizle */
-    body.focus-mode .ottoman-bg,
-    body.focus-mode .ottoman-starfield,
-    body.focus-mode .ottoman-skyline { opacity:0 !important; }
-
-    /* ── Giriş ekranı kapsayıcısı ── */
-    #girisEkrani {
-        position:relative; width:100%; min-height:100%;
-        display:flex; align-items:center; justify-content:center;
-        font-family:'Josefin Sans', sans-serif; z-index:10;
-    }
-    #girisEkrani.hidden { display:none !important; }
-
-    .ott-wrap {
-        width:100%; max-width:420px; position:relative;
-        z-index:10; padding:0 16px; margin:auto;
-        animation:reveal 0.9s ease forwards;
-    }
-    @keyframes reveal { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
-
-    /* ── Ornament şeridi (hiyeroglif yerine Osmanlı motifleri) ── */
-    .ott-ornament {
-        display:flex; justify-content:center; gap:6px; margin-bottom:10px;
-    }
-    .ott-ornament span {
-        font-size:19px; opacity:0.55; color:#C9A84C;
-        animation:ornaPulse 3s ease-in-out infinite alternate;
-    }
-    .ott-ornament span:nth-child(2){animation-delay:0.5s;}
-    .ott-ornament span:nth-child(3){animation-delay:1s; font-size:22px;}
-    .ott-ornament span:nth-child(4){animation-delay:1.5s;}
-    .ott-ornament span:nth-child(5){animation-delay:2s;}
-    @keyframes ornaPulse { from{opacity:0.3;} to{opacity:0.75;} }
-
-    /* ── Hilal (Ra gözü yerine) ── */
-    .ott-crescent {
-        text-align:center; font-size:38px; margin-bottom:8px;
-        color:#C9A84C;
-        filter:drop-shadow(0 0 12px rgba(201,168,76,0.5));
-        animation:crescentGlow 2.5s ease-in-out infinite alternate;
-    }
-    @keyframes crescentGlow {
-        from{filter:drop-shadow(0 0 8px rgba(201,168,76,0.4));}
-        to  {filter:drop-shadow(0 0 18px rgba(201,168,76,0.85));}
-    }
-
-    /* ── Header ── */
-    .ott-header { text-align:center; margin-bottom:16px; }
-    .ott-era-tag {
-        display:inline-block;
-        font-size:9px; font-weight:600; letter-spacing:3px;
-        text-transform:uppercase; color:#A83232;
-        margin-bottom:10px; padding:4px 16px;
-        border:1px solid rgba(139,26,26,0.35);
-        background:rgba(139,26,26,0.08);
-    }
-    .ott-title {
-        font-family:'Marcellus', serif;
-        font-size:34px; color:#F4E4B0;
-        line-height:1.15;
-        text-shadow:0 0 30px rgba(201,168,76,0.25), 0 2px 10px rgba(0,0,0,0.6);
-    }
-    .ott-title span { color:#E8A020; }
-    .ott-school { margin-top:8px; font-size:11px; color:rgba(244,228,176,0.5); letter-spacing:0.5px; }
-
-    /* ── Ayırıcı çizgi ── */
-    .ott-hr { display:flex; align-items:center; gap:8px; margin:12px 0 16px; }
-    .ott-hr-line { flex:1; height:1px; background:linear-gradient(to right,transparent,rgba(201,168,76,0.3),transparent); }
-    .ott-hr-star { font-size:14px; color:#C9A84C; opacity:0.6; }
-
-    /* ── Kart ── */
-    .ott-card {
-        background:linear-gradient(160deg,rgba(28,12,12,0.96) 0%,rgba(13,17,23,0.97) 100%);
-        border:1px solid rgba(201,168,76,0.28);
-        border-radius:3px;
-        padding:26px 22px 22px;
-        position:relative; overflow:hidden;
-        box-shadow:0 0 50px rgba(139,26,26,0.15), 0 8px 40px rgba(0,0,0,0.5), inset 0 0 30px rgba(0,0,0,0.3);
-    }
-    .ott-card::before {
-        content:'';
-        position:absolute; top:0; left:0; right:0; height:4px;
-        background:linear-gradient(to right,#8B1A1A,#C9A84C,#E8A020,#C9A84C,#8B1A1A);
-    }
-    /* Tuğra filigranı */
-    .ott-card::after {
-        content:'☽';
-        position:absolute; bottom:6px; right:12px;
-        font-size:38px; color:rgba(201,168,76,0.07);
-        pointer-events:none; line-height:1;
-    }
-
-    /* ── Sekmeler ── */
-    .ott-tabs {
-        display:flex; gap:0; margin-bottom:24px;
-        border:1px solid rgba(201,168,76,0.2); border-radius:2px; overflow:hidden;
-    }
-    .ott-tab, #girisEkrani button.tab-btn.ott-tab {
-        flex:1; padding:10px 8px;
-        font-family:'Josefin Sans',sans-serif; font-size:11px; font-weight:600;
-        letter-spacing:1.5px; text-transform:uppercase;
-        border:none; background:transparent; color:rgba(201,168,76,0.4);
-        cursor:pointer; transition:all 0.25s;
-    }
-    .ott-tab.active, #girisEkrani button.tab-btn.ott-tab.active {
-        background:linear-gradient(135deg,rgba(139,26,26,0.75),rgba(139,26,26,0.45));
-        color:#F4E4B0;
-    }
-    .ott-tab:not(:last-child) { border-right:1px solid rgba(201,168,76,0.15); }
-    .ott-tab:hover:not(.active) { background:rgba(201,168,76,0.07); color:rgba(201,168,76,0.7); }
-
-    /* ── Form alanları ── */
-    .ott-field { margin-bottom:18px; }
-    .ott-label {
-        display:block;
-        font-size:9px; font-weight:700; letter-spacing:3px; text-transform:uppercase;
-        color:#A83232; margin-bottom:8px; opacity:0.9;
-    }
-    .ott-input-wrap { position:relative; }
-    .ott-iicon {
-        position:absolute; left:12px; top:50%;
-        transform:translateY(-50%); font-size:14px;
-        color:rgba(201,168,76,0.35); pointer-events:none;
-    }
-    .ott-input-wrap input,
-    .ott-input-wrap select {
-        width:100%;
-        padding:12px 14px 12px 38px;
-        background:rgba(13,17,23,0.85);
-        border:1px solid rgba(201,168,76,0.18);
-        border-radius:2px;
-        color:#F4E4B0;
-        font-family:'Josefin Sans',sans-serif; font-size:13px; font-weight:300;
-        letter-spacing:0.5px;
-        outline:none; transition:all 0.25s; -webkit-appearance:none;
-    }
-    .ott-input-wrap select option { background:#100808; }
-    .ott-input-wrap input::placeholder { color:rgba(244,228,176,0.2); font-weight:300; }
-    .ott-input-wrap input:focus,
-    .ott-input-wrap select:focus {
-        border-color:rgba(139,26,26,0.7);
-        background:rgba(139,26,26,0.08);
-        box-shadow:0 0 0 3px rgba(139,26,26,0.1), inset 0 1px 4px rgba(0,0,0,0.4);
-    }
-    .ott-caret {
-        position:absolute; right:12px; top:50%; transform:translateY(-50%);
-        color:rgba(201,168,76,0.35); font-size:11px; pointer-events:none;
-    }
-
-    /* ── Giriş butonu ── */
-    .ott-btn {
-        width:100%; padding:14px 20px; margin-top:6px;
-        background:linear-gradient(135deg,#8B1A1A 0%,#A83232 100%);
-        border:1px solid rgba(201,168,76,0.4);
-        border-radius:2px; color:#F4E4B0;
-        font-family:'Josefin Sans',sans-serif; font-size:12px; font-weight:700;
-        letter-spacing:4px; text-transform:uppercase;
-        cursor:pointer; transition:all 0.3s;
-        text-shadow:0 1px 3px rgba(0,0,0,0.4);
-        position:relative; overflow:hidden;
-    }
-    .ott-btn::before {
-        content:''; position:absolute; inset:0;
-        background:linear-gradient(135deg,rgba(255,255,255,0.1),transparent);
-        opacity:0; transition:opacity 0.3s;
-    }
-    .ott-btn:hover::before { opacity:1; }
-    .ott-btn:hover {
-        transform:translateY(-2px);
-        box-shadow:0 6px 26px rgba(139,26,26,0.5), 0 0 14px rgba(201,168,76,0.15);
-    }
-    .ott-btn:active { transform:translateY(0); }
-
-    /* ── Alıntı ── */
-    .ott-quote {
-        text-align:center; margin-top:14px;
-        font-size:11px; color:rgba(244,228,176,0.28);
-        line-height:1.6; font-weight:300; letter-spacing:0.3px;
-    }
-    .ott-quote cite {
-        display:block; font-style:italic; font-size:10px;
-        color:rgba(201,168,76,0.4); margin-top:3px; letter-spacing:1px;
-    }
-
-    /* ── Alt bilgi ── */
-    .ott-footer {
-        text-align:center; margin-top:16px; padding-top:12px;
-        border-top:1px solid rgba(201,168,76,0.1);
-    }
-    .ott-footer-text { font-size:11px; color:rgba(244,228,176,0.25); letter-spacing:0.3px; }
-    .ott-badge {
-        display:inline-block; padding:2px 8px;
-        border:1px solid rgba(201,168,76,0.25); background:rgba(201,168,76,0.07);
-        font-size:9px; color:#C9A84C; letter-spacing:1px; margin-left:4px;
-    }
-    </style>
+    <link rel="stylesheet" href="stiller/ortak-stil.css">
+    <link rel="stylesheet" href="stiller/sinif10.css">
 </head>
 <body oncontextmenu="return false;">
 
@@ -331,9 +58,8 @@
 <div class="container">
 
     <div class="settings-panel" style="display:flex;gap:10px;align-items:center;">
-        <a href="index.html" class="settings-btn" title="Ana Sayfaya Dön" style="display:flex;align-items:center;justify-content:center;text-decoration:none;"><i class="fa-solid fa-house"></i></a>
-        <button class="settings-btn" id="btnTema" onclick="temaCycle()" title="Tema Değiştir"><i class="fa-solid fa-moon"></i></button>
-        <button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Sözlük"><i class="fa-solid fa-book-open"></i> Sözlük</button>
+        <button class="settings-btn uzun-buton" id="btnMuzik" onclick="toggleMuzikPanel()" title="Tarihî Müzik Kutusu"><i class="fa-solid fa-music"></i></button>
+		<button class="settings-btn uzun-buton hidden" id="btnSozluk" onclick="sozlukGoster()" title="Sözlük"><i class="fa-solid fa-book-open"></i> Sözlük</button>
         <div class="dropdown-menu-container">
             <button class="settings-btn" id="btnHamburger" onclick="menuToggle(event)" title="Menü" style="position:relative;">
                 <i class="fa-solid fa-bars"></i>
@@ -587,6 +313,9 @@
             <div class="footer-right">
                 <span>Tasarım ve Kodlama: Murat Mutlu, Tarih Öğretmeni</span>
                 <a href="/cdn-cgi/l/email-protection#026f7770637642696b70697b636f632c7769" class="footer-mail-btn" title="Öğretmene E-Posta Gönder"><i class="fa-solid fa-envelope"></i></a>
+<a href="https://kirkyama.uk/" target="_blank" title="kırkyama">
+    <img src="https://depo.kirkyama.uk/k%C4%B1rkyama%20pe%C3%A7.png" alt="Logo" style="width: 32px; height: 32px; border-radius: 6px; object-fit: cover; vertical-align: middle; margin-left: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.1)'" onmouseout="this.style.transform='scale(1)'">
+</a>
             </div>
         </div>
     </div>
@@ -698,7 +427,8 @@
         <div class="modal-content" style="border-top:6px solid var(--accent-color);max-width:650px;">
             <h3 style="color:var(--accent-color);margin-top:0;font-size:22px;"><i class="fa-solid fa-book-bookmark"></i> Bibliyografya</h3>
             <p style="font-size:14px;color:var(--text-color);opacity:0.8;margin-bottom:20px;">
-                Bu portalda yer alan içerikler, aşağıdaki akademik ve bilimsel kaynaklardan yararlanılarak hazırlanmıştır.
+                Bu portalda yer alan içerikler, aşağıdaki akademik ve bilimsel kaynaklardan yararlanılarak hazırlanmıştır. <br>
+                İncelemek istediğiniz kaynağı PDF formatında almak için <a href="mailto:murat@kirkyama.uk" style="color:inherit; text-decoration: underline;">murat@kirkyama.uk</a> adresine isim, soyisim ve gerekçenizi belirten kısa bir mail gönderiniz.
             </p>
             <div id="kaynakListesiAlani" style="max-height:45vh;overflow-y:auto;background:var(--option-hover);border-radius:12px;border:2px solid var(--card-border);padding:5px;text-align:left;"></div>
             <div class="modal-btn-group">
@@ -721,7 +451,7 @@
     <div id="iletisimModal" class="modal">
         <div class="modal-content" style="border-top:6px solid var(--accent-color);">
             <h3 style="color:var(--accent-color);margin-top:0;font-size:22px;"><i class="fa-solid fa-comment-dots"></i> Öğretmene İlet</h3>
-            <p style="font-size:15px;color:var(--text-color);opacity:0.8;margin-bottom:20px;">Anlamadığın bir soruyu veya sistemde gördüğün bir hatayı buradan yazabilirsin.</p>
+            <p style="font-size:15px;color:var(--text-color);opacity:0.8;margin-bottom:20px;">Anlamadığın bir soruyu veya sistemde gördüğün bir hatayı buradan yazabilirsin. Diğer her şey için <a href="mailto:murat@kirkyama.uk" style="color:inherit; text-decoration: underline;">murat@kirkyama.uk</a> adresine mail atabilirsin.</p>
             <textarea id="ogrenciMesaji" placeholder="Mesajınızı buraya yazınız..."></textarea>
             <div class="modal-btn-group">
                 <button class="action-btn back-btn" onclick="iletisimKapat()" style="margin-top:0;">İptal</button>
@@ -828,10 +558,51 @@
     </div>
 
 </div><!-- /container -->
+<div id="muzikPanel" class="muzik-panel">
+        <div class="muzik-panel-header">
+            <h3><i class="fa-solid fa-compact-disc fa-spin" style="margin-right: 8px; color: var(--accent-color);"></i>portal player v.ı</h3>
+            <button class="muzik-kapat-btn" onclick="toggleMuzikPanel()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="muzik-liste-container" id="muzikListeContainer"></div>
+<!-- ZARİF VE YAPIŞKAN (STICKY) ŞERİT PLAYER -->
+        <div style="position: sticky; bottom: 0; left: 0; width: 100%; background: var(--container-bg); backdrop-filter: blur(12px); border-top: 1px solid var(--card-border); padding: 10px 15px; display: flex; flex-direction: column; gap: 8px; z-index: 999; box-shadow: 0 -5px 20px rgba(0,0,0,0.3); border-radius: 0 0 12px 12px;">
+            
+            <!-- Üst Kısım: Şarkı Bilgisi (Sol) ve Butonlar (Sağ) Yan Yana -->
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+                
+                <!-- Şarkı Bilgisi -->
+                <div style="display: flex; flex-direction: column; overflow: hidden; white-space: nowrap; max-width: 55%;">
+                    <span id="calanSarkiBaslik" style="font-weight: 700; font-size: 14px; color: var(--accent-color); text-overflow: ellipsis; overflow: hidden;">Şarkı Seçilmedi</span>
+                    <span id="calanSarkiSanatci" style="font-size: 11.5px; color: var(--text-color); opacity: 0.6; text-overflow: ellipsis; overflow: hidden; margin-top: 2px;">Bekleniyor...</span>
+                </div>
 
+                <!-- Oynatma Kontrolleri -->
+                <div style="display: flex; align-items: center; gap: 15px;">
+                    <button onclick="oncekiSarki()" style="background: transparent; border: none; color: var(--text-color); opacity: 0.8; font-size: 16px; cursor: pointer; padding: 0; outline: none;"><i class="fa-solid fa-backward-step"></i></button>
+                    
+                    <button id="muzikPlayBtn" onclick="toggleMuzikPlay()" style="background: var(--accent-color); border: none; color: #0D1117; width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 16px; box-shadow: 0 2px 8px rgba(201,168,76,0.3); outline: none;">
+                        <i class="fa-solid fa-play" style="margin-left: 2px;"></i>
+                    </button>
+                    
+                    <button onclick="sonrakiSarki()" style="background: transparent; border: none; color: var(--text-color); opacity: 0.8; font-size: 16px; cursor: pointer; padding: 0; outline: none;"><i class="fa-solid fa-forward-step"></i></button>
+                </div>
+            </div>
+
+            <!-- Alt Kısım: İnce İlerleme Çubuğu -->
+            <div id="muzikProgressBg" onclick="seekMuzik(event)" style="width: 100%; height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; cursor: pointer; position: relative;">
+                <div id="muzikProgressFill" style="width: 0%; height: 100%; background: var(--accent-color); border-radius: 4px; transition: width 0.15s linear;"></div>
+            </div>
+
+            <!-- Gizli Ses Motoru -->
+            <audio id="muzikAudio" ontimeupdate="updateMuzikProgress()" onended="sonrakiSarki()"></audio>
+        </div>
+    </div>
 <!-- Audio Player -->
-<div id="audioPlayerContainer" class="glass-player">
-    <div class="player-top-row">
+<div id="audioPlayerContainer" class="bottom-audio-bar">
+    <div class="progress-bar-custom" id="progressBarBg" onclick="seekAudio(event)">
+        <div class="progress-fill" id="progressBarFill"></div>
+    </div>
+    <div class="bottom-bar-content">
         <div class="player-info-custom">
             <div class="player-icon-custom" id="podcastIconBox"><i class="fa-solid fa-podcast"></i></div>
             <div class="player-text-custom">
@@ -839,19 +610,17 @@
                 <span class="player-subtitle-custom">Özel Batman Boğaziçi Koleji</span>
             </div>
         </div>
-        <button class="ctrl-btn" onclick="kapatPlayer()" title="Kapat" style="font-size:24px;margin-left:10px;"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="progress-container">
-        <span id="currentTimeDisplay">00:00</span>
-        <div class="progress-bar-custom" id="progressBarBg" onclick="seekAudio(event)">
-            <div class="progress-fill" id="progressBarFill"></div>
+        <div class="player-controls">
+            <button class="ctrl-btn" onclick="skipAudio(-15)" title="15 Saniye Geri"><i class="fa-solid fa-rotate-left"></i></button>
+            <button class="ctrl-btn play-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fa-solid fa-play" style="margin-left: 2px;"></i></button>
+            <button class="ctrl-btn" onclick="skipAudio(15)" title="15 Saniye İleri"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
-        <span id="durationDisplay">00:00</span>
-    </div>
-    <div class="player-controls">
-        <button class="ctrl-btn" onclick="skipAudio(-15)" title="15 Saniye Geri"><i class="fa-solid fa-rotate-left"></i></button>
-        <button class="ctrl-btn play-btn" id="playPauseBtn" onclick="togglePlay()"><i class="fa-solid fa-play" style="margin-left:3px;"></i></button>
-        <button class="ctrl-btn" onclick="skipAudio(15)" title="15 Saniye İleri"><i class="fa-solid fa-rotate-right"></i></button>
+        <div class="player-right-actions">
+            <div class="time-display">
+                <span id="currentTimeDisplay">00:00</span> <span style="opacity:0.5; margin:0 3px;">/</span> <span id="durationDisplay">00:00</span>
+            </div>
+            <button class="ctrl-btn close-btn" onclick="kapatPlayer()" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
+        </div>
     </div>
     <audio id="mainAudio" src="" ontimeupdate="updateProgress()" onloadedmetadata="setDuration()" onended="audioEnded()"></audio>
 </div>
@@ -866,12 +635,24 @@
     </div>
 </div>
 
-<div id="inlinePdfContainer" class="hidden" style="width:100%;margin-top:15px;margin-bottom:5px;border-radius:12px;overflow:hidden;box-shadow:0 8px 25px rgba(0,0,0,0.1);border:2px solid var(--accent-color);background:#fff;animation:fadeIn 0.4s ease;height:500px;display:flex;flex-direction:column;">
-    <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 15px;background:var(--accent-color);color:#fff;flex-shrink:0;">
-        <h3 id="inlinePdfBaslik" style="margin:0;font-size:15px;color:#fff;font-weight:700;text-align:left;">Doküman</h3>
-        <button onclick="pdfKapat()" style="background:transparent;border:none;color:#fff;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
+<div id="inlinePdfContainer" class="hidden" style="width: 100%; margin-top: 15px; margin-bottom: 5px; border-radius: 12px; overflow: hidden; box-shadow: 0 8px 25px rgba(0,0,0,0.5); border: 1px solid var(--card-border); background: var(--container-bg); animation: fadeIn 0.4s ease; display: flex; flex-direction: column;">
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 15px; background: rgba(13,17,23,0.95); border-bottom: 1px solid var(--card-border); color: var(--accent-color); flex-shrink: 0; flex-wrap: wrap; gap: 10px;">
+        <h3 id="inlinePdfBaslik" style="margin: 0; font-size: 15px; color: var(--accent-color); font-weight: 700; text-align: left; flex: 1; min-width: 150px;">Doküman</h3>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <button onclick="onPdfPrev()" style="background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-chevron-left"></i></button>
+            <span id="pdfPageInfo" style="font-size: 13px; font-weight: 600; min-width: 45px; text-align: center;">1 / 1</span>
+            <button onclick="onPdfNext()" style="background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-chevron-right"></i></button>
+            <button onclick="onPdfZoomIn()" style="background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-left: 5px; transition: 0.2s;"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
+            <button onclick="onPdfZoomOut()" style="background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.3); color: var(--accent-color); padding: 4px 10px; border-radius: 6px; cursor: pointer; transition: 0.2s;"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+            
+            <a id="pdfDownloadBtn" href="#" target="_blank" download style="background: rgba(139, 26, 26, 0.2); border: 1px solid rgba(139, 26, 26, 0.5); color: #A83232; padding: 4px 10px; border-radius: 6px; cursor: pointer; margin-left: 5px; transition: 0.2s; text-decoration: none; display: flex; align-items: center; justify-content: center;" title="PDF'yi İndir" onmouseover="this.style.background='rgba(139, 26, 26, 0.4)'" onmouseout="this.style.background='rgba(139, 26, 26, 0.2)'"><i class="fa-solid fa-download"></i></a>
+            
+            <button onclick="pdfKapat()" style="background: transparent; border: none; color: var(--accent-color); cursor: pointer; font-size: 20px; display: flex; align-items: center; justify-content: center; margin-left: 5px;" title="Kapat"><i class="fa-solid fa-xmark"></i></button>
+        </div>
     </div>
-    <iframe id="pdfIframe" src="" style="width:100%;height:100%;border:none;flex:1;"></iframe>
+    <div id="pdfRenderArea" style="width: 100%; height: 65vh; overflow: auto; display: flex; justify-content: center; background: rgba(0,0,0,0.1); padding: 20px 0;">
+        <canvas id="pdfCanvas" style="box-shadow: 0 4px 15px rgba(0,0,0,0.3); max-width: 100%; height: auto;"></canvas>
+    </div>
 </div>
 
 <!-- Harita modal (opsiyonel) -->
@@ -892,6 +673,7 @@
 
 <!-- Soru veritabanları -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script src="muzik_verisi.js"></script>
 <script src="sinif10sorular/menu_verisi.js"></script>
 <script src="sinif10sorular/u1_askeri.js"></script>
 <script src="sinif10sorular/u1_teskilat.js"></script>
@@ -905,7 +687,10 @@
 <script src="sinif10sorular/u2_ilim.js"></script>
 <script src="sinif10sorular/u2_genel.js"></script>
 <script src="sinif10sorular/u3_cihan.js"></script>
-<script src="motor_sinif10.js"></script>
+<script src="sinif10sorular/sinif10haritalar.js"></script>
+<script src="motorlar/motor_sinif10.js"></script>
+<script src="sinif10sorular/s10kavramlar.js"></script>
+<script src="sinif10sorular/s10kaynak.js"></script>
 
 <!-- Osmanlı Tema Başlatıcı -->
 <script>
@@ -955,3 +740,4 @@ document.addEventListener("DOMContentLoaded", function() {
 
 </body>
 </html>
+
